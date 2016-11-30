@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "781616950425",
+    "firebase_url": "https://snappychat-d72d2.firebaseio.com",
+    "project_id": "snappychat-d72d2",
+    "storage_bucket": "snappychat-d72d2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:781616950425:android:20328eb7b42aaf9c",
+        "android_client_info": {
+          "package_name": "com.snappychat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "781616950425-ntd4keshucu7mct87j2obb7pcpgbfqiu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.snappychat",
+            "certificate_hash": "2B7281D8B482A04E190BCA73E26782D2B021F8E4"
+          }
+        },
+        {
+          "client_id": "781616950425-gqju8svctogcjr1biv8ij68a2u92qjcq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbu77Yhm-J-4N5KruJ3Q5sfis9DHl2r9g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "781616950425-gqju8svctogcjr1biv8ij68a2u92qjcq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
