@@ -56,19 +56,34 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         //Firebase Authentication Listener Closed
 
         //Configure Google Sign In
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this,this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API,googleSignInOptions)
+                .build();
+
         googlesignIn = (SignInButton) findViewById(R.id.google_login_button);
         googlesignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //SignInOperation For Google
-                GoogleSignIn();
+                try{
+                    Intent googlesigninIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+                    startActivityForResult(googlesigninIntent,currentcode);
+                }
+                catch (Error e)
+                {
+                    Log.v("Error",e.toString());
+                }
             }
         });
 
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
+
 
 
         //Google SIgn in Complete
@@ -115,8 +130,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void GoogleSignIn()
     {
-        Intent googlesigninIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-        startActivityForResult(googlesigninIntent,currentcode);
+
 
     }
 
