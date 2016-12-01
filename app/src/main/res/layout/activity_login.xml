@@ -12,19 +12,26 @@
     tools:context="com.snappychat.LoginActivity">
 
 
-    <com.google.android.gms.common.SignInButton
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/google_login_button"
-        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <com.facebook.login.widget.LoginButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/facebook_login_button"/>
+        <com.google.android.gms.common.SignInButton
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/google_login_button"
+            android:layout_centerVertical="true"
+            android:layout_alignStart="@+id/facebook_login_button"
+            android:layout_alignEnd="@+id/facebook_login_button" />
 
-
-
+        <com.facebook.login.widget.LoginButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/facebook_login_button"
+            android:layout_marginBottom="54dp"
+            android:layout_above="@+id/google_login_button"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 
 
 </LinearLayout>
