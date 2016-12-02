@@ -1,6 +1,7 @@
 package com.snappychat;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -26,16 +27,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.gson.JsonObject;
+import com.snappychat.networking.ServiceHandler;
 
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-    public static final String TAG = "Facebook Login";
+    public static final String TAG = "Firebase Login";
 
     //Creating Objects
     private FirebaseAuth snappyauth;
@@ -44,6 +46,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private GoogleApiClient googleApiClient;
     private SignInButton googlesignIn;
     private static final int RC_SIGN_IN = 1001;
+    private JsonObject user;
+    String email;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -61,7 +65,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     Log.v("User Logged In", user.getUid());
-                    startMainActivity();
+                    Log.v("User Logged In EMAIL", user.getEmail());
+                    email = user.getEmail();
+                    new GetUserTask().execute(email);
                 } else {
                     Log.v("User SIgned out", "No User");
                 }
@@ -121,11 +127,22 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
         //Facebook Login Button Closure
 
+
     }
 
-    private void startMainActivity() {
-        Intent i = new Intent(getBaseContext(), MainActivity.class);
-        startActivity(i);
+    private void selectActivity() {
+        if(user!=null) { //If user is found, redirect to timeline
+            Intent i = new Intent(getBaseContext(), MainActivity.class);
+            i.putExtra("user",user.toString());
+            startActivity(i);
+        }else { //if user doesn't exist redirects to user profile activity
+            user = new JsonObject();
+            user.addProperty("email",email);
+            Intent i = new Intent(getBaseContext(), UserProfile.class);
+            i.putExtra("user",user.toString());
+            i.putExtra(MainActivity.FROM_LOGIN,true);
+            startActivity(i);
+        }
     }
 
     @Override
@@ -175,7 +192,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Log.v("Google SIgn In", connectionResult.toString());
     }
 
-
+    public void setUser(JsonObject user){
+        this.user = user;
+    }
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
 
@@ -193,9 +212,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                        } else
-                            startMainActivity();
-                        // ...
+                        } else {
+
+                        }
+                            // ...
                     }
                 });
     }
@@ -217,10 +237,24 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                        }else
-                            startMainActivity();
+                        }
                         // ...
                     }
                 });
+    }
+
+
+    private class GetUserTask extends AsyncTask<String,Void,JsonObject> {
+        @Override
+        protected JsonObject doInBackground(String... params) {
+            return ServiceHandler.getUser(params[0]);
+        }
+
+
+        @Override
+        protected void onPostExecute(JsonObject user) {
+            setUser(user);
+            selectActivity();
+        }
     }
 }
