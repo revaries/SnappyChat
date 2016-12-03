@@ -31,8 +31,10 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.gson.JsonObject;
 import com.snappychat.networking.ServiceHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -46,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private GoogleApiClient googleApiClient;
     private SignInButton googlesignIn;
     private static final int RC_SIGN_IN = 1001;
-    private JsonObject user;
+    private JSONObject user;
     String email;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,11 +139,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             i.putExtra(MainActivity.FROM_LOGIN,true);
             startActivity(i);
         }else { //if user doesn't exist redirects to user profile activity
-            user = new JsonObject();
-            user.addProperty("email",email);
-            Intent i = new Intent(getBaseContext(), UserProfile.class);
-            i.putExtra("user",user.toString());
-            startActivity(i);
+            user = new JSONObject();
+            try {
+                user.put("email",email);
+                Intent i = new Intent(getBaseContext(), UserProfile.class);
+                i.putExtra("user",user.toString());
+                startActivity(i);
+            } catch (JSONException e) {
+                Log.e(TAG, "JSONException",e);
+            }
+
         }
     }
 
@@ -192,7 +199,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Log.v("Google SIgn In", connectionResult.toString());
     }
 
-    public void setUser(JsonObject user){
+    public void setUser(JSONObject user){
         this.user = user;
     }
     private void handleFacebookAccessToken(AccessToken token) {
@@ -242,19 +249,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
 
-    private class GetUserTask extends AsyncTask<String,Void,JsonObject> {
+    private class GetUserTask extends AsyncTask<String,Void,JSONObject> {
         @Override
-        protected JsonObject doInBackground(String... params) {
+        protected JSONObject doInBackground(String... params) {
             //Update user status to online
-            JsonObject user = new JsonObject();
-            user.addProperty("status",true);
-            ServiceHandler.updateUser(params[0],user);
+            JSONObject user = new JSONObject();
+            try {
+                user.put("status",true);
+                ServiceHandler.updateUser(params[0],user);
+            } catch (JSONException e) {
+                Log.e(TAG, "JSONException",e);
+            }
             return ServiceHandler.getUser(params[0]);
         }
 
 
         @Override
-        protected void onPostExecute(JsonObject user) {
+        protected void onPostExecute(JSONObject user) {
             setUser(user);
             selectActivity();
         }

@@ -3,9 +3,10 @@ package com.snappychat.networking;
 import android.net.Uri;
 import android.util.Log;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.snappychat.model.UserItem;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 //import org.json.JSONObject;
 
@@ -29,7 +31,7 @@ public class ServiceHandler {
 
 
     // Return a JsonObject which is a key,value pair of the JSON string
-    public static void updateUser(String param, JsonObject json) {
+    public static void updateUser(String param, JSONObject json) {
         try {
             String url = Uri.parse(ENDPOINT_USER).buildUpon()
                     .appendEncodedPath(param)
@@ -40,24 +42,59 @@ public class ServiceHandler {
                 Log.v(TAG,response);
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.e(TAG, "Failed to update user", e);
         }
     }
 
-    // Return a JsonObject which is a key,value pair of the JSON string
-    public static JsonObject getUser(String param) {
+    public static ArrayList<UserItem> getUsers(String param){
+        ArrayList<UserItem> userItems = null;
         try {
             String url = Uri.parse(ENDPOINT_USER).buildUpon()
                     .appendEncodedPath(param)
                     .build().toString();
             String response = makeRequest(url,"GET",null);
             if(response != null){
-                JsonArray jsonArray = new JsonParser().parse(response).getAsJsonArray();
-                return jsonArray.get(0).getAsJsonObject();
+                JSONArray jsonArray = new JSONArray(response);
+                userItems = new ArrayList<UserItem>();
+                for(int i=0; i < jsonArray.length(); i++){
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String image = null;
+                    if(jsonObject.optJSONObject("image") != null){
+                        image = jsonObject.getJSONObject("image").getString("data");
+                    }
+                    UserItem userItem = new UserItem();
+                    userItem.setId(jsonObject.get("_id").toString());
+                    if(jsonObject.optString("first_name") != "") {
+                        userItem.setFirstName(jsonObject.optString("first_name"));
+                        userItem.setLastName(jsonObject.optString("last_name"));
+                        userItem.setNickName(jsonObject.optString("nick_name"));
+                        userItem.setImage(image);
+                        userItems.add(userItem);
+                    }
+                }
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to fetch user", e);
+        }
+
+        return userItems;
+    }
+
+    // Return a JSONObject which is a key,value pair of the JSON string
+    public static JSONObject getUser(String param) {
+        try {
+            String url = Uri.parse(ENDPOINT_USER).buildUpon()
+                    .appendEncodedPath(param)
+                    .build().toString();
+            String response = makeRequest(url,"GET",null);
+            if(response != null){
+                JSONArray jsonArray = new JSONArray(response);
+                return jsonArray.getJSONObject(0);
+            }
+
+        } catch (Exception e) {
             Log.e(TAG, "Failed to fetch user", e);
         }
 
