@@ -31,6 +31,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
 
 import org.json.JSONException;
@@ -48,7 +49,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private GoogleApiClient googleApiClient;
     private SignInButton googlesignIn;
     private static final int RC_SIGN_IN = 1001;
-    private JSONObject user;
+    private User user;
     String email;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,20 +136,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void selectActivity() {
         if(user!=null) { //If user is found, redirect to timeline
             Intent i = new Intent(getBaseContext(), MainActivity.class);
-            i.putExtra("user",user.toString());
+            i.putExtra("user",user);
             i.putExtra(MainActivity.FROM_LOGIN,true);
             startActivity(i);
         }else { //if user doesn't exist redirects to user profile activity
-            user = new JSONObject();
-            try {
-                user.put("email",email);
-                Intent i = new Intent(getBaseContext(), UserProfile.class);
-                i.putExtra("user",user.toString());
-                startActivity(i);
-            } catch (JSONException e) {
-                Log.e(TAG, "JSONException",e);
-            }
-
+            User user = new User();
+            user.setEmail(email);
+            Intent i = new Intent(getBaseContext(), UserProfile.class);
+            i.putExtra("user",user);
+            startActivity(i);
         }
     }
 
@@ -199,7 +195,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Log.v("Google SIgn In", connectionResult.toString());
     }
 
-    public void setUser(JSONObject user){
+    public void setUser(User user){
         this.user = user;
     }
     private void handleFacebookAccessToken(AccessToken token) {
@@ -249,9 +245,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
 
-    private class GetUserTask extends AsyncTask<String,Void,JSONObject> {
+    private class GetUserTask extends AsyncTask<String,Void,User> {
         @Override
-        protected JSONObject doInBackground(String... params) {
+        protected User doInBackground(String... params) {
             //Update user status to online
             JSONObject user = new JSONObject();
             try {
@@ -265,7 +261,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
         @Override
-        protected void onPostExecute(JSONObject user) {
+        protected void onPostExecute(User user) {
             setUser(user);
             selectActivity();
         }

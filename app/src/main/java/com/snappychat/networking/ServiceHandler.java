@@ -3,7 +3,8 @@ package com.snappychat.networking;
 import android.net.Uri;
 import android.util.Log;
 
-import com.snappychat.model.UserItem;
+import com.google.gson.Gson;
+import com.snappychat.model.User;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -47,8 +48,8 @@ public class ServiceHandler {
         }
     }
 
-    public static ArrayList<UserItem> getUsers(String param){
-        ArrayList<UserItem> userItems = null;
+    public static ArrayList<User> getUsers(String param){
+        ArrayList<User> users = null;
         try {
             String url = Uri.parse(ENDPOINT_USER).buildUpon()
                     .appendEncodedPath(param)
@@ -56,21 +57,12 @@ public class ServiceHandler {
             String response = makeRequest(url,"GET",null);
             if(response != null){
                 JSONArray jsonArray = new JSONArray(response);
-                userItems = new ArrayList<UserItem>();
+                users = new ArrayList<User>();
                 for(int i=0; i < jsonArray.length(); i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    String image = null;
-                    if(jsonObject.optJSONObject("image") != null){
-                        image = jsonObject.getJSONObject("image").getString("data");
-                    }
-                    UserItem userItem = new UserItem();
-                    userItem.setId(jsonObject.get("_id").toString());
                     if(jsonObject.optString("first_name") != "") {
-                        userItem.setFirstName(jsonObject.optString("first_name"));
-                        userItem.setLastName(jsonObject.optString("last_name"));
-                        userItem.setNickName(jsonObject.optString("nick_name"));
-                        userItem.setImage(image);
-                        userItems.add(userItem);
+                        User user = new Gson().fromJson(jsonObject.toString(), User.class);
+                        users.add(user);
                     }
                 }
             }
@@ -79,11 +71,11 @@ public class ServiceHandler {
             Log.e(TAG, "Failed to fetch user", e);
         }
 
-        return userItems;
+        return users;
     }
 
     // Return a JSONObject which is a key,value pair of the JSON string
-    public static JSONObject getUser(String param) {
+    public static User getUser(String param) {
         try {
             String url = Uri.parse(ENDPOINT_USER).buildUpon()
                     .appendEncodedPath(param)
@@ -91,7 +83,9 @@ public class ServiceHandler {
             String response = makeRequest(url,"GET",null);
             if(response != null){
                 JSONArray jsonArray = new JSONArray(response);
-                return jsonArray.getJSONObject(0);
+                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                User user = new Gson().fromJson(jsonObject.toString(), User.class);
+                return user;
             }
 
         } catch (Exception e) {

@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
-import com.snappychat.model.UserItem;
+import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class SearchUserFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     RecyclerView recyclerView;
-    ArrayList<UserItem> userItems;
+    ArrayList<User> users;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -72,14 +72,14 @@ public class SearchUserFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            userItems = new ArrayList<UserItem>();
+            users = new ArrayList<User>();
             recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(userItems, mListener));
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(users, mListener));
         }
         return view;
     }
@@ -128,10 +128,10 @@ public class SearchUserFragment extends Fragment {
 
     void setupAdapter() {
         if (getActivity() == null || recyclerView == null) return;
-        if (userItems != null) {
+        if (users != null) {
 //            mGridView.setAdapter(new ArrayAdapter<GalleryItem>(getActivity(),
 //                    android.R.layout.simple_gallery_item, mItems));
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(userItems,mListener));
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(users,mListener));
         } else {
             recyclerView.setAdapter(null);
         }
@@ -174,20 +174,20 @@ public class SearchUserFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(UserItem item);
+        void onListFragmentInteraction(User item);
     }
 
-    private class FilterUsersTask extends AsyncTask<String,Void,ArrayList<UserItem>> {
+    private class FilterUsersTask extends AsyncTask<String,Void,ArrayList<User>> {
         @Override
-        protected ArrayList<UserItem> doInBackground(String... params) {
+        protected ArrayList<User> doInBackground(String... params) {
             //Update user status to online
             return ServiceHandler.getUsers(params[0]);
         }
 
 
         @Override
-        protected void onPostExecute(ArrayList<UserItem> users) {
-            userItems = users;
+        protected void onPostExecute(ArrayList<User> users) {
+            SearchUserFragment.this.users = users;
             setupAdapter();
         }
     }

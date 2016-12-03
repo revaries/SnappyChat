@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.snappychat.model.UserItem;
+import com.snappychat.model.User;
 
 public class SearchUserActivity extends AppCompatActivity implements SearchUserFragment.OnListFragmentInteractionListener{
 
@@ -31,7 +31,7 @@ public class SearchUserActivity extends AppCompatActivity implements SearchUserF
     }
 
     @Override
-    public void onListFragmentInteraction(UserItem item) {
+    public void onListFragmentInteraction(User item) {
 
     }
 }

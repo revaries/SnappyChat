@@ -1,24 +1,33 @@
 package com.snappychat.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 /**
  * Created by Fabrizio on 2/12/2016.
  */
 
-public class UserItem {
-    public String id;
+public class User implements Serializable{
+    @SerializedName("_id")
+    private String id;
+    @SerializedName("first_name")
     private String firstName;
+    @SerializedName("last_name")
     private String lastName;
+    @SerializedName("image.data")
     private String image;
+    @SerializedName("nick_name")
     private String nickName;
+    private String email;
+    public User(){};
 
-    public  UserItem(){};
-
-    public UserItem(String id, String firstName,String lastName,String nickName, String image){
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.nickName = nickName;
-        this.image = image;
+    public User(String id, String firstName, String lastName, String nickName, String image){
+        this.setId(id);
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.setNickName(nickName);
+        this.setImage(image);
     }
 
     public String getFirstName() {
@@ -59,5 +68,13 @@ public class UserItem {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

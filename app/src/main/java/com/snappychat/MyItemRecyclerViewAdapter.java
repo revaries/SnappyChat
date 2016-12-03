@@ -7,22 +7,22 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.snappychat.SearchUserFragment.OnListFragmentInteractionListener;
-import com.snappychat.model.UserItem;
+import com.snappychat.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link UserItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link User} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<UserItem> mValues;
+    private final List<User> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyItemRecyclerViewAdapter(ArrayList<UserItem> items, SearchUserFragment.OnListFragmentInteractionListener listener) {
+    public MyItemRecyclerViewAdapter(ArrayList<User> items, SearchUserFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -61,7 +61,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final View mView;
         //public final TextView mIdView;
         public final TextView mContentView;
-        public UserItem mItem;
+        public User mItem;
 
         public ViewHolder(View view) {
             super(view);
