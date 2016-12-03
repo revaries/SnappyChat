@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void selectActivity() {
         if(user!=null) { //If user is found, redirect to timeline
-            Intent i = new Intent(getBaseContext(), MainActivity.class);
+            Intent i = new Intent(getBaseContext(), SearchUserActivity.class);
             i.putExtra("user",user);
             i.putExtra(MainActivity.FROM_LOGIN,true);
             startActivity(i);
