@@ -13,13 +13,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    /*
     @Override
     public void onBackPressed()
     {
-      /*  if (getIntent().getExtras().getBoolean(FROM_LOGIN_KEY))
+        if (getIntent().getExtras().getBoolean(FROM_LOGIN_KEY))
             moveTaskToBack(true); // exist app
         else
             finish();
-           */
-    }
+
+    }*/
 }

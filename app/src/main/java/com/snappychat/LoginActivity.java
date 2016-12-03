@@ -134,13 +134,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if(user!=null) { //If user is found, redirect to timeline
             Intent i = new Intent(getBaseContext(), MainActivity.class);
             i.putExtra("user",user.toString());
+            i.putExtra(MainActivity.FROM_LOGIN,true);
             startActivity(i);
         }else { //if user doesn't exist redirects to user profile activity
             user = new JsonObject();
             user.addProperty("email",email);
             Intent i = new Intent(getBaseContext(), UserProfile.class);
             i.putExtra("user",user.toString());
-            i.putExtra(MainActivity.FROM_LOGIN,true);
             startActivity(i);
         }
     }
@@ -212,7 +212,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                        } 
+                        }
                             // ...
                     }
                 });
@@ -245,6 +245,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private class GetUserTask extends AsyncTask<String,Void,JsonObject> {
         @Override
         protected JsonObject doInBackground(String... params) {
+            //Update user status to online
+            JsonObject user = new JsonObject();
+            user.addProperty("status",true);
+            ServiceHandler.updateUser(params[0],user);
             return ServiceHandler.getUser(params[0]);
         }
 
