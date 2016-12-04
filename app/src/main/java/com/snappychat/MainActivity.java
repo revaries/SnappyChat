@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
         switch (item.getItemId()) {
             case R.id.friends_bar:
                 Intent intent = new Intent(this, FriendsActivity.class);
-                intent.putExtra("CURRENT_USER_ID", CURRENT_USER_ID);
+                intent.putExtra(USER,userLoggedIn);
                 startActivity(intent);
                 return true;
             case R.id.search_bar:

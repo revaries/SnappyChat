@@ -64,7 +64,8 @@ public class TimelineFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_timeline_list, container, false);
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
+        //if (view instanceof RecyclerView) {
+        timelines = new ArrayList<Timeline>();
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
@@ -73,7 +74,7 @@ public class TimelineFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             recyclerView.setAdapter(new MyTimelineRecyclerViewAdapter(timelines, mListener));
-        }
+        //}
         return view;
     }
 
