@@ -103,9 +103,6 @@ public class ServiceHandler {
         return null;
     }
 
-<<<<<<< HEAD
-    public static String makeRequest (String urlSpec, String method, String jsonRequest) throws IOException {
-=======
     public static ArrayList<Timeline> getTimeline(String param) {
         ArrayList<Timeline> timelines = null;
         try {
@@ -140,8 +137,7 @@ public class ServiceHandler {
         return timelines;
     }
 
-    private static String makeRequest (String urlSpec, String method, String jsonRequest) throws IOException {
->>>>>>> a8f7b70253265eb4d8128686471f0a06eed4f721
+    public static String makeRequest (String urlSpec, String method, String jsonRequest) throws IOException {
         URL url = new URL(urlSpec);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
         String response = null;
