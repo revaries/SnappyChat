@@ -102,7 +102,7 @@ public class ServiceHandler {
         return null;
     }
 
-    private static String makeRequest (String urlSpec, String method, String jsonRequest) throws IOException {
+    public static String makeRequest (String urlSpec, String method, String jsonRequest) throws IOException {
         URL url = new URL(urlSpec);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
         String response = null;

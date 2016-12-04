@@ -11,26 +11,30 @@ import android.widget.TextView;
 
 import com.snappychat.R;
 
+import java.util.ArrayList;
+
 /**
  * Created by Jelson on 12/2/2016.
  */
 
 public class RecyclerAdapterInvitation extends RecyclerView.Adapter<RecyclerAdapterInvitation.FriendViewHolder> {
     private static String TAG = "RECYCLER_INVITATION";
-    private String[] mDataset;
+    private ArrayList<FriendCard> mDataset;
 
-    public RecyclerAdapterInvitation(String[] myDataset) {
+    public RecyclerAdapterInvitation(ArrayList<FriendCard> myDataset) {
         mDataset = myDataset;
     }
 
     public static class FriendViewHolder extends RecyclerView.ViewHolder {
         public CardView mCardView;
         public TextView mTextView;
+        public TextView mTextViewCardName;
         public Button mButton;
         public FriendViewHolder(View v) {
             super(v);
             mCardView = (CardView) v.findViewById(R.id.card_invitation);
             mTextView = (TextView) v.findViewById(R.id.card_text);
+            mTextViewCardName = (TextView) v.findViewById(R.id.card_name);
             mButton = (Button) v.findViewById(R.id.card_invitation_button);
 
             setButtonTextAndListener(mButton, "Cancel");
@@ -59,12 +63,18 @@ public class RecyclerAdapterInvitation extends RecyclerView.Adapter<RecyclerAdap
 
     @Override
     public void onBindViewHolder(FriendViewHolder holder, int position) {
-        holder.mTextView.setText(mDataset[position]);
+        holder.mTextView.setText(mDataset.get(position).getName() + " " +mDataset.get(position).getLast());
+        holder.mTextViewCardName.setText(mDataset.get(position).getDescription());
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return mDataset.size();
+    }
+
+    public void updateData(ArrayList<FriendCard> data){
+        mDataset = data;
+        notifyDataSetChanged();
     }
 }
 

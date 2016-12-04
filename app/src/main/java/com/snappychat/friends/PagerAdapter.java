@@ -7,7 +7,6 @@ package com.snappychat.friends;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
@@ -19,7 +18,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Log.d("POSITION", "Position is " + Integer.toString(position));
         switch (position) {
             case 0:
                 CurrentFriendsFragment tab1 = new CurrentFriendsFragment();

@@ -21,7 +21,7 @@ public class SearchFriendsFragment extends Fragment {
         View v = inflater.inflate(R.layout.search_friends_fragment, container, false);
         RecyclerView rv = (RecyclerView) v.findViewById(R.id.recycler_view_search);
         rv.setHasFixedSize(true);
-        RecyclerAdapter adapter = new RecyclerAdapter(new String[]{"test search one", "test search two", "test three", "test four", "test five" , "test six" , "test seven","test eight", "test nine", "test 10"});
+        RecyclerAdapterSearch adapter = new RecyclerAdapterSearch(new String[]{"test search one", "test search two", "test three", "test four", "test five" , "test six" , "test seven","test eight", "test nine", "test 10"});
         rv.setAdapter(adapter);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
