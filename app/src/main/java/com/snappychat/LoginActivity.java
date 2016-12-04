@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     public static final String TAG = "Firebase Login";
 
+
     //Creating Objects
     private FirebaseAuth snappyauth;
     private FirebaseAuth.AuthStateListener snappyauthListener;
@@ -135,8 +136,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void selectActivity() {
         if(user!=null) { //If user is found, redirect to timeline
-            Intent i = new Intent(getBaseContext(), SearchUserActivity.class);
-            i.putExtra("user",user);
+            Intent i = new Intent(getBaseContext(), MainActivity.class);
+            i.putExtra(MainActivity.USER,user);
             i.putExtra(MainActivity.FROM_LOGIN,true);
             startActivity(i);
         }else { //if user doesn't exist redirects to user profile activity

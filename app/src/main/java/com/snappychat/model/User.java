@@ -1,8 +1,14 @@
 package com.snappychat.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Fabrizio on 2/12/2016.
@@ -19,8 +25,11 @@ public class User implements Serializable{
     private String image;
     @SerializedName("nick_name")
     private String nickName;
+    private Boolean status;
     private String email;
+    private List<String>friends;
     public User(){};
+    private transient boolean friend;
 
     public User(String id, String firstName, String lastName, String nickName, String image){
         this.setId(id);
@@ -76,5 +85,53 @@ public class User implements Serializable{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        boolean sameSame = false;
+
+        if (object != null && object instanceof String)
+        {
+            sameSame = this.id.equals((String) object);
+        }
+
+        return sameSame;
+    }
+
+    public boolean isFriend() {
+        return friend;
+    }
+
+    public void setFriend(boolean friend) {
+        this.friend = friend;
+    }
+
+    public List<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
+    public Bitmap getImageIntoBitmap(){
+        Bitmap decodedByte = null;
+        try {
+            byte[] decodedString = Base64.decode(image, Base64.URL_SAFE);
+            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        }catch (Exception ex){
+            Log.e("User", "Error converting image to bitmap",ex);
+        }
+        return decodedByte;
     }
 }

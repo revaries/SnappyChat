@@ -33,6 +33,7 @@ public class SearchUserFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    private User user;
     private OnListFragmentInteractionListener mListener;
     RecyclerView recyclerView;
     ArrayList<User> users;
@@ -45,10 +46,11 @@ public class SearchUserFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static SearchUserFragment newInstance(int columnCount) {
+    public static SearchUserFragment newInstance(User user, int columnCount) {
         SearchUserFragment fragment = new SearchUserFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putSerializable(MainActivity.USER,user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,6 +61,7 @@ public class SearchUserFragment extends Fragment {
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            user = (User) getArguments().get(MainActivity.USER);
         }
 
     }
@@ -91,10 +94,13 @@ public class SearchUserFragment extends Fragment {
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                //clearBuildingMarkers();
+                users = null;
+                setupAdapter();
                 return false;
             }
         });
+
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -135,7 +141,8 @@ public class SearchUserFragment extends Fragment {
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                //clearBuildingMarkers();
+                users = null;
+                setupAdapter();
                 return false;
             }
         });
@@ -177,7 +184,7 @@ public class SearchUserFragment extends Fragment {
     public ArrayList<String> processQuery(String query){
         ArrayList<String> matches = new ArrayList<>();
         String[] words = query.toLowerCase().split("\\s+");
-        new FilterUsersTask().execute("");
+        new FilterUsersTask().execute(user,"");
         return matches;
     }
 
@@ -214,11 +221,11 @@ public class SearchUserFragment extends Fragment {
         void onListFragmentInteraction(User item);
     }
 
-    private class FilterUsersTask extends AsyncTask<String,Void,ArrayList<User>> {
+    private class FilterUsersTask extends AsyncTask<Object,Void,ArrayList<User>> {
         @Override
-        protected ArrayList<User> doInBackground(String... params) {
+        protected ArrayList<User> doInBackground(Object... params) {
             //Update user status to online
-            return ServiceHandler.getUsers(params[0]);
+            return ServiceHandler.getUsers((User)params[0],(String) params[1]);
         }
 
 
