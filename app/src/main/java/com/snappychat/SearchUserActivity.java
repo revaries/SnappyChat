@@ -27,7 +27,8 @@ public class SearchUserActivity extends AppCompatActivity implements SearchUserF
         return R.layout.activity_search_user;
     }
     protected Fragment createFragment() {
-        return SearchUserFragment.newInstance(1);
+        User user = (User) getIntent().getSerializableExtra(MainActivity.USER);
+        return SearchUserFragment.newInstance(user,1);
     }
 
     @Override

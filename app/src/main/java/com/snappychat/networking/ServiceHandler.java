@@ -48,7 +48,7 @@ public class ServiceHandler {
         }
     }
 
-    public static ArrayList<User> getUsers(String param){
+    public static ArrayList<User> getUsers(User userLoggedIn, String param){
         ArrayList<User> users = null;
         try {
             String url = Uri.parse(ENDPOINT_USER).buildUpon()
@@ -62,6 +62,7 @@ public class ServiceHandler {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     if(jsonObject.optString("first_name") != "") {
                         User user = new Gson().fromJson(jsonObject.toString(), User.class);
+                        user.setFriend(userLoggedIn.getFriends().contains(user));
                         users.add(user);
                     }
                 }
