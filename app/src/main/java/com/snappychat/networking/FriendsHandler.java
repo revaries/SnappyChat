@@ -13,8 +13,9 @@ import java.util.ArrayList;
  */
 
 public class FriendsHandler {
-    private static final String API_URL = "https://snappychatapi.herokuapp.com/api/users";
+    public static final String API_URL = "https://snappychatapi.herokuapp.com/api/users";
     private static final String CURRENT_USER = "jesantos0527@gmail.com";
+    private static final String CURRENT_USER_ID = "58446f5489866a0004ecfe11";
     private static final String TAG = "FRIENDS_HANDLER";
 
     public static final String FRIENDS_URL = API_URL + "/" + CURRENT_USER + "/friends";
@@ -90,7 +91,7 @@ public class FriendsHandler {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return new FriendCard(name, last, email, description);
+        return new FriendCard(name, last, email, description, null, false, false, false);
     }
 
     public static FriendCard handlePendingFriends(JSONObject parser){
@@ -102,4 +103,55 @@ public class FriendsHandler {
         }
         return null;
     }
+
+    public static ArrayList<FriendCard> processFriendsJsonResponse(String response, String type){
+        ArrayList<FriendCard> friendCards = new ArrayList<>();
+        Log.d(TAG, "Process Response - "+response);
+        if(response != null){
+            try {
+                JSONArray jsonArray = new JSONArray(response);
+                //Log.d(TAG, "Object "+jsonArray.toString(2));
+                for(int i=0; i < jsonArray.length(); i++){
+                    JSONObject parser = jsonArray.getJSONObject(i);
+                    //Log.d(TAG, "Object "+parser.toString());
+                    String name = parser.getString("first_name");
+                    String last = parser.getString("last_name");
+                    String email = parser.getString("email");
+                    String description = "This is a description";
+                    String visibility = parser.getString("visibility");
+                    JSONArray friends = parser.getJSONArray("friends");
+                    JSONArray pending = parser.getJSONArray("friends_pending");
+                    JSONArray requested = parser.getJSONArray("friends_requested");
+                    //Log.d(TAG, "friends "+friends.toString());
+                    Boolean areFriends = false;
+                    Boolean arePending = false;
+                    Boolean areRequested = false;
+                    if(friends.toString().contains(CURRENT_USER_ID)){
+                        //Log.d(TAG, name + " are friends");
+                        areFriends = true;
+                    }
+                    for(int j=0; j < pending.length(); j++){
+                        JSONObject p = pending.getJSONObject(j);
+                        if(p.getString("user_id").equals(CURRENT_USER_ID)){
+                            //Log.d(TAG, name + " are pending friends");
+                            arePending = true;
+                        }
+                    }
+                    for(int j=0; j < requested.length(); j++){
+                        JSONObject p = requested.getJSONObject(j);
+                        if(p.getString("user_id").equals(CURRENT_USER_ID)){
+                            //Log.d(TAG, name + " are requested friends");
+                            areRequested = true;
+                        }
+                    }
+                    friendCards.add(new FriendCard(name,last,email,description,visibility,areFriends,arePending,areRequested));
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return friendCards;
+    }
+
 }

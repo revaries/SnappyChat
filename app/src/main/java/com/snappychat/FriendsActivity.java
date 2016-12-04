@@ -45,15 +45,15 @@ public class FriendsActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Log.d(TAG, "TAB Selected "+Integer.toString(tab.getPosition()));
-                for(int i=0; i< RecyclerAdapter.mTypeOfLayout.length; i++){
-                    if(i == tab.getPosition()){
-                        RecyclerAdapter.mTypeOfLayout[i] = true;
-                        Log.d(TAG, Integer.toString(i) + " set to TRUE");
-                    }else{
-                        RecyclerAdapter.mTypeOfLayout[i] = false;
-                        Log.d(TAG, Integer.toString(i) + " set to False");
-                    }
-                }
+//                for(int i=0; i< RecyclerAdapter.mTypeOfLayout.length; i++){
+//                            if(i == tab.getPosition()){
+//                                RecyclerAdapter.mTypeOfLayout[i] = true;
+//                                Log.d(TAG, Integer.toString(i) + " set to TRUE");
+//                    }else{
+//                        RecyclerAdapter.mTypeOfLayout[i] = false;
+//                        Log.d(TAG, Integer.toString(i) + " set to False");
+//                    }
+//                }
                 viewPager.setCurrentItem(tab.getPosition());
             }
 

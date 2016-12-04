@@ -20,7 +20,6 @@ import java.util.ArrayList;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.FriendViewHolder> {
     private static String TAG = "RECYCLER_FRIENDS";
     private ArrayList<FriendCard> mDataset;
-    public static Boolean[] mTypeOfLayout = new Boolean[]{true, false, false, false};
 
     public RecyclerAdapter(ArrayList<FriendCard> myDataset) {
         mDataset = myDataset;

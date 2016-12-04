@@ -9,12 +9,21 @@ public class FriendCard {
     private String mLast;
     private String mEmail;
     private String mDescription;
+    private String mVisibility;
+    private Boolean mFriends;
+    private Boolean mPending;
+    private Boolean mRequested;
 
-    public FriendCard(String name, String last, String email, String description){
+    public FriendCard(String name, String last, String email, String description, String visibility,
+                      boolean friends, boolean pending, boolean requested){
         this.mName = name;
         this.mLast = last;
         this.mEmail = email;
         this.mDescription = description;
+        this.mVisibility = visibility;
+        this.mFriends = friends;
+        this.mPending = pending;
+        this.mRequested = requested;
     }
 
     public String getName() {
@@ -47,6 +56,38 @@ public class FriendCard {
 
     public void setDescription(String description) {
         this.mDescription = description;
+    }
+
+    public String getVisibility() {
+        return mVisibility;
+    }
+
+    public void setVisibility(String visibility) {
+        this.mVisibility = visibility;
+    }
+
+    public Boolean getFriends() {
+        return mFriends;
+    }
+
+    public void setFriends(Boolean friends) {
+        this.mFriends = friends;
+    }
+
+    public Boolean getPending() {
+        return mPending;
+    }
+
+    public void setPending(Boolean pending) {
+        this.mPending = pending;
+    }
+
+    public Boolean getRequested() {
+        return mRequested;
+    }
+
+    public void setRequested(Boolean requested) {
+        this.mRequested = requested;
     }
 
 }
