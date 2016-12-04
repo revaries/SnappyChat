@@ -13,13 +13,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
     public static final String FROM_LOGIN = "login";
-<<<<<<< HEAD
     //This is temporary and it should be set at login
     private static final String CURRENT_USER_ID = "jesantos0527@gmail.com";
-=======
     public static final String USER = "USER";
     private User user;
->>>>>>> 307c320c945495ce40438a72902b1c7f1138c797
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
