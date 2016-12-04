@@ -184,7 +184,7 @@ public class SearchUserFragment extends Fragment {
     public ArrayList<String> processQuery(String query){
         ArrayList<String> matches = new ArrayList<>();
         String[] words = query.toLowerCase().split("\\s+");
-        new FilterUsersTask().execute(user,"");
+        new FilterUsersTask().execute(user,query);
         return matches;
     }
 

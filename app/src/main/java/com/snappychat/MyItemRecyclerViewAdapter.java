@@ -40,22 +40,26 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         //holder.mIdView.setText(mValues.get(position).getNickName());
+        holder.nickTextView.setText("@"+mValues.get(position).getNickName());
         holder.infoTextView.setText(mValues.get(position).getFirstName()+" "+mValues.get(position).getLastName());
         if(!holder.mItem.getStatus()){
             holder.statusImageView.setImageResource(R.drawable.ic_radio_button_unchecked_black_24dp);
             holder.statusTextView.setText("Off");
         }else
             holder.statusTextView.setText("On");
-        if(holder.mItem.getImage() != null && !holder.mItem.getImage().isEmpty())
-            holder.infoImageView.setImageBitmap(holder.mItem.getImageIntoBitmap());
-
+        if(holder.mItem.getImage() != null && !holder.mItem.getImage().isEmpty()) {
+            holder.imageProfileImageView.setImageBitmap(holder.mItem.getImageIntoBitmap());
+        }
         if(!holder.mItem.isFriend()){
-            holder.friendImageView.setVisibility(View.INVISIBLE);
-            holder.friendTextView.setVisibility(View.INVISIBLE);
-            holder.chatButton.setVisibility(View.INVISIBLE);
-        }else
+            holder.friendImageView.setVisibility(View.GONE);
+            holder.friendTextView.setVisibility(View.GONE);
+            holder.chatButton.setImageResource(R.drawable.ic_account_circle_black_24dp);
+        }else {
+            holder.friendImageView.setVisibility(View.VISIBLE);
+            holder.friendTextView.setVisibility(View.VISIBLE);
+            holder.chatButton.setImageResource(R.drawable.ic_chat_black_24dp);
             holder.friendTextView.setText("Friend");
-
+        }
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,7 +79,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final ImageView infoImageView;
+        public final TextView nickTextView;
+        public final ImageView imageProfileImageView;
         public final TextView infoTextView;
         public final ImageView statusImageView;
         public final TextView statusTextView;
@@ -87,19 +92,15 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            infoImageView = (ImageView) view.findViewById(R.id.info_image);
+            nickTextView = (TextView) view.findViewById(R.id.nick_text);
+            imageProfileImageView = (ImageView) view.findViewById(R.id.image_profile);
             infoTextView = (TextView) view.findViewById(R.id.info_text);
             statusImageView = (ImageView) view.findViewById(R.id.status_image);
             statusTextView = (TextView) view.findViewById(R.id.status_text);
             friendTextView = (TextView) view.findViewById(R.id.friend_text);
             friendImageView = (ImageView) view.findViewById(R.id.friend_image);
             chatButton = (ImageButton) view.findViewById(R.id.chat_button);
-            chatButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Call to Chat Activity
-                }
-            });
+
         }
 
         @Override

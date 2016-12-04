@@ -127,7 +127,7 @@ public class User implements Serializable{
     public Bitmap getImageIntoBitmap(){
         Bitmap decodedByte = null;
         try {
-            byte[] decodedString = Base64.decode(image, Base64.URL_SAFE);
+            byte[] decodedString = Base64.decode(image,Base64.DEFAULT);
             decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         }catch (Exception ex){
             Log.e("User", "Error converting image to bitmap",ex);

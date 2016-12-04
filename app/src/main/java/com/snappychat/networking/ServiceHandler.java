@@ -52,7 +52,7 @@ public class ServiceHandler {
         ArrayList<User> users = null;
         try {
             String url = Uri.parse(ENDPOINT_USER).buildUpon()
-                    .appendEncodedPath(param)
+                    .appendQueryParameter("search",param)
                     .build().toString();
             String response = makeRequest(url,"GET",null);
             if(response != null){
@@ -63,6 +63,9 @@ public class ServiceHandler {
                     if(jsonObject.optString("first_name") != "") {
                         User user = new Gson().fromJson(jsonObject.toString(), User.class);
                         user.setFriend(userLoggedIn.getFriends().contains(user));
+                        if(jsonObject.optJSONObject("image") != null){
+                            user.setImage(jsonObject.optJSONObject("image").optString("data"));
+                        }
                         users.add(user);
                     }
                 }
@@ -86,6 +89,9 @@ public class ServiceHandler {
                 JSONArray jsonArray = new JSONArray(response);
                 JSONObject jsonObject = jsonArray.getJSONObject(0);
                 User user = new Gson().fromJson(jsonObject.toString(), User.class);
+                if(jsonObject.optJSONObject("image") != null){
+                    user.setImage(jsonObject.optJSONObject("image").optString("data"));
+                }
                 return user;
             }
 
