@@ -1,5 +1,7 @@
 package com.snappychat.friends;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,12 +17,12 @@ import com.snappychat.R;
  * Created by Jelson on 12/2/2016.
  */
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.FriendViewHolder> {
-    private static String TAG = "RECYCLER_FRIENDS";
+public class RecyclerAdapterPending extends RecyclerView.Adapter<RecyclerAdapterPending.FriendViewHolder> {
+    private static String TAG = "RECYCLER_PENDING";
     private String[] mDataset;
     public static Boolean[] mTypeOfLayout = new Boolean[]{true, false, false, false};
 
-    public RecyclerAdapter(String[] myDataset) {
+    public RecyclerAdapterPending(String[] myDataset) {
         mDataset = myDataset;
     }
 
@@ -28,13 +30,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Friend
         public CardView mCardView;
         public TextView mTextView;
         public Button mButton;
+        public Button mReject;
         public FriendViewHolder(View v) {
             super(v);
             mCardView = (CardView) v.findViewById(R.id.card_view);
             mTextView = (TextView) v.findViewById(R.id.card_text);
-            mButton = (Button) v.findViewById(R.id.card_view_button);
-            setButtonTextAndListener(mButton, "View Profile");
+            mButton = (Button) v.findViewById(R.id.card_button_accept);
+            mReject = (Button) v.findViewById(R.id.card_button_reject);
 
+            setButtonTextAndListener(mButton, "Accept");
+            setButtonTextAndListener(mReject, "Reject");
         }
 
         public void setButtonTextAndListener(Button button, final String text){
@@ -49,9 +54,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Friend
     }
 
     @Override
-    public RecyclerAdapter.FriendViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
-        Integer layoutId = R.layout.card_view;
+    public RecyclerAdapterPending.FriendViewHolder onCreateViewHolder(ViewGroup parent,
+                                                               int viewType) {
+        Integer layoutId = R.layout.card_view_pending;
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(layoutId, parent, false);
         FriendViewHolder vh = new FriendViewHolder(v);
@@ -68,3 +73,4 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Friend
         return mDataset.length;
     }
 }
+
