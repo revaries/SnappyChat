@@ -2,32 +2,63 @@ package com.snappychat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.snappychat.model.Timeline;
 import com.snappychat.model.User;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TimelineFragment.OnListFragmentInteractionListener{
 
     public static final String TAG = "MainActivity";
     public static final String FROM_LOGIN = "login";
     //This is temporary and it should be set at login
     private static final String CURRENT_USER_ID = "jesantos0527@gmail.com";
     public static final String USER = "USER";
-    private User user;
+    private User userLoggedIn;
+
+    private FloatingActionButton addTimelineButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if(savedInstanceState != null)
-            user = (User)savedInstanceState.getSerializable(USER);
+            userLoggedIn = (User)savedInstanceState.getSerializable(USER);
         if(getIntent().getSerializableExtra(USER) != null)
-            user = (User) getIntent().getSerializableExtra(USER);
+            userLoggedIn = (User) getIntent().getSerializableExtra(USER);
 
         setContentView(R.layout.activity_main);
+
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+        if (fragment == null) {
+            fragment = createFragment();
+            fm.beginTransaction()
+                    .add(R.id.fragmentContainer, fragment)
+                    .commit();
+        }
+
+        addTimelineButton =(FloatingActionButton) findViewById(R.id.addTimeline);
+        addTimelineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getBaseContext(), AddTimelineActivity.class);
+                i.putExtra(USER,userLoggedIn);
+                startActivity(i);
+            }
+        });
+    }
+
+    protected Fragment createFragment() {
+        User userLoggedIn = (User) getIntent().getSerializableExtra(MainActivity.USER);
+        return TimelineFragment.newInstance(userLoggedIn,1);
     }
 
     @Override
@@ -39,13 +70,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putSerializable(USER, user);
+        savedInstanceState.putSerializable(USER, userLoggedIn);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        user = (User)savedInstanceState.getSerializable(USER);
+        userLoggedIn = (User)savedInstanceState.getSerializable(USER);
     }
 
     @Override
@@ -59,12 +90,12 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.friends_bar:
                 Intent intent = new Intent(this, FriendsActivity.class);
-                intent.putExtra("CURRENT_USER_ID", CURRENT_USER_ID);
+                intent.putExtra(USER,userLoggedIn);
                 startActivity(intent);
                 return true;
             case R.id.search_bar:
                 intent = new Intent(this, SearchUserActivity.class);
-                intent.putExtra(USER,user);
+                intent.putExtra(USER,userLoggedIn);
                 startActivity(intent);
                 return true;
             default:
@@ -81,6 +112,11 @@ public class MainActivity extends AppCompatActivity {
             moveTaskToBack(true); // exist app
         else
             finish();
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(Timeline timeline) {
 
     }
 }

@@ -1,5 +1,7 @@
 package com.snappychat;
 
+import android.content.res.ColorStateList;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +51,13 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             holder.statusTextView.setText("On");
         if(holder.mItem.getImage() != null && !holder.mItem.getImage().isEmpty()) {
             holder.imageProfileImageView.setImageBitmap(holder.mItem.getImageIntoBitmap());
+        }else {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                holder.imageProfileImageView.setImageTintList(ColorStateList.valueOf(holder.imageProfileImageView.getContext().getResources().getColor(R.color.com_facebook_blue)));
+            }
+
         }
+        
         if(!holder.mItem.isFriend()){
             holder.friendImageView.setVisibility(View.GONE);
             holder.friendTextView.setVisibility(View.GONE);
