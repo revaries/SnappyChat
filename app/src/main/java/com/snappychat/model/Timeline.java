@@ -1,6 +1,14 @@
 package com.snappychat.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
+
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,8 +17,12 @@ import java.util.List;
 
 public class Timeline implements Serializable {
 
+    @SerializedName("_id")
     private String id;
+    @SerializedName("user_id")
+    private String userId;
     private String comment;
+    private Date creationDate;
     private List<String> images;
 
     public String getId() {
@@ -35,5 +47,32 @@ public class Timeline implements Serializable {
 
     public void setImages(List<String> images) {
         this.images = images;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Bitmap getImageIntoBitmap(String image){
+        Bitmap decodedByte = null;
+        try {
+            byte[] decodedString = Base64.decode(image,Base64.DEFAULT);
+            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        }catch (Exception ex){
+            Log.e("User", "Error converting image to bitmap",ex);
+        }
+        return decodedByte;
     }
 }

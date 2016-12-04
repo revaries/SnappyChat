@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.snappychat.model.Timeline;
 import com.snappychat.model.User;
 
 import org.json.JSONArray;
@@ -78,7 +79,7 @@ public class ServiceHandler {
         return users;
     }
 
-    // Return a JSONObject which is a key,value pair of the JSON string
+
     public static User getUser(String param) {
         try {
             String url = Uri.parse(ENDPOINT_USER).buildUpon()
@@ -100,6 +101,40 @@ public class ServiceHandler {
         }
 
         return null;
+    }
+
+    public static ArrayList<Timeline> getTimeline(String param) {
+        ArrayList<Timeline> timelines = null;
+        try {
+            String url = Uri.parse(ENDPOINT_USER).buildUpon()
+                    .appendEncodedPath(param)
+                    .appendPath("timeline")
+                    .build().toString();
+            String response = makeRequest(url,"GET",null);
+            if(response != null){
+                JSONArray jsonArray = new JSONArray(response);
+                timelines = new ArrayList<Timeline>();
+                for(int i=0; i < jsonArray.length(); i++){
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    Timeline timeline = new Gson().fromJson(jsonObject.toString(), Timeline.class);
+
+                    if(jsonObject.optJSONArray("images") != null){
+                        timeline.setImages(new ArrayList<String>());
+                        for(int j=0; i < jsonObject.optJSONArray("images").length(); j++){
+                            JSONObject jsonObject1 =  jsonObject.optJSONArray("images").getJSONObject(i);
+                            timeline.getImages().add(jsonObject.optString("data"));
+                        }
+                    }
+                    timelines.add(timeline);
+                }
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to fetch timeline", e);
+        }
+
+        return timelines;
     }
 
     private static String makeRequest (String urlSpec, String method, String jsonRequest) throws IOException {
