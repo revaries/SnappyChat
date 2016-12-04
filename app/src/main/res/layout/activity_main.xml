@@ -25,6 +25,7 @@
         app:backgroundTint="@color/com_facebook_blue"
         app:fabSize="normal"
         android:tint="@android:color/white"
+        android:id="@+id/addTimeline"
         />
 
 </android.support.design.widget.CoordinatorLayout>

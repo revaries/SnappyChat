@@ -2,12 +2,14 @@ package com.snappychat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.snappychat.model.Timeline;
 import com.snappychat.model.User;
@@ -20,6 +22,8 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
     private static final String CURRENT_USER_ID = "jesantos0527@gmail.com";
     public static final String USER = "USER";
     private User userLoggedIn;
+
+    private FloatingActionButton addTimelineButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,16 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
                     .add(R.id.fragmentContainer, fragment)
                     .commit();
         }
+
+        addTimelineButton =(FloatingActionButton) findViewById(R.id.addTimeline);
+        addTimelineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getBaseContext(), AddTimelineActivity.class);
+                i.putExtra(USER,userLoggedIn);
+                startActivity(i);
+            }
+        });
     }
 
     protected Fragment createFragment() {
