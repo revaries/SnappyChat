@@ -15,12 +15,11 @@ import com.snappychat.R;
  * Created by Jelson on 12/2/2016.
  */
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.FriendViewHolder> {
-    private static String TAG = "RECYCLER_FRIENDS";
+public class RecyclerAdapterSearch extends RecyclerView.Adapter<RecyclerAdapterSearch.FriendViewHolder> {
+    private static String TAG = "RECYCLER_INVITATION";
     private String[] mDataset;
-    public static Boolean[] mTypeOfLayout = new Boolean[]{true, false, false, false};
 
-    public RecyclerAdapter(String[] myDataset) {
+    public RecyclerAdapterSearch(String[] myDataset) {
         mDataset = myDataset;
     }
 
@@ -30,11 +29,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Friend
         public Button mButton;
         public FriendViewHolder(View v) {
             super(v);
-            mCardView = (CardView) v.findViewById(R.id.card_view);
+            mCardView = (CardView) v.findViewById(R.id.card_view_search);
             mTextView = (TextView) v.findViewById(R.id.card_text);
-            mButton = (Button) v.findViewById(R.id.card_view_button);
-            setButtonTextAndListener(mButton, "View Profile");
+            mButton = (Button) v.findViewById(R.id.card_invitation_button);
 
+            setButtonTextAndListener(mButton, "Cancel");
         }
 
         public void setButtonTextAndListener(Button button, final String text){
@@ -49,9 +48,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Friend
     }
 
     @Override
-    public RecyclerAdapter.FriendViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
-        Integer layoutId = R.layout.card_view;
+    public RecyclerAdapterSearch.FriendViewHolder onCreateViewHolder(ViewGroup parent,
+                                                                         int viewType) {
+        Integer layoutId = R.layout.card_view_invitations;
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(layoutId, parent, false);
         FriendViewHolder vh = new FriendViewHolder(v);
@@ -68,3 +67,4 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Friend
         return mDataset.length;
     }
 }
+

@@ -55,12 +55,20 @@
             </TextView>
 
             <Button
-                android:text="View Profile"
+                android:text="Accept"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="18dp"
-                android:id="@+id/card_view_button"
-                android:layout_centerVertical="true"
+                android:id="@+id/card_button_accept"
+                android:layout_alignBottom="@+id/card_name"
+                android:layout_toStartOf="@+id/card_button_reject" />
+
+            <Button
+                android:text="Reject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/card_button_reject"
+                android:layout_alignBaseline="@+id/card_button_accept"
+                android:layout_alignBottom="@+id/card_button_accept"
                 android:layout_alignParentEnd="true" />
 
         </RelativeLayout>

@@ -15,12 +15,13 @@ import com.snappychat.R;
  */
 
 public class CurrentFriendsFragment extends Fragment {
+    public static final String LAYOUT = "CURRENT_FRIENDS";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.current_friends_fragment, container, false);
         RecyclerView rv = (RecyclerView) v.findViewById(R.id.recycler_view);
         rv.setHasFixedSize(true);
-        RecyclerAdapter adapter = new RecyclerAdapter(new String[]{"test one", "test two", "test three", "test four", "test five" , "test six" , "test seven","test eight", "test nine", "test 10"});
+        RecyclerAdapter adapter = new RecyclerAdapter(new String[]{"test friends one", "test friends two", "test three", "test four", "test five" , "test six" , "test seven","test eight", "test nine", "test 10"});
         rv.setAdapter(adapter);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());

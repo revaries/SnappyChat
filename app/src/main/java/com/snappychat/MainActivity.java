@@ -13,6 +13,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
     public static final String FROM_LOGIN = "login";
+    //This is temporary and it should be set at login
+    private static final String CURRENT_USER_ID = "jesantos0527@gmail.com";
     public static final String USER = "USER";
     private User user;
 
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.friends_bar:
                 Intent intent = new Intent(this, FriendsActivity.class);
+                intent.putExtra("CURRENT_USER_ID", CURRENT_USER_ID);
                 startActivity(intent);
                 return true;
             case R.id.search_bar:

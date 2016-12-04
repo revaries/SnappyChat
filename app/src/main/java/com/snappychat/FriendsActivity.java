@@ -5,18 +5,20 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.snappychat.friends.CurrentFriendsFragment;
 import com.snappychat.friends.PagerAdapter;
+import com.snappychat.friends.RecyclerAdapter;
 
 /**
  * Created by Jelson on 12/2/2016.
  */
 
-
 public class FriendsActivity extends AppCompatActivity {
-
+    private static String TAG = "FRIENDS_ACTIVITY";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +26,8 @@ public class FriendsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        String currentUserEmail = getIntent().getStringExtra("CURRENT_USER_ID");
+        Log.d(TAG, "Email: "+currentUserEmail);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Friends"));
         tabLayout.addTab(tabLayout.newTab().setText("Pending"));
@@ -36,9 +40,20 @@ public class FriendsActivity extends AppCompatActivity {
                 (getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                Log.d(TAG, "TAB Selected "+Integer.toString(tab.getPosition()));
+                for(int i=0; i< RecyclerAdapter.mTypeOfLayout.length; i++){
+                    if(i == tab.getPosition()){
+                        RecyclerAdapter.mTypeOfLayout[i] = true;
+                        Log.d(TAG, Integer.toString(i) + " set to TRUE");
+                    }else{
+                        RecyclerAdapter.mTypeOfLayout[i] = false;
+                        Log.d(TAG, Integer.toString(i) + " set to False");
+                    }
+                }
                 viewPager.setCurrentItem(tab.getPosition());
             }
 
