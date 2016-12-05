@@ -19,8 +19,8 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
     public static final String TAG = "MainActivity";
     public static final String FROM_LOGIN = "login";
     //This is temporary and it should be set at login
-    private static final String CURRENT_USER_ID = "jesantos0527@gmail.com";
-    public static final String USER = "USER";
+    private static final String CURRENT_USER_LOGGED_IN_ID = "jesantos0527@gmail.com";
+    public static final String USER_LOGGED_IN = "USER_LOGGED_IN";
     private User userLoggedIn;
 
     private FloatingActionButton addTimelineButton;
@@ -30,9 +30,9 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
         super.onCreate(savedInstanceState);
 
         if(savedInstanceState != null)
-            userLoggedIn = (User)savedInstanceState.getSerializable(USER);
-        if(getIntent().getSerializableExtra(USER) != null)
-            userLoggedIn = (User) getIntent().getSerializableExtra(USER);
+            userLoggedIn = (User)savedInstanceState.getSerializable(USER_LOGGED_IN);
+        if(getIntent().getSerializableExtra(USER_LOGGED_IN) != null)
+            userLoggedIn = (User) getIntent().getSerializableExtra(USER_LOGGED_IN);
 
         setContentView(R.layout.activity_main);
 
@@ -50,14 +50,14 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getBaseContext(), AddTimelineActivity.class);
-                i.putExtra(USER,userLoggedIn);
+                i.putExtra(USER_LOGGED_IN,userLoggedIn);
                 startActivity(i);
             }
         });
     }
 
     protected Fragment createFragment() {
-        User userLoggedIn = (User) getIntent().getSerializableExtra(MainActivity.USER);
+        User userLoggedIn = (User) getIntent().getSerializableExtra(MainActivity.USER_LOGGED_IN);
         return TimelineFragment.newInstance(userLoggedIn,1);
     }
 
@@ -70,13 +70,13 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putSerializable(USER, userLoggedIn);
+        savedInstanceState.putSerializable(USER_LOGGED_IN, userLoggedIn);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        userLoggedIn = (User)savedInstanceState.getSerializable(USER);
+        userLoggedIn = (User)savedInstanceState.getSerializable(USER_LOGGED_IN);
     }
 
     @Override
@@ -90,12 +90,12 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
         switch (item.getItemId()) {
             case R.id.friends_bar:
                 Intent intent = new Intent(this, FriendsActivity.class);
-                intent.putExtra(USER,userLoggedIn);
+                intent.putExtra(USER_LOGGED_IN,userLoggedIn);
                 startActivity(intent);
                 return true;
             case R.id.search_bar:
                 intent = new Intent(this, SearchUserActivity.class);
-                intent.putExtra(USER,userLoggedIn);
+                intent.putExtra(USER_LOGGED_IN,userLoggedIn);
                 startActivity(intent);
                 return true;
             default:

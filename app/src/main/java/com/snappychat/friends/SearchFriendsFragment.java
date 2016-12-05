@@ -49,7 +49,7 @@ public class SearchFriendsFragment extends Fragment {
         friendsTask = new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                String response = FriendsHandler.getFriends(FriendsHandler.API_URL);
+                String response = FriendsHandler.getFriends("",FriendsHandler.API_URL);
                 return response;
             }
 
@@ -57,7 +57,7 @@ public class SearchFriendsFragment extends Fragment {
             protected void onPostExecute(String result) {
                 friendsTask = null;
                 Log.d(TAG, "onPostExecute: result: " + result);
-                searchFriendCards = FriendsHandler.processFriendsJsonResponse(result, FriendsHandler.API_URL);
+                //searchFriendCards = FriendsHandler.processFriendsJsonResponse(result, FriendsHandler.API_URL);
                 adapter.updateData(searchFriendCards);
             }
 
