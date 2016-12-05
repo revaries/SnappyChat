@@ -8,43 +8,51 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.RemoteMessage;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.snappychat.networking.FriendsHandler;
+import com.snappychat.networking.ServiceHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Jelson on 11/27/16.
  */
 
 public class ChatFragment extends Fragment{//implements OnClickListener {
-    private static final String SENDER_ID = "1071236147570";
+    private static final String GOOGLE_API_URL = "https://fcm.googleapis.com/fcm/send";
+    private static final String CHAT_URL = "https://snappychatapi.herokuapp.com/api/chats";
+    //private static final String SENDER_ID = "1071236147570";
     private EditText msg_edittext;
-    private String user1 = "khushi1", user2 = "khushi2";
+    private static String current_user;
+    private static String chat_friend;
+    private static String getMessageUrl;
     private Random random;
     public static ArrayList<ChatMessage> chatlist;
     public static ChatAdapter chatAdapter;
     ListView msgListView;
 
-
+    //temporary destination key
+    private static String token;
     //send message
     private static final String TAG_SEND = "MessageSender";
-    AsyncTask<Void, Void, String> sendTask;
-    AtomicInteger ccsMsgId = new AtomicInteger();
-    FirebaseMessaging fm = FirebaseMessaging.getInstance();
+    private AsyncTask<Void, Void, String> requestTask;
+    private AsyncTask<Void, Void, String> getMessagesTask;
+    //AtomicInteger ccsMsgId = new AtomicInteger();
+    //FirebaseMessaging fm = FirebaseMessaging.getInstance();
 
     private static final String TAG = "UPDATE_VIEW";
 
@@ -55,8 +63,16 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         random = new Random();
-        //((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(
-        //  "Chats");
+
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG, "Created View Token - " + refreshedToken);
+
+        ///SETUP USERS FROM INTENT HERE;
+        current_user = "jesantos0527@gmail.com";
+        chat_friend = "fabriziojps@gmail.com";
+        getMessageUrl = "https://snappychatapi.herokuapp.com/api/chats?user_sender_id=" +
+                current_user + "&user_receiver_id=" + chat_friend;
+        token = getToken(chat_friend);
         msg_edittext = (EditText) view.findViewById(R.id.messageEditText);
         msgListView = (ListView) view.findViewById(R.id.msgListView);
         ImageButton sendButton = (ImageButton) view
@@ -66,107 +82,170 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.sendMessageButton:
-                        sendTextMessage(v);
-
+                        sendTextMessage();
                 }
             }
         });
 
-        // ----Set autoscroll of listview when a new message arrives----//
         msgListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         msgListView.setStackFromBottom(true);
 
         chatlist = new ArrayList<ChatMessage>();
         chatAdapter = new ChatAdapter(getActivity(), chatlist);
         msgListView.setAdapter(chatAdapter);
+        getHistoryChatMessages();
         return view;
+    }
+
+    public String getToken(final String email){
+        requestTask = new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String response = null;
+                try {
+
+                    String url = Uri.parse(FriendsHandler.API_URL+ "/" + email).buildUpon()
+                            .build().toString();
+                    response = ServiceHandler.makeRequest(url,"GET",null);
+                    JSONArray jsonArray = new JSONArray(response);
+                    token = jsonArray.getJSONObject(0).getString("token");
+                    //Log.d(TAG, "Token JSON "+jsonArray.getJSONObject(0).getString("token"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return "Token is "+token;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                requestTask = null;
+            }
+
+        };
+        requestTask.execute(null, null, null);
+        return null;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
     }
 
-
-    public void sendMessage(final Bundle data) {
-
-        sendTask = new AsyncTask<Void, Void, String>() {
+    public void getHistoryChatMessages(){
+        Log.d(TAG, "Entering update view.");
+        getMessagesTask = new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
 
-                String msgId = Integer.toString(ccsMsgId.incrementAndGet());
-                Log.d(TAG, "messageid: " + msgId);
-                fm.send(new RemoteMessage.Builder(SENDER_ID + "@gcm.googleapis.com")
-                        .setMessageId(msgId)
-                        .addData("my_message", "Hello World")
-                        .addData("my_action","SAY_HELLO")
-                        .build());
-                Log.d(TAG, "After fcm.send successful.");
-                /*try {
-                    Log.d(TAG, "messageid: " + msgId);
-                    fm.send(new RemoteMessage.Builder(SENDER_ID + "@gcm.googleapis.com")
-                            .setMessageId(msgId)
-                            .addData("my_message", "Hello World")
-                            .addData("my_action","SAY_HELLO")
-                            .build());
-                    Log.d(TAG, "After fcm.send successful.");
+                String getMessages = null;
+                try {
+                    getMessages = ServiceHandler.makeRequest(getMessageUrl,"GET",null);
+                    JSONArray jsonArray = new JSONArray(getMessages);
+                    JSONObject parser = jsonArray.getJSONObject(0);
+                    JSONArray chatMessages = parser.getJSONArray("chat_messages");
+                    Log.d(TAG, "ChatMessages "+ chatMessages);
+                    for(int i=0; i < chatMessages.length(); i++){
+                        JSONObject message = chatMessages.getJSONObject(i);
+                        String sender_email = message.getJSONObject("user_sender_id").getString("email");
+                        String receiver_email = message.getJSONObject("user_receiver_id").getString("email");
+                        String msg = message.getString("message");
+//                        Log.d(TAG, "Sender id "+ sender_email);
+//                        Log.d(TAG, "Receiver id "+ receiver_email);
+//                        Log.d(TAG, "Message "+ msg);
+                        Boolean isMine = false;
+                        if(sender_email.equals(current_user)){
+                            isMine= true;
+                        }
+                        ChatMessage chatMessage = new ChatMessage(sender_email, receiver_email,
+                                msg, "" + random.nextInt(1000), isMine);
+                        chatAdapter.add(chatMessage);
+                    }
+
                 } catch (IOException e) {
-                    Log.d(TAG, "Exception: " + e);  
                     e.printStackTrace();
-                }*/
-                return "Message ID: "+msgId+ " Sent.";
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d(TAG, "Response Chat "+getMessages);
+                return "List of messages!";
             }
 
             @Override
             protected void onPostExecute(String result) {
-                sendTask = null;
+                chatAdapter.notifyDataSetChanged();
+                getMessagesTask = null;
                 Log.d(TAG, "onPostExecute: result: " + result);
             }
 
         };
-        sendTask.execute(null, null, null);
+        getMessagesTask.execute(null, null, null);
     }
 
-
-    public void sendTextMessage(View v) {
+    public void sendTextMessage() {
         String message = msg_edittext.getEditableText().toString();
         if (!message.equalsIgnoreCase("")) {
-            final ChatMessage chatMessage = new ChatMessage(user1, user2,
+            final ChatMessage chatMessage = new ChatMessage(current_user, chat_friend,
                     message, "" + random.nextInt(1000), true);
             chatMessage.setMsgID();
             chatMessage.body = message;
             chatMessage.Date = getCurrentDate();
             chatMessage.Time = getCurrentTime();
             msg_edittext.setText("");
-            //chatAdapter.add(chatMessage);
-            //chatAdapter.notifyDataSetChanged();
             updateView(chatMessage);
         }
     }
 
+    public static void postToDatabase(ChatMessage chatMessage){
+        JSONObject updateDB = new JSONObject();
+        String responseChat;
+        try {
+            updateDB.put("user_sender_id", chatMessage.sender);
+            updateDB.put("user_receiver_id", chatMessage.receiver);
+            updateDB.put("message", chatMessage.body);
+            String chatUrl = Uri.parse(CHAT_URL).buildUpon()
+                    .build().toString();
+            responseChat = ServiceHandler.makeRequest(chatUrl,"POST",updateDB.toString());
+            Log.d(TAG, "Updated to database: "+responseChat);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static void updateView(final ChatMessage chatMessage){
-        Log.d(TAG, "Entering update view.");
         updateViewTask = new AsyncTask<Void, Void, String>() {
-            /*@Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                Log.d(TAG, "onPreExecute");
-            }*/
 
             @Override
             protected String doInBackground(Void... params) {
 
-                Log.d(TAG, "Before update");
+                String response = null;
+                JSONObject json = new JSONObject();
+                JSONObject data = new JSONObject();
+                try {
+                    data.put("message", chatMessage.body);
+                    data.put("user_sender_id", chatMessage.sender);
+                    data.put("user_receiver_id", chatMessage.receiver);
+                    json.put("data", data);
+                    json.put("to", token);
+
+                    String url = Uri.parse(GOOGLE_API_URL).buildUpon()
+                            .build().toString();
+                    response = ServiceHandler.makeRequest(url,"POST",json.toString());
+                    postToDatabase(chatMessage);
+                    if(response != null){
+                        Log.v(TAG,"Send Message response is "+response);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 chatAdapter.add(chatMessage);
-                //Log.d(TAG, "After gcm.send successful.");
-//                try {
-//                    Log.d(TAG, "Before update");
-//                    chatAdapter.add(chatMessage);
-//                    Log.d(TAG, "After gcm.send successful.");
-//                } catch (IOException e) {
-//                    Log.d(TAG, "Exception: " + e);
-//                    //e.printStackTrace();
-//                }
-                return "Chat message added!";
+                return "Chat message added!. Response "+response;
             }
 
             @Override
@@ -177,12 +256,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
             }
 
         };
-        Log.d(TAG, "Calling execute.");
         updateViewTask.execute(null, null, null);
-        Log.d(TAG, "Leaving update view.");
-
-        //chatAdapter.add(chatMessage);
-        //chatAdapter.notifyDataSetChanged();
     }
 
     public static String getCurrentTime(){

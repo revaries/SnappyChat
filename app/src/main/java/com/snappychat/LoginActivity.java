@@ -73,6 +73,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     Log.v("User Logged In EMAIL", user.getEmail());
                     email = user.getEmail();
                     new GetUserTask().execute(email, FirebaseInstanceId.getInstance().getToken());
+
                 } else {
                     Log.v("User SIgned out", "No User");
                 }

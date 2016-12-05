@@ -25,7 +25,53 @@ public class User implements Serializable{
     private String image;
     @SerializedName("nick_name")
     private String nickName;
+
+    public String getAboutMe() {
+        return AboutMe;
+    }
+
+    public void setAboutMe(String aboutMe) {
+        AboutMe = aboutMe;
+    }
+
+    public String getInterest() {
+        return Interest;
+    }
+
+    public void setInterest(String interest) {
+        Interest = interest;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
+
+    @SerializedName("location")
+    private String location;
+    @SerializedName("profession")
+    private String profession;
+    @SerializedName("about_me")
+    private String AboutMe;
+    @SerializedName("Intersts")
+    private String Interest;
+
+
+
+
     private Boolean status;
+
     private String email;
     private List<String>friends;
     public User(){};
