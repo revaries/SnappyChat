@@ -26,6 +26,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     private final List<User> mValues;
     private final OnListFragmentInteractionListener mListener;
 
+
     public MyItemRecyclerViewAdapter(ArrayList<User> items, SearchUserFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
@@ -42,8 +43,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         //holder.mIdView.setText(mValues.get(position).getNickName());
-        holder.nickTextView.setText("@"+mValues.get(position).getNickName());
-        holder.infoTextView.setText(mValues.get(position).getFirstName()+" "+mValues.get(position).getLastName());
+        holder.nickTextView.setText("@"+holder.mItem.getNickName());
+        holder.infoTextView.setText(holder.mItem.getFirstName()+" "+holder.mItem.getLastName());
         if(!holder.mItem.getStatus()){
             holder.statusImageView.setImageResource(R.drawable.ic_radio_button_unchecked_black_24dp);
             holder.statusTextView.setText("Off");
@@ -61,11 +62,10 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         if(!holder.mItem.isFriend()){
             holder.friendImageView.setVisibility(View.GONE);
             holder.friendTextView.setVisibility(View.GONE);
-            holder.chatButton.setImageResource(R.drawable.ic_account_circle_black_24dp);
+            holder.chatButton.setVisibility(View.GONE);
         }else {
             holder.friendImageView.setVisibility(View.VISIBLE);
             holder.friendTextView.setVisibility(View.VISIBLE);
-            holder.chatButton.setImageResource(R.drawable.ic_chat_black_24dp);
             holder.friendTextView.setText("Friend");
         }
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +94,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final TextView statusTextView;
         public final ImageView friendImageView;
         public final TextView friendTextView;
+        public final ImageButton profileButton;
         public final ImageButton chatButton;
         public User mItem;
 
@@ -107,6 +108,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             statusTextView = (TextView) view.findViewById(R.id.status_text);
             friendTextView = (TextView) view.findViewById(R.id.friend_text);
             friendImageView = (ImageView) view.findViewById(R.id.friend_image);
+            profileButton= (ImageButton) view.findViewById(R.id.profile_button);
             chatButton = (ImageButton) view.findViewById(R.id.chat_button);
 
         }

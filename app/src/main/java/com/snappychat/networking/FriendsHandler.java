@@ -2,10 +2,13 @@ package com.snappychat.networking;
 
 import android.net.Uri;
 import android.util.Log;
+
 import com.snappychat.friends.FriendCard;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -14,16 +17,18 @@ import java.util.ArrayList;
 
 public class FriendsHandler {
     public static final String API_URL = "https://snappychatapi.herokuapp.com/api/users";
-    private static final String CURRENT_USER = "jesantos0527@gmail.com";
-    private static final String CURRENT_USER_ID = "58446f5489866a0004ecfe11";
+    //private static final String CURRENT_USER = "jesantos0527@gmail.com";
+    //private static final String CURRENT_USER_ID = "58446f5489866a0004ecfe11";
     private static final String TAG = "FRIENDS_HANDLER";
 
-    public static final String FRIENDS_URL = API_URL + "/" + CURRENT_USER + "/friends";
-    public static final String PENDING_URL = API_URL + "/" + CURRENT_USER + "/friends_pending";
-    public static final String REQUESTED_URL = API_URL + "/" + CURRENT_USER + "/friends_request";
+    public static final String FRIENDS_URL = "friends";
+    public static final String PENDING_URL = "friends_pending";
+    public static final String REQUESTED_URL = "friends_request";
 
-    public static String getFriends(String apiURL){
-        String url = Uri.parse(apiURL).buildUpon()
+    public static String getFriends(String user_id, String param){
+        String url = Uri.parse(API_URL).buildUpon()
+                .appendEncodedPath(user_id)
+                .appendPath("friends")
                 .build().toString();
         Log.d(TAG, "URL: "+url);
         String response = null;
@@ -104,6 +109,7 @@ public class FriendsHandler {
         return null;
     }
 
+    /*
     public static ArrayList<FriendCard> processFriendsJsonResponse(String response, String type){
         ArrayList<FriendCard> friendCards = new ArrayList<>();
         Log.d(TAG, "Process Response - "+response);
@@ -152,6 +158,6 @@ public class FriendsHandler {
             }
         }
         return friendCards;
-    }
+    }*/
 
 }

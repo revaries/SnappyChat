@@ -44,7 +44,7 @@ public class TimelineFragment extends Fragment {
         TimelineFragment fragment = new TimelineFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
-        args.putSerializable(MainActivity.USER,user);
+        args.putSerializable(MainActivity.USER_LOGGED_IN,user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,7 +55,7 @@ public class TimelineFragment extends Fragment {
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-            user = (User) getArguments().get(MainActivity.USER);
+            user = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
             new FetchTimelineTask().execute(user.getEmail());
         }
 

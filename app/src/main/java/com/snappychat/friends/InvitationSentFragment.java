@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.snappychat.MainActivity;
 import com.snappychat.R;
+import com.snappychat.model.User;
 import com.snappychat.networking.FriendsHandler;
 
 import java.util.ArrayList;
@@ -21,14 +23,25 @@ import java.util.ArrayList;
 
 public class InvitationSentFragment extends Fragment {
     public static final String TAG = "INVITATION_FRIENDS";
-    private static AsyncTask<Void, Void, String> invitationFriendsTask;
+    private static AsyncTask<String, Void, String> invitationFriendsTask;
     public static ArrayList<FriendCard> invitationFriendCards = new ArrayList<>();
     public static RecyclerAdapterInvitation adapter;
+    private User userLoggedIn;
+
+    public static InvitationSentFragment newInstance(User user) {
+        InvitationSentFragment fragment = new InvitationSentFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(MainActivity.USER_LOGGED_IN,user);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        userLoggedIn = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
         getInvitationFriendsList();
+
     }
 
     @Override
@@ -46,10 +59,10 @@ public class InvitationSentFragment extends Fragment {
     }
 
     public void getInvitationFriendsList(){
-        invitationFriendsTask = new AsyncTask<Void, Void, String>() {
+        invitationFriendsTask = new AsyncTask<String, Void, String>() {
             @Override
-            protected String doInBackground(Void... params) {
-                String response = FriendsHandler.getFriends(FriendsHandler.REQUESTED_URL);
+            protected String doInBackground(String... params) {
+                String response = FriendsHandler.getFriends(params[0],FriendsHandler.REQUESTED_URL);
                 return response;
             }
 
@@ -62,6 +75,6 @@ public class InvitationSentFragment extends Fragment {
             }
 
         };
-        invitationFriendsTask.execute(null, null, null);
+        invitationFriendsTask.execute(userLoggedIn.getEmail());
     }
 }
