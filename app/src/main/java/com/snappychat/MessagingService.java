@@ -1,7 +1,5 @@
 package com.snappychat;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -13,8 +11,6 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
-import java.util.List;
 import java.util.Random;
 
 public class MessagingService extends FirebaseMessagingService {
@@ -44,54 +40,29 @@ public class MessagingService extends FirebaseMessagingService {
 
         Log.d(TAG, "onMessageReceived was call");
 
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData().get("hello"));
-        }
-
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            String message = remoteMessage.getNotification().getBody();
-            Log.d(TAG, "Message Notification Body: " + message);
+            String message = remoteMessage.getData().get("message");
+            String sender_id = remoteMessage.getData().get("user_sender_id");
+            String receiver_id = remoteMessage.getData().get("user_receiver_id");
             Random random = new Random();
-            final ChatMessage chatMessage = new ChatMessage("user1", "user2",
-                    remoteMessage.getNotification().getBody(), "" + random.nextInt(1000), false);
+            final ChatMessage chatMessage = new ChatMessage(sender_id, receiver_id,
+                    message, "" + random.nextInt(1000), false);
             chatMessage.setMsgID();
             chatMessage.body = message;
-
             chatMessage.Date = ChatFragment.getCurrentDate();
             chatMessage.Time = ChatFragment.getCurrentTime();
 
-            ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
-
-            ActivityManager manager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-            List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
-            String currentActivity = taskInfo.get(0).topActivity.getShortClassName();
-            Log.d("topActivity", "CURRENT Activity ::" + taskInfo.get(0).topActivity.getClassName());
-
-            if(currentActivity.equals(".ChatActivity")){
+//            ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+//            ActivityManager manager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+//            List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+//            String currentActivity = taskInfo.get(0).topActivity.getShortClassName();
+//            Log.d("topActivity", "CURRENT Activity ::" + taskInfo.get(0).topActivity.getClassName());
+            if(ChatActivity.isActive){
                 ChatFragment.updateView(chatMessage);
-                Log.d(TAG, "Message was added to window.");
             }else{
-                Log.d(TAG, "Current Acvity is not ChatActivity.");
+                ChatFragment.postToDatabase(chatMessage);
             }
-            //ChatFragment.updateView(chatMessage);
-
-            //Activity act = ChatActivity;
-
-            /*runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ChatFragment.updateView(chatMessage);
-                    // your UI code here
-
-                }
-            });*/
-
-                    //chatAdapter.add(chatMessage);
-            //ChatFragment.chatAdapter.notifyDataSetChanged();
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
