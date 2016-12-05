@@ -30,6 +30,10 @@ public class ServiceHandler {
 
     public static final String TAG = "ServiceHandler";
     private static final String ENDPOINT_USER = "https://snappychatapi.herokuapp.com/api/users";
+    private static final String FIRABASE_SERVER_KEY =
+            "key=AAAAtfwALJk:APA91bHXBxoCZ8_kuK5ML6CCfVBEMezJ7DMHft8fGpriIK5wGD4Fj07pDktiIT16bIyy" +
+                    "MyMyHHHwYBMU8Jxcb5cVYyEoaGoLwzCHv3gW8fAV49zBachwromew0ms3YbU493p8wfJHZ8eJ_-_" +
+                    "w57KqFJzzgp7mDxg_A";
 
 
     // Return a JsonObject which is a key,value pair of the JSON string
@@ -145,6 +149,7 @@ public class ServiceHandler {
             connection.setRequestMethod(method);
             if (jsonRequest != null) {
                 connection.setRequestProperty("Content-Type","application/json");
+                connection.setRequestProperty("Authorization", FIRABASE_SERVER_KEY);
                 connection.setDoOutput(true);
                 OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
                 out.write(jsonRequest);
