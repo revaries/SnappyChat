@@ -22,7 +22,7 @@
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".LoginActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".SearchUserActivity"
             android:parentActivityName=".MainActivity"
@@ -74,7 +74,9 @@
         </activity>
         <activity
             android:name=".AddTimelineActivity"
-            android:parentActivityName=".MainActivity" android:theme="@style/AppTheme"></activity>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".profileview"></activity>
     </application>
 
 </manifest>
