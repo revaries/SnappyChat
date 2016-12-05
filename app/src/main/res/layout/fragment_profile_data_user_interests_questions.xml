@@ -1,13 +1,58 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.snappychat.ProfileDataUserInterestsQuestions">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="15dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:text="Tell Us What you like"
+        android:textSize="20dp"
+        android:paddingLeft="-15dp"
+        android:textAlignment="center"
+        />
+    <EditText
+            android:id="@+id/about_you"
+            android:paddingBottom="5dp"
+            android:layout_margin="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="About You"
+            android:inputType="textImeMultiLine"
+            android:layout_weight="1.75"
+            android:background="@drawable/edittext_underline"
+            />
 
-</FrameLayout>
+
+
+        <EditText
+            android:id="@+id/interests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_underline"
+            android:layout_weight="0.5"
+            android:layout_margin="15dp"
+            android:paddingBottom="5dp"
+            android:text="Nick Name"/>
+
+
+
+    <RelativeLayout
+        android:layout_margin="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/next"
+            android:text="NEXT"></Button>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

@@ -3,62 +3,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.snappychat.ProfileDataNameQuestions">
-
+    tools:context="com.snappychat.ProileDataUserQuestions">
 
     <TextView
         android:layout_marginTop="50dp"
         android:layout_marginBottom="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Tell Us Who You are "
+        android:text=" A little More"
         android:textSize="20dp"
         android:paddingLeft="-15dp"
         android:textAlignment="center"
         />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/first_name"
+            android:id="@+id/location"
+            android:drawableLeft="@drawable/ic_location"
             android:paddingBottom="5dp"
             android:layout_margin="15dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="First Name"
-            android:layout_weight="1"
+            android:text="Location"
+
             android:background="@drawable/edittext_underline"
             />
         <EditText
             android:id="@+id/last_name"
             android:paddingBottom="5dp"
             android:layout_margin="15dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Last Name"
-            android:layout_weight="1"
+            android:text="Profession"
+            android:drawableLeft="@drawable/ic_profession"
             android:background="@drawable/edittext_underline"
             />
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/nick_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edittext_underline"
-        android:layout_weight="1"
-        android:layout_margin="15dp"
-        android:paddingBottom="5dp"
-        android:text="Nick Name"/>
-
-    </LinearLayout>
 
     <RelativeLayout
         android:layout_margin="30dp"
@@ -72,5 +53,6 @@
             android:text="NEXT"></Button>
 
     </RelativeLayout>
+
 
 </LinearLayout>

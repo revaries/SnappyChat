@@ -1,0 +1,66 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.snappychat.ProfileDataSettingsQuestions"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select who can see your Profile"
+        android:textSize="20dp"
+        android:paddingLeft="-15dp"
+        android:textAlignment="center"
+        />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/profile_settings_radio"
+        android:layout_margin="20dp"
+        >
+        <RadioButton
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_settings_private"
+            android:text="Private"
+            android:buttonTint="@color/com_facebook_button_background_color"
+            />
+        <RadioButton
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_settings_friendsonly"
+            android:text="Friends Only"
+            android:buttonTint="@color/com_facebook_button_background_color"
+            />
+        <RadioButton
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_settings_public"
+            android:text="Public"
+            android:buttonTint="@color/com_facebook_button_background_color"
+            />
+    </RadioGroup>
+
+    <RelativeLayout
+        android:layout_margin="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/next"
+            android:text="NEXT"></Button>
+
+    </RelativeLayout>
+
+
+</LinearLayout>
