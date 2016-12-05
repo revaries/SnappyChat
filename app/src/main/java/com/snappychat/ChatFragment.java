@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.snappychat.networking.FriendsHandler;
 import com.snappychat.networking.ServiceHandler;
 
 import org.json.JSONArray;
@@ -45,11 +46,10 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
     ListView msgListView;
 
     //temporary destination key
-    private static final String token = "1bFvul8nO0bZGuCoysF49d5XvErAp36pJlVtEkOH" +
-            "MLtdGO1RpMwu2rLkP2kLIbcF7vqVWFTzrT3kc1JJCxX8aTNKe8hdyog9V8SPG-Gmjt69OlnSOPl3P9OK_MkKkGM7Amhn0MCQ";
+    private static String token;
     //send message
     private static final String TAG_SEND = "MessageSender";
-    //private AsyncTask<Void, Void, String> sendTask;
+    private AsyncTask<Void, Void, String> requestTask;
     private AsyncTask<Void, Void, String> getMessagesTask;
     //AtomicInteger ccsMsgId = new AtomicInteger();
     //FirebaseMessaging fm = FirebaseMessaging.getInstance();
@@ -72,7 +72,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         chat_friend = "fabriziojps@gmail.com";
         getMessageUrl = "https://snappychatapi.herokuapp.com/api/chats?user_sender_id=" +
                 current_user + "&user_receiver_id=" + chat_friend;
-
+        token = getToken(chat_friend);
         msg_edittext = (EditText) view.findViewById(R.id.messageEditText);
         msgListView = (ListView) view.findViewById(R.id.msgListView);
         ImageButton sendButton = (ImageButton) view
@@ -97,6 +97,38 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         return view;
     }
 
+    public String getToken(final String email){
+        requestTask = new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String response = null;
+                try {
+
+                    String url = Uri.parse(FriendsHandler.API_URL+ "/" + email).buildUpon()
+                            .build().toString();
+                    response = ServiceHandler.makeRequest(url,"GET",null);
+                    JSONArray jsonArray = new JSONArray(response);
+                    token = jsonArray.getJSONObject(0).getString("token");
+                    //Log.d(TAG, "Token JSON "+jsonArray.getJSONObject(0).getString("token"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return "Token is "+token;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                requestTask = null;
+            }
+
+        };
+        requestTask.execute(null, null, null);
+        return null;
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
     }
@@ -119,9 +151,9 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                         String sender_email = message.getJSONObject("user_sender_id").getString("email");
                         String receiver_email = message.getJSONObject("user_receiver_id").getString("email");
                         String msg = message.getString("message");
-                        Log.d(TAG, "Sender id "+ sender_email);
-                        Log.d(TAG, "Receiver id "+ receiver_email);
-                        Log.d(TAG, "Message "+ msg);
+//                        Log.d(TAG, "Sender id "+ sender_email);
+//                        Log.d(TAG, "Receiver id "+ receiver_email);
+//                        Log.d(TAG, "Message "+ msg);
                         Boolean isMine = false;
                         if(sender_email.equals(current_user)){
                             isMine= true;
