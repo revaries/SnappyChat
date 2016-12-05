@@ -1,13 +1,5 @@
 package com.snappychat;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Random;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,6 +20,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Random;
+
 /**
  * Created by Jelson on 11/27/16.
  */
@@ -37,8 +38,8 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
     private static final String CHAT_URL = "https://snappychatapi.herokuapp.com/api/chats";
     //private static final String SENDER_ID = "1071236147570";
     private EditText msg_edittext;
-    private static String current_user;
-    private static String chat_friend;
+    //private static String current_user;
+    //private static String chat_friend;
     private static String getMessageUrl;
     private Random random;
     public static ArrayList<ChatMessage> chatlist;
@@ -68,11 +69,11 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         Log.d(TAG, "Created View Token - " + refreshedToken);
 
         ///SETUP USERS FROM INTENT HERE;
-        current_user = "jesantos0527@gmail.com";
-        chat_friend = "fabriziojps@gmail.com";
+        //current_user = "jesantos0527@gmail.com";
+        //chat_friend = "fabriziojps@gmail.com";
         getMessageUrl = "https://snappychatapi.herokuapp.com/api/chats?user_sender_id=" +
-                current_user + "&user_receiver_id=" + chat_friend;
-        token = getToken(chat_friend);
+                ((ChatActivity)getActivity()).userSender.getEmail() + "&user_receiver_id=" + ((ChatActivity)getActivity()).userReceiver.getEmail();
+        //token = getToken(chat_friend);
         msg_edittext = (EditText) view.findViewById(R.id.messageEditText);
         msgListView = (ListView) view.findViewById(R.id.msgListView);
         ImageButton sendButton = (ImageButton) view
@@ -155,7 +156,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
 //                        Log.d(TAG, "Receiver id "+ receiver_email);
 //                        Log.d(TAG, "Message "+ msg);
                         Boolean isMine = false;
-                        if(sender_email.equals(current_user)){
+                        if(sender_email.equals(((ChatActivity)getActivity()).userSender.getEmail())){
                             isMine= true;
                         }
                         ChatMessage chatMessage = new ChatMessage(sender_email, receiver_email,
@@ -186,7 +187,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
     public void sendTextMessage() {
         String message = msg_edittext.getEditableText().toString();
         if (!message.equalsIgnoreCase("")) {
-            final ChatMessage chatMessage = new ChatMessage(current_user, chat_friend,
+            final ChatMessage chatMessage = new ChatMessage(((ChatActivity)getActivity()).userSender.getEmail(), ((ChatActivity)getActivity()).userReceiver.getEmail(),
                     message, "" + random.nextInt(1000), true);
             chatMessage.setMsgID();
             chatMessage.body = message;

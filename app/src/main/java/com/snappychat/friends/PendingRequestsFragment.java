@@ -1,5 +1,6 @@
 package com.snappychat.friends;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,14 +10,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.snappychat.MainActivity;
 import com.snappychat.R;
 import com.snappychat.model.FriendCard;
 import com.snappychat.model.User;
 import com.snappychat.networking.FriendsHandler;
+import com.snappychat.networking.ServiceHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import static com.snappychat.friends.InvitationSentFragment.invitationFriendCards;
 
 /**
  * Created by Jelson on 12/2/2016.
@@ -28,6 +36,7 @@ public class PendingRequestsFragment extends Fragment {
     public static ArrayList<FriendCard> pendingFriendCards = new ArrayList<>();
     public static RecyclerAdapterPending adapter;
     private User userLoggedIn;
+    OnListFragmentInteractionListener mListener;
 
     public static PendingRequestsFragment newInstance(User user) {
         PendingRequestsFragment fragment = new PendingRequestsFragment();
@@ -49,13 +58,35 @@ public class PendingRequestsFragment extends Fragment {
         View v = inflater.inflate(R.layout.pending_requests_fragment, container, false);
         RecyclerView rv = (RecyclerView) v.findViewById(R.id.recycler_view_pending);
         rv.setHasFixedSize(true);
-        adapter = new RecyclerAdapterPending(pendingFriendCards);
+        adapter = new RecyclerAdapterPending(pendingFriendCards,mListener);
         rv.setAdapter(adapter);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
 
         return v;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnListFragmentInteractionListener) {
+            mListener = (OnListFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnListFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onPendingChanged(FriendCard item, boolean answer);
     }
 
     public void getPendingFriendsList(){
@@ -76,5 +107,34 @@ public class PendingRequestsFragment extends Fragment {
 
         };
         pendingFriendsTask.execute(userLoggedIn.getEmail());
+    }
+
+    public void modifyPendingRequest(FriendCard friendCard, boolean answer){
+        AsyncTask<Object, Void, String> invitationFriendsTask = new AsyncTask<Object, Void, String>() {
+            @Override
+            protected String doInBackground(Object... params) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("email",(String)params[0]);
+                    jsonObject.put("accept",(Boolean) params[2]);
+                    String result = ServiceHandler.updateFriendPending((String)params[1], jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return FriendsHandler.getFriends((String)params[1],FriendsHandler.PENDING_URL);
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                Log.d(TAG, "onPostExecute: result: " + result);
+                invitationFriendCards = FriendsHandler.processJsonResponse(result, FriendsHandler.REQUESTED_URL);
+                if(result != null){
+                    Toast.makeText(getActivity(), "Friend request canceled!", Toast.LENGTH_SHORT).show();
+                }
+                adapter.updateData(invitationFriendCards);
+            }
+
+        };
+        invitationFriendsTask.execute(friendCard.getEmail(),userLoggedIn.getEmail(),answer);
     }
 }

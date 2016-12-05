@@ -40,7 +40,7 @@ public class SearchUserActivity extends AppCompatActivity implements SearchUserF
 
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra(USER_LOGGED_IN,userLoggedIn);
-        intent.putExtra(USER_LOGGED_IN,userReceiver);
+        intent.putExtra(ChatActivity.USER_RECEIVER,userReceiver);
         startActivity(intent);
 
     }
