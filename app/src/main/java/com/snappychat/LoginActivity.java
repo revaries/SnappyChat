@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     Log.v("User Logged In", user.getUid());
                     Log.v("User Logged In EMAIL", user.getEmail());
                     email = user.getEmail();
-                    Log.d(TAG, user.getToken(true).toString())
+                    Log.d(TAG, user.getToken(true).toString());
                     new GetUserTask().execute(email);
                 } else {
                     Log.v("User SIgned out", "No User");
