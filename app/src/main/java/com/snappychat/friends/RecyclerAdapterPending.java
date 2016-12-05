@@ -21,9 +21,12 @@ import java.util.ArrayList;
 public class RecyclerAdapterPending extends RecyclerView.Adapter<RecyclerAdapterPending.FriendViewHolder> {
     private static String TAG = "RECYCLER_PENDING";
     private ArrayList<FriendCard> mDataset;
+    private final PendingRequestsFragment.OnListFragmentInteractionListener mListener;
 
-    public RecyclerAdapterPending(ArrayList<FriendCard> myDataset) {
+    public RecyclerAdapterPending(ArrayList<FriendCard> myDataset, PendingRequestsFragment.OnListFragmentInteractionListener listener) {
+
         mDataset = myDataset;
+        mListener = listener;
     }
 
     public static class FriendViewHolder extends RecyclerView.ViewHolder {
@@ -32,6 +35,7 @@ public class RecyclerAdapterPending extends RecyclerView.Adapter<RecyclerAdapter
         public TextView mTextViewCardName;
         public Button mButton;
         public Button mReject;
+        public FriendCard mItem;
         public FriendViewHolder(View v) {
             super(v);
             mCardView = (CardView) v.findViewById(R.id.card_view);
@@ -66,9 +70,30 @@ public class RecyclerAdapterPending extends RecyclerView.Adapter<RecyclerAdapter
     }
 
     @Override
-    public void onBindViewHolder(FriendViewHolder holder, int position) {
+    public void onBindViewHolder(final FriendViewHolder holder, int position) {
+        holder.mItem = mDataset.get(position);
         holder.mTextView.setText(mDataset.get(position).getName() + " " +mDataset.get(position).getLast());
         holder.mTextViewCardName.setText(mDataset.get(position).getDescription());
+        holder.mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onPendingChanged(holder.mItem,true);
+                }
+            }
+        });
+        holder.mReject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onPendingChanged(holder.mItem,false);
+                }
+            }
+        });
     }
 
     @Override

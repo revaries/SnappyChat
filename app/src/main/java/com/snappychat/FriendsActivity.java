@@ -25,7 +25,7 @@ import static com.snappychat.MainActivity.USER_LOGGED_IN;
  * Created by Jelson on 12/2/2016.
  */
 
-public class FriendsActivity extends AppCompatActivity implements SearchUserFragment.OnListFragmentInteractionListener, InvitationSentFragment.OnListFragmentInteractionListener{
+public class FriendsActivity extends AppCompatActivity implements SearchUserFragment.OnListFragmentInteractionListener, InvitationSentFragment.OnListFragmentInteractionListener, PendingRequestsFragment.OnListFragmentInteractionListener{
     private static String TAG = "FRIENDS_ACTIVITY";
     private User userLoggedIn;
     ViewPager viewPager;
@@ -66,15 +66,6 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Log.d(TAG, "TAB Selected "+Integer.toString(tab.getPosition()));
-//                for(int i=0; i< RecyclerAdapter.mTypeOfLayout.length; i++){
-//                            if(i == tab.getPosition()){
-//                                RecyclerAdapter.mTypeOfLayout[i] = true;
-//                                Log.d(TAG, Integer.toString(i) + " set to TRUE");
-//                    }else{
-//                        RecyclerAdapter.mTypeOfLayout[i] = false;
-//                        Log.d(TAG, Integer.toString(i) + " set to False");
-//                    }
-//                }
                 viewPager.setCurrentItem(tab.getPosition());
             }
 
@@ -94,7 +85,7 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
     public void onChatRequested(User userReceiver) {
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra(USER_LOGGED_IN,userLoggedIn);
-        intent.putExtra(USER_LOGGED_IN,userReceiver);
+        intent.putExtra(ChatActivity.USER_RECEIVER,userReceiver);
         startActivity(intent);
     }
 
@@ -114,6 +105,14 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
             fragment.cancelRequest(item);
         }
 }
+
+    @Override
+    public void onPendingChanged(FriendCard item, boolean answer) {
+        PendingRequestsFragment fragment = (PendingRequestsFragment) adapter.getItem(viewPager.getCurrentItem());
+        if (fragment != null) {
+            fragment.modifyPendingRequest(item, answer);
+        }
+    }
 /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
