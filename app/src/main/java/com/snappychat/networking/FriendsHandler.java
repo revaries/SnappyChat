@@ -3,7 +3,7 @@ package com.snappychat.networking;
 import android.net.Uri;
 import android.util.Log;
 
-import com.snappychat.friends.FriendCard;
+import com.snappychat.model.FriendCard;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,10 +25,10 @@ public class FriendsHandler {
     public static final String PENDING_URL = "friends_pending";
     public static final String REQUESTED_URL = "friends_request";
 
-    public static String getFriends(String user_id, String param){
+    public static String getFriends(String user_id, String url_requested){
         String url = Uri.parse(API_URL).buildUpon()
                 .appendEncodedPath(user_id)
-                .appendPath("friends")
+                .appendPath(url_requested)
                 .build().toString();
         Log.d(TAG, "URL: "+url);
         String response = null;

@@ -1,5 +1,6 @@
 package com.snappychat.friends;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import com.snappychat.MainActivity;
 import com.snappychat.MyItemRecyclerViewAdapter;
 import com.snappychat.R;
+import com.snappychat.SearchUserFragment;
 import com.snappychat.model.User;
 import com.snappychat.networking.FriendsHandler;
 import com.snappychat.networking.ServiceHandler;
@@ -25,8 +27,7 @@ public class CurrentFriendsFragment extends Fragment {
     public static final String TAG = "CURRENT_FRIENDS";
     private static AsyncTask<String, Void, ArrayList<User>> friendsTask;
     public static ArrayList<User> currentFriendCards = new ArrayList<User>();
-    //public static RecyclerAdapter adapter;
-    public static MyItemRecyclerViewAdapter adapter;
+    private SearchUserFragment.OnListFragmentInteractionListener mListener;
     RecyclerView recyclerView;
     private User userLoggedIn;
 
@@ -53,7 +54,7 @@ public class CurrentFriendsFragment extends Fragment {
         recyclerView = (RecyclerView) v.findViewById(R.id.list);
         recyclerView.setHasFixedSize(true);
         //adapter = new RecyclerAdapter(currentFriendCards);
-        recyclerView.setAdapter( new MyItemRecyclerViewAdapter(currentFriendCards,null));
+        recyclerView.setAdapter( new MyItemRecyclerViewAdapter(currentFriendCards,mListener));
 
         //LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         //recyclerView.setLayoutManager(llm);
@@ -61,16 +62,35 @@ public class CurrentFriendsFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof SearchUserFragment.OnListFragmentInteractionListener) {
+            mListener = (SearchUserFragment.OnListFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
     void setupAdapter() {
         if (getActivity() == null || recyclerView == null) return;
         if (currentFriendCards != null) {
 //            mGridView.setAdapter(new ArrayAdapter<GalleryItem>(getActivity(),
 //                    android.R.layout.simple_gallery_item, mItems));
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(currentFriendCards,null));
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(currentFriendCards,mListener));
         } else {
             recyclerView.setAdapter(null);
         }
     }
+
+
 
     public void getFriendsList(){
         friendsTask = new AsyncTask<String, Void, ArrayList<User>>() {

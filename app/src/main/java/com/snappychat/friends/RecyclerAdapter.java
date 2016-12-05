@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.snappychat.R;
+import com.snappychat.model.FriendCard;
 
 import java.util.ArrayList;
 

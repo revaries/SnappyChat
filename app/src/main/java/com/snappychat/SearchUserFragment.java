@@ -16,9 +16,13 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -34,7 +38,7 @@ public class SearchUserFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private User user;
+    private User userLoggedIn;
     private OnListFragmentInteractionListener mListener;
     RecyclerView recyclerView;
     ArrayList<User> users;
@@ -62,7 +66,7 @@ public class SearchUserFragment extends Fragment {
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-            user = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
+            userLoggedIn = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
         }
 
     }
@@ -189,7 +193,7 @@ public class SearchUserFragment extends Fragment {
     public ArrayList<String> processQuery(String query){
         ArrayList<String> matches = new ArrayList<>();
         String[] words = query.toLowerCase().split("\\s+");
-        new FilterUsersTask().execute(user,query);
+        new FilterUsersTask().execute(userLoggedIn,query);
         return matches;
     }
 
@@ -223,7 +227,8 @@ public class SearchUserFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(User item);
+        void onChatRequested(User item);
+        void onFriendAdded(User item);
     }
 
     private class FilterUsersTask extends AsyncTask<Object,Void,ArrayList<User>> {
@@ -239,5 +244,29 @@ public class SearchUserFragment extends Fragment {
             SearchUserFragment.this.users = users;
             setupAdapter();
         }
+    }
+
+    public void addFriend(User userToAdd){
+        AsyncTask<String, Void, String> friendsTask = new AsyncTask<String, Void, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("email",(String)params[0]);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return ServiceHandler.addFriend((String)params[1], jsonObject);
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                if(result!=null){
+                    Toast.makeText(getActivity(), "Friend request sent!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        };
+        friendsTask.execute(userToAdd.getEmail(),userLoggedIn.getEmail());
     }
 }

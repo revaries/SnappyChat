@@ -33,7 +33,8 @@ public class ServiceHandler {
 
     public static final String TAG = "ServiceHandler";
     private static final String ENDPOINT_USER = "https://snappychatapi.herokuapp.com/api/users";
-    private static final String FRIENDS_URL = "friends";
+    public static final String FRIENDS_URL = "friends";
+    public static final String FRIENDS_REQUEST_URL = "friends_request";
     private static final String FIRABASE_SERVER_KEY =
             "key=AAAAtfwALJk:APA91bHXBxoCZ8_kuK5ML6CCfVBEMezJ7DMHft8fGpriIK5wGD4Fj07pDktiIT16bIyy" +
                     "MyMyHHHwYBMU8Jxcb5cVYyEoaGoLwzCHv3gW8fAV49zBachwromew0ms3YbU493p8wfJHZ8eJ_-_" +
@@ -136,6 +137,45 @@ public class ServiceHandler {
         }
 
         return null;
+    }
+
+
+    public static String addFriend(String user_id, JSONObject json) {
+        String response = null;
+        try {
+            String url = Uri.parse(ENDPOINT_USER).buildUpon()
+                    .appendEncodedPath(user_id)
+                    .appendPath(FRIENDS_REQUEST_URL)
+                    .build().toString();
+
+            response = makeRequest(url,"POST",json.toString());
+            if(response != null){
+                Log.v(TAG,response);
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to update user", e);
+        }
+        return response;
+    }
+
+    public static String deleteFriendRequest(String user_id, JSONObject json) {
+        String response = null;
+        try {
+            String url = Uri.parse(ENDPOINT_USER).buildUpon()
+                    .appendEncodedPath(user_id)
+                    .appendPath(FRIENDS_REQUEST_URL)
+                    .build().toString();
+
+            response = makeRequest(url,"DELETE",json.toString());
+            if(response != null){
+                Log.v(TAG,response);
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to update user", e);
+        }
+        return response;
     }
 
     public static ArrayList<Timeline> getTimeline(String param) {

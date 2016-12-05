@@ -31,6 +31,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
 
@@ -71,8 +72,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     Log.v("User Logged In", user.getUid());
                     Log.v("User Logged In EMAIL", user.getEmail());
                     email = user.getEmail();
-                    Log.d(TAG, user.getToken(true).toString())
-                    new GetUserTask().execute(email);
+                    new GetUserTask().execute(email, FirebaseInstanceId.getInstance().getToken());
                 } else {
                     Log.v("User SIgned out", "No User");
                 }
@@ -254,7 +254,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             JSONObject user = new JSONObject();
             try {
                 user.put("status",true);
-
+                user.put("token",params[1]);
                 ServiceHandler.updateUser(params[0],user);
             } catch (JSONException e) {
                 Log.e(TAG, "JSONException",e);

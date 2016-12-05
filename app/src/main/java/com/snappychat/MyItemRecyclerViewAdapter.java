@@ -64,17 +64,29 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             holder.friendTextView.setVisibility(View.GONE);
             holder.chatButton.setVisibility(View.GONE);
         }else {
+            holder.addFriendButton.setVisibility(View.GONE);
             holder.friendImageView.setVisibility(View.VISIBLE);
             holder.friendTextView.setVisibility(View.VISIBLE);
             holder.friendTextView.setText("Friend");
         }
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        holder.chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onChatRequested(holder.mItem);
+                }
+            }
+        });
+
+        holder.addFriendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onFriendAdded(holder.mItem);
                 }
             }
         });
@@ -96,6 +108,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final TextView friendTextView;
         public final ImageButton profileButton;
         public final ImageButton chatButton;
+        public final ImageButton addFriendButton;
         public User mItem;
 
         public ViewHolder(View view) {
@@ -110,6 +123,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             friendImageView = (ImageView) view.findViewById(R.id.friend_image);
             profileButton= (ImageButton) view.findViewById(R.id.profile_button);
             chatButton = (ImageButton) view.findViewById(R.id.chat_button);
+            addFriendButton = (ImageButton) view.findViewById(R.id.add_friend_button);
 
         }
 

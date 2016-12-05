@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.snappychat.R;
+import com.snappychat.model.FriendCard;
 import com.snappychat.networking.FriendsHandler;
 
 import java.util.ArrayList;
