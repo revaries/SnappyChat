@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.snappychat.MainActivity;
 import com.snappychat.R;
+import com.snappychat.model.User;
 import com.snappychat.networking.FriendsHandler;
 
 import java.util.ArrayList;
@@ -21,13 +23,23 @@ import java.util.ArrayList;
 
 public class PendingRequestsFragment extends Fragment {
     public static final String TAG = "PENDING_FRIENDS";
-    private static AsyncTask<Void, Void, String> pendingFriendsTask;
+    private static AsyncTask<String, Void, String> pendingFriendsTask;
     public static ArrayList<FriendCard> pendingFriendCards = new ArrayList<>();
     public static RecyclerAdapterPending adapter;
+    private User userLoggedIn;
+
+    public static PendingRequestsFragment newInstance(User user) {
+        PendingRequestsFragment fragment = new PendingRequestsFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(MainActivity.USER_LOGGED_IN,user);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        userLoggedIn = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
         getPendingFriendsList();
     }
 
@@ -46,10 +58,10 @@ public class PendingRequestsFragment extends Fragment {
     }
 
     public void getPendingFriendsList(){
-        pendingFriendsTask = new AsyncTask<Void, Void, String>() {
+        pendingFriendsTask = new AsyncTask<String, Void, String>() {
             @Override
-            protected String doInBackground(Void... params) {
-                String response = FriendsHandler.getFriends(FriendsHandler.PENDING_URL);
+            protected String doInBackground(String... params) {
+                String response = FriendsHandler.getFriends(params[0],FriendsHandler.PENDING_URL);
                 return response;
             }
 
@@ -62,6 +74,6 @@ public class PendingRequestsFragment extends Fragment {
             }
 
         };
-        pendingFriendsTask.execute(null, null, null);
+        pendingFriendsTask.execute(userLoggedIn.getEmail());
     }
 }

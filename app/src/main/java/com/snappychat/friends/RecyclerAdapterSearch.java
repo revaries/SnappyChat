@@ -11,28 +11,31 @@ import android.widget.TextView;
 
 import com.snappychat.R;
 
+import java.util.ArrayList;
+
 /**
  * Created by Jelson on 12/2/2016.
  */
 
 public class RecyclerAdapterSearch extends RecyclerView.Adapter<RecyclerAdapterSearch.FriendViewHolder> {
-    private static String TAG = "RECYCLER_INVITATION";
-    private String[] mDataset;
+    private static String TAG = "RECYCLER_SEARCH";
+    private ArrayList<FriendCard> mDataset;
 
-    public RecyclerAdapterSearch(String[] myDataset) {
+    public RecyclerAdapterSearch(ArrayList<FriendCard> myDataset) {
         mDataset = myDataset;
     }
 
     public static class FriendViewHolder extends RecyclerView.ViewHolder {
         public CardView mCardView;
         public TextView mTextView;
+        public TextView mTextViewCardName;
         public Button mButton;
         public FriendViewHolder(View v) {
             super(v);
             mCardView = (CardView) v.findViewById(R.id.card_view_search);
             mTextView = (TextView) v.findViewById(R.id.card_text);
+            mTextViewCardName = (TextView) v.findViewById(R.id.card_name);
             mButton = (Button) v.findViewById(R.id.card_invitation_button);
-
             setButtonTextAndListener(mButton, "Cancel");
         }
 
@@ -59,12 +62,25 @@ public class RecyclerAdapterSearch extends RecyclerView.Adapter<RecyclerAdapterS
 
     @Override
     public void onBindViewHolder(FriendViewHolder holder, int position) {
-        holder.mTextView.setText(mDataset[position]);
+        holder.mTextView.setText(mDataset.get(position).getName() + " " +mDataset.get(position).getLast());
+        holder.mTextViewCardName.setText(mDataset.get(position).getDescription());
+        if(mDataset.get(position).getFriends()){
+            holder.mButton.setText("Friends");
+        }else if(mDataset.get(position).getPending()){
+            holder.mButton.setText("Pending");
+        }else if(mDataset.get(position).getRequested()){
+            holder.mButton.setText("Request Sent");
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return mDataset.size();
+    }
+
+    public void updateData(ArrayList<FriendCard> data){
+        mDataset = data;
+        notifyDataSetChanged();
     }
 }
 

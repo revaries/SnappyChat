@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     Log.v("User Logged In", user.getUid());
                     Log.v("User Logged In EMAIL", user.getEmail());
                     email = user.getEmail();
+                    Log.d(TAG, user.getToken(true).toString());
                     new GetUserTask().execute(email);
                 } else {
                     Log.v("User SIgned out", "No User");
@@ -137,7 +138,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void selectActivity() {
         if(user!=null) { //If user is found, redirect to timeline
             Intent i = new Intent(getBaseContext(), MainActivity.class);
-            i.putExtra(MainActivity.USER,user);
+            i.putExtra(MainActivity.USER_LOGGED_IN,user);
             i.putExtra(MainActivity.FROM_LOGIN,true);
             startActivity(i);
         }else { //if user doesn't exist redirects to user profile activity
@@ -253,6 +254,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             JSONObject user = new JSONObject();
             try {
                 user.put("status",true);
+
                 ServiceHandler.updateUser(params[0],user);
             } catch (JSONException e) {
                 Log.e(TAG, "JSONException",e);

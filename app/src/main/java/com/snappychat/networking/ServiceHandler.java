@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.snappychat.model.Timeline;
 import com.snappychat.model.User;
 
@@ -14,9 +15,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 //import org.json.JSONObject;
 
@@ -30,6 +33,12 @@ public class ServiceHandler {
 
     public static final String TAG = "ServiceHandler";
     private static final String ENDPOINT_USER = "https://snappychatapi.herokuapp.com/api/users";
+    private static final String FRIENDS_URL = "friends";
+    private static final String FIRABASE_SERVER_KEY =
+            "key=AAAAtfwALJk:APA91bHXBxoCZ8_kuK5ML6CCfVBEMezJ7DMHft8fGpriIK5wGD4Fj07pDktiIT16bIyy" +
+                    "MyMyHHHwYBMU8Jxcb5cVYyEoaGoLwzCHv3gW8fAV49zBachwromew0ms3YbU493p8wfJHZ8eJ_-_" +
+                    "w57KqFJzzgp7mDxg_A";
+
 
 
     // Return a JsonObject which is a key,value pair of the JSON string
@@ -77,6 +86,32 @@ public class ServiceHandler {
         }
 
         return users;
+    }
+
+    public static ArrayList<User> getFriends(String user_id, String param){
+        ArrayList<User> friends = null;
+        try {
+            String url = Uri.parse(ENDPOINT_USER).buildUpon()
+                    .appendEncodedPath(user_id)
+                    .appendPath(FRIENDS_URL)
+                    .build().toString();
+            String response = makeRequest(url,"GET",null);
+            if(response != null){
+                JSONArray jsonArray = new JSONArray(response);
+                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                if(jsonObject.optJSONArray("friends") != null) {
+                    Type listType = new TypeToken<List<User>>(){}.getType();
+                    friends = new Gson().fromJson(jsonObject.optJSONArray("friends").toString(), listType);
+                    for(User friend : friends){friend.setFriend(true);};
+                }
+
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to fetch user", e);
+        }
+
+        return friends;
     }
 
 
@@ -145,6 +180,7 @@ public class ServiceHandler {
             connection.setRequestMethod(method);
             if (jsonRequest != null) {
                 connection.setRequestProperty("Content-Type","application/json");
+                connection.setRequestProperty("Authorization", FIRABASE_SERVER_KEY);
                 connection.setDoOutput(true);
                 OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
                 out.write(jsonRequest);

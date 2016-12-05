@@ -51,7 +51,7 @@ public class SearchUserFragment extends Fragment {
         SearchUserFragment fragment = new SearchUserFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
-        args.putSerializable(MainActivity.USER,user);
+        args.putSerializable(MainActivity.USER_LOGGED_IN,user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,7 +62,7 @@ public class SearchUserFragment extends Fragment {
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-            user = (User) getArguments().get(MainActivity.USER);
+            user = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
         }
 
     }
@@ -91,6 +91,8 @@ public class SearchUserFragment extends Fragment {
         SearchManager searchManager = (SearchManager)
                 getActivity().getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) view.findViewById(R.id.searchView);
+        searchView.setVisibility(View.VISIBLE);
+        searchView.setQueryHint(getResources().getString(R.string.search_hint));
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchView.setIconifiedByDefault(false);
         searchView.setSubmitButtonEnabled(true);

@@ -6,28 +6,28 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
-import com.snappychat.friends.CurrentFriendsFragment;
 import com.snappychat.friends.PagerAdapter;
-import com.snappychat.friends.RecyclerAdapter;
+import com.snappychat.model.User;
+
+import static com.snappychat.MainActivity.USER_LOGGED_IN;
 
 /**
  * Created by Jelson on 12/2/2016.
  */
 
-public class FriendsActivity extends AppCompatActivity {
+public class FriendsActivity extends AppCompatActivity implements SearchUserFragment.OnListFragmentInteractionListener{
     private static String TAG = "FRIENDS_ACTIVITY";
+    private User userLoggedIn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        String currentUserEmail = getIntent().getStringExtra("CURRENT_USER_ID");
-        Log.d(TAG, "Email: "+currentUserEmail);
+        userLoggedIn = (User) getIntent().getSerializableExtra(USER_LOGGED_IN);
+        //String currentUserEmail = getIntent().getStringExtra("CURRENT_USER_ID");
+        //Log.d(TAG, "Email: "+currentUserEmail);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Friends"));
         tabLayout.addTab(tabLayout.newTab().setText("Pending"));
@@ -37,7 +37,7 @@ public class FriendsActivity extends AppCompatActivity {
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         final PagerAdapter adapter = new PagerAdapter
-                (getSupportFragmentManager(), tabLayout.getTabCount());
+                (userLoggedIn,getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
@@ -45,15 +45,15 @@ public class FriendsActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Log.d(TAG, "TAB Selected "+Integer.toString(tab.getPosition()));
-                for(int i=0; i< RecyclerAdapter.mTypeOfLayout.length; i++){
-                    if(i == tab.getPosition()){
-                        RecyclerAdapter.mTypeOfLayout[i] = true;
-                        Log.d(TAG, Integer.toString(i) + " set to TRUE");
-                    }else{
-                        RecyclerAdapter.mTypeOfLayout[i] = false;
-                        Log.d(TAG, Integer.toString(i) + " set to False");
-                    }
-                }
+//                for(int i=0; i< RecyclerAdapter.mTypeOfLayout.length; i++){
+//                            if(i == tab.getPosition()){
+//                                RecyclerAdapter.mTypeOfLayout[i] = true;
+//                                Log.d(TAG, Integer.toString(i) + " set to TRUE");
+//                    }else{
+//                        RecyclerAdapter.mTypeOfLayout[i] = false;
+//                        Log.d(TAG, Integer.toString(i) + " set to False");
+//                    }
+//                }
                 viewPager.setCurrentItem(tab.getPosition());
             }
 
@@ -67,6 +67,11 @@ public class FriendsActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onListFragmentInteraction(User item) {
+
     }
 /*
     @Override
