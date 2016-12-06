@@ -64,7 +64,7 @@ public class InvitationSentFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
-        getInvitationFriendsList();
+        //getInvitationFriendsList();
         return v;
     }
 

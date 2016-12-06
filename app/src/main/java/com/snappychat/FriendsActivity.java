@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.snappychat.friends.CurrentFriendsFragment;
@@ -35,8 +34,8 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
         userLoggedIn = (User) getIntent().getSerializableExtra(USER_LOGGED_IN);
         //String currentUserEmail = getIntent().getStringExtra("CURRENT_USER_ID");
         //Log.d(TAG, "Email: "+currentUserEmail);
@@ -61,26 +60,6 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
         adapter = new PagerAdapter
                 (userLoggedIn,getSupportFragmentManager(),tabLayout.getTabCount(),fragments);
         viewPager.setAdapter(adapter);
-        //viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        /*viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                Log.d(TAG, "TAB Selected "+Integer.toString(tab.getPosition()));
-                //viewPager.setCurrentItem(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });*/
-        //viewPager.setCurrentItem(0);
-
         tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
