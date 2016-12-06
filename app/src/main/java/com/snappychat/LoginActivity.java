@@ -138,14 +138,25 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void selectActivity() {
         if(user!=null) { //If user is found, redirect to timeline
+
+           /* Original to be kept Changing for Test purposes
+
             Intent i = new Intent(getBaseContext(), MainActivity.class);
             i.putExtra(MainActivity.USER_LOGGED_IN,user);
             i.putExtra(MainActivity.FROM_LOGIN,true);
             startActivity(i);
+            */
+
+            //Remove After Implementation is checked and Works
+            Intent i = new Intent(getBaseContext(),profiledatacollector.class);
+            i.putExtra("user",user);
+            startActivity(i);
+
         }else { //if user doesn't exist redirects to user profile activity
             User user = new User();
             user.setEmail(email);
-            Intent i = new Intent(getBaseContext(), UserProfile.class);
+            //Intent i = new Intent(getBaseContext(), UserProfile.class);
+            Intent i = new Intent(getBaseContext(),profiledatacollector.class);
             i.putExtra("user",user);
             startActivity(i);
         }

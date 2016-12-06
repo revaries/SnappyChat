@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.opengl.EGLDisplay;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class ProfileDataNameQuestions extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        Log.v("Inside Fragment one","Inside Fragment one");
         View view =  inflater.inflate(R.layout.fragment_profile_data_name_questions, container, false);
 
         FirstName = (EditText) view.findViewById(R.id.first_name);
