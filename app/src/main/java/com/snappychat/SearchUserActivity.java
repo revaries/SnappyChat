@@ -1,9 +1,11 @@
 package com.snappychat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.snappychat.model.User;
@@ -52,5 +54,35 @@ public class SearchUserActivity extends AppCompatActivity implements SearchUserF
         if (fragment != null) {
             fragment.addFriend(item);
         }
+    }
+
+    @Override
+    public void onFriendRemoved(final User item) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage("Are you sure that you want to remove this friend?");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        FragmentManager fm = getSupportFragmentManager();
+                        SearchUserFragment fragment = (SearchUserFragment) fm.findFragmentById(R.id.fragmentContainer);
+                        if (fragment != null) {
+                            fragment.deleteFriend(item);
+                        }
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 }

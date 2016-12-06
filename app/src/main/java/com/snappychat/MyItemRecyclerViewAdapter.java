@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<User> mValues;
+    private List<User> mValues;
     private final OnListFragmentInteractionListener mListener;
 
 
@@ -90,6 +90,22 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                 }
             }
         });
+
+        holder.removeFriendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onFriendRemoved(holder.mItem);
+                }
+            }
+        });
+    }
+
+    public void updateData(ArrayList<User> data){
+        mValues = data;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -109,6 +125,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final ImageButton profileButton;
         public final ImageButton chatButton;
         public final ImageButton addFriendButton;
+        public final ImageButton removeFriendButton;
         public User mItem;
 
         public ViewHolder(View view) {
@@ -124,7 +141,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             profileButton= (ImageButton) view.findViewById(R.id.profile_button);
             chatButton = (ImageButton) view.findViewById(R.id.chat_button);
             addFriendButton = (ImageButton) view.findViewById(R.id.add_friend_button);
-
+            removeFriendButton = (ImageButton) view.findViewById(R.id.remove_friend_button);
         }
 
         @Override

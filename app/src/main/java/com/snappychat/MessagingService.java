@@ -11,6 +11,8 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.snappychat.model.ChatMessage;
+
 import java.util.Random;
 
 public class MessagingService extends FirebaseMessagingService {

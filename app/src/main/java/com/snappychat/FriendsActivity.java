@@ -1,11 +1,12 @@
 package com.snappychat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -91,11 +92,39 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
 
     @Override
     public void onFriendAdded(User item) {
-        FragmentManager fm = getSupportFragmentManager();
         SearchUserFragment fragment = (SearchUserFragment) adapter.getItem(viewPager.getCurrentItem());
         if (fragment != null) {
             fragment.addFriend(item);
         }
+    }
+
+    @Override
+    public void onFriendRemoved(final User item) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage("Are you sure that you want to remove this friend?");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        CurrentFriendsFragment fragment = (CurrentFriendsFragment) adapter.getItem(viewPager.getCurrentItem());
+                        if (fragment != null) {
+                            fragment.deleteFriend(item);
+                        }
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 
     @Override
@@ -113,21 +142,5 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
             fragment.modifyPendingRequest(item, answer);
         }
     }
-/*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-    */
 }
