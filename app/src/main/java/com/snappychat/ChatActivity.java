@@ -50,6 +50,12 @@ public class ChatActivity extends AppCompatActivity {
         Log.d("CHAT", "State was called OnStart()");
         isActive = true;
         EventBus.getDefault().register(this);
+        FragmentManager fm = getSupportFragmentManager();
+        ChatFragment fragment = (ChatFragment) fm.findFragmentById(R.id.fragment_container);
+        if (fragment != null) {
+            fragment.getHistoryChatMessages();
+        }
+
     }
 
     @Override
@@ -80,7 +86,6 @@ public class ChatActivity extends AppCompatActivity {
         isActive = false;
         Log.d("CHAT", "State was called OnDestroy()");
     }
-
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {

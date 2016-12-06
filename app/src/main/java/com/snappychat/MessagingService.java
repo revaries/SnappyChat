@@ -62,13 +62,16 @@ public class MessagingService extends FirebaseMessagingService {
 //            List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
 //            String currentActivity = taskInfo.get(0).topActivity.getShortClassName();
 //            Log.d("topActivity", "CURRENT Activity ::" + taskInfo.get(0).topActivity.getClassName());
-            EventBus.getDefault().post(new MessageEvent(chatMessage));
-            /*
+            //EventBus.getDefault().post(new MessageEvent(chatMessage));
+
             if(ChatActivity.isActive){
-                ChatFragment.updateView(chatMessage);
-            }else{
-                ChatFragment.postToDatabase(chatMessage);
-            }*/
+                //ChatActivity.updateView(chatMessage);
+                //ChatFragment.updateView(chatMessage);
+                EventBus.getDefault().post(new MessageEvent(chatMessage));
+            }
+            //else{
+             //   ChatFragment.postToDatabase(chatMessage);
+            //}
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM

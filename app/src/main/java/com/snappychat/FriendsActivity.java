@@ -44,7 +44,7 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Friends"));
         tabLayout.addTab(tabLayout.newTab().setText("Pending"));
-        tabLayout.addTab(tabLayout.newTab().setText("Invitations"));
+        tabLayout.addTab(tabLayout.newTab().setText("Request"));
         tabLayout.addTab(tabLayout.newTab().setText("Search"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
