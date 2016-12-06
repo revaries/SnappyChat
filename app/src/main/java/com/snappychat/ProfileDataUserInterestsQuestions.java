@@ -1,9 +1,7 @@
 package com.snappychat;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
-import android.opengl.EGLDisplay;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,17 +13,16 @@ import android.widget.TextView;
 
 import com.snappychat.model.User;
 
-import java.net.Inet4Address;
-
 public class ProfileDataUserInterestsQuestions extends Fragment {
 
-    private EditText AboutMe;
-    private EditText Interests;
-    private Button Next;
-    private Button Back;
-    private TextView Warning;
+    private EditText aboutMe;
+    private EditText userInterests;
+    private Button next;
+    private Button back;
+    private TextView warning;
     private OnFragmentInteractionListener mListener;
-    private User user;
+
+    private User interestsUser;
 
     public ProfileDataUserInterestsQuestions() {
 
@@ -52,27 +49,34 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_profile_data_user_interests_questions, container, false);
 
         //Inflating Views
-        AboutMe = (EditText) view.findViewById(R.id.about_me);
-        Interests = (EditText) view.findViewById(R.id.interests);
-        Next = (Button) view.findViewById(R.id.interest_question_next);
-        Back = (Button) view.findViewById(R.id.interest_question_back);
-        Warning = (TextView) view.findViewById(R.id.interests_warning);
+        aboutMe = (EditText) view.findViewById(R.id.about_me);
+        userInterests = (EditText) view.findViewById(R.id.interests);
+        next = (Button) view.findViewById(R.id.interest_question_next);
+        back = (Button) view.findViewById(R.id.interest_question_back);
+        warning = (TextView) view.findViewById(R.id.interests_warning);
 
-        AboutMe.setOnFocusChangeListener(cellCleaner);
-        Interests.setOnFocusChangeListener(cellCleaner);
+        interestsUser = ((ProfileDataCollector)getActivity()).getUserObject();
+        aboutMe.setOnFocusChangeListener(cellCleaner);
+        userInterests.setOnFocusChangeListener(cellCleaner);
 
-        user = ((ProfileDataCollector)getActivity()).getUserObject();
-        Next.setOnClickListener(new View.OnClickListener() {
+        InitialCellValues();
+
+
+        next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(ValidateNameFields()) {
+                    interestsUser.setAboutMe(aboutMe.getText().toString());
+                    interestsUser.setInterests(userInterests.getText().toString());
+                    ((ProfileDataCollector) getActivity()).nextpagehandler("interests");
+                }
             }
         });
 
-        Back.setOnClickListener(new View.OnClickListener() {
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                ((ProfileDataCollector)getActivity()).prevpagehandler("interests");
             }
         });
 
@@ -100,16 +104,16 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
     private View.OnFocusChangeListener cellCleaner = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View view, boolean b) {
-            if (view == AboutMe)
+            if (view == aboutMe)
             {
-                if (AboutMe.getText().toString()=="About Me") {
-                    AboutMe.setText("");
+                if ((aboutMe.getText().toString()).equals("About Me")) {
+                    aboutMe.setText("");
                 }
             }
-            else if (view == Interests)
+            else if (view == userInterests)
             {
-                if (Interests.getText().toString()=="Interests"){
-                    Interests.setText("");
+                if ((userInterests.getText().toString()).equals("Interests")){
+                    userInterests.setText("");
                 }
             }
         }
@@ -117,22 +121,49 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
 
     private void InitialCellValues()
     {
-        if (user.getInterests()==null)
+        if (interestsUser.getInterests()==null)
         {
-            Interests.setText("");
+            userInterests.setText("Interests");
         }
         else
         {
-            Interests.setText(user.getInterests());
+            userInterests.setText(interestsUser.getInterests());
         }
-        if (user.getAboutMe()==null)
+        if (interestsUser.getAboutMe()==null)
         {
-            AboutYou
+            aboutMe.setText("About Me");
+        }
+        else
+        {
+            aboutMe.setText(interestsUser.getAboutMe());
         }
 
     }
 
 
+    private boolean ValidateNameFields() {
+        boolean flag = true;
+        String stringInterests = userInterests.getText().toString();
+        String stringAboutMe = aboutMe.getText().toString();
+        if (stringInterests.length() == 0 || stringInterests.equals("Interests")) {
+            warning.setText("Please Fill All the Fields");
+            userInterests.setBackground(getResources().getDrawable(R.drawable.edittext_warning));
+            flag = false;
+        } else {
+            userInterests.setBackground(getResources().getDrawable(R.drawable.edittext_underline));
+        }
+        if (stringAboutMe.length() == 0 || stringAboutMe.equals("About Me")) {
+            warning.setText("Please Fill All the Fields");
+            aboutMe.setBackground(getResources().getDrawable(R.drawable.edittext_warning));
+            flag = false;
+        } else {
+            aboutMe.setBackground(getResources().getDrawable(R.drawable.edittext_underline));
+        }
+        if (flag) {
+            warning.setText("");
+        }
+        return flag;
+    }
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }

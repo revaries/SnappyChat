@@ -2,7 +2,6 @@ package com.snappychat;
 
 import android.content.Context;
 import android.net.Uri;
-import android.opengl.EGLDisplay;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,8 +14,6 @@ import android.widget.TextView;
 
 import com.snappychat.model.User;
 
-import org.w3c.dom.Text;
-
 
 public class ProfileDataNameQuestions extends Fragment {
 
@@ -24,13 +21,13 @@ public class ProfileDataNameQuestions extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private EditText FirstName;
-    private EditText LastName;
-    private EditText NickName;
-    private TextView Warning;
-    private Button Next;
+    private EditText firstName;
+    private EditText lastName;
+    private EditText nickName;
+    private TextView warning;
+    private Button next;
 
-    private User user;
+    private User NameUser;
 
     public ProfileDataNameQuestions() {
 
@@ -56,27 +53,27 @@ public class ProfileDataNameQuestions extends Fragment {
         Log.v("Inside Fragment one","Inside Fragment one");
         View view =  inflater.inflate(R.layout.fragment_profile_data_name_questions, container, false);
 
-        FirstName = (EditText) view.findViewById(R.id.first_name);
-        LastName = (EditText) view.findViewById(R.id.last_name);
-        NickName = (EditText) view.findViewById(R.id.nick_name);
-        Next = (Button) view.findViewById(R.id.name_question_next);
-        Warning = (TextView) view.findViewById(R.id.name_warning);
+        firstName = (EditText) view.findViewById(R.id.first_name);
+        lastName = (EditText) view.findViewById(R.id.last_name);
+        nickName = (EditText) view.findViewById(R.id.nick_name);
+        next = (Button) view.findViewById(R.id.name_question_next);
+        warning = (TextView) view.findViewById(R.id.name_warning);
 
-        user = ((ProfileDataCollector)getActivity()).getUserObject();
+        NameUser = ((ProfileDataCollector)getActivity()).getUserObject();
 
         InitialCellValues();
 
-        FirstName.setOnFocusChangeListener(cellcleaner);
-        LastName.setOnFocusChangeListener(cellcleaner);
-        NickName.setOnFocusChangeListener(cellcleaner);
+        firstName.setOnFocusChangeListener(cellcleaner);
+        lastName.setOnFocusChangeListener(cellcleaner);
+        nickName.setOnFocusChangeListener(cellcleaner);
 
-        Next.setOnClickListener(new View.OnClickListener() {
+        next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(ValidateNameFields()) {
-                    user.setFirstName(FirstName.getText().toString());
-                    user.setLastName(LastName.getText().toString());
-                    user.setNickName(NickName.getText().toString());
+                    NameUser.setFirstName(firstName.getText().toString());
+                    NameUser.setLastName(lastName.getText().toString());
+                    NameUser.setNickName(nickName.getText().toString());
                     ((ProfileDataCollector)getActivity()).nextpagehandler("name");
                     }
                 }
@@ -90,80 +87,80 @@ public class ProfileDataNameQuestions extends Fragment {
 
         @Override
         public void onFocusChange(View view, boolean b) {
-            if (view == FirstName)
+            if (view == firstName)
             {
-                if (FirstName.getText().toString()=="First Name") {
-                        FirstName.setText("");
+                if (firstName.getText().toString().equals("First Name")) {
+                        firstName.setText("");
                 }
             }
-            else if (view == LastName)
+            else if (view == lastName)
             {
-                if (LastName.getText().toString()=="Last Name"){
-                    LastName.setText("");
+                if (lastName.getText().toString().equals("Last Name")){
+                    lastName.setText("");
                 }
             }
             else
             {
-                if (LastName.getText().toString()=="Nick Name")
-                NickName.setText("");
+                if (nickName.getText().toString().equals("Nick Name"))
+                nickName.setText("");
             }
         }
         };
 
     private void InitialCellValues()
     {
-        if (user.getFirstName()==null)
-            FirstName.setText("First Name");
+        if (NameUser.getFirstName()==null)
+            firstName.setText("First Name");
         else
-            FirstName.setText(user.getFirstName());
-        if (user.getLastName()==null)
-            LastName.setText("Last Name");
+            firstName.setText(NameUser.getFirstName());
+        if (NameUser.getLastName()==null)
+            lastName.setText("Last Name");
         else
-            LastName.setText(user.getLastName());
-        if (user.getNickName()==null)
-            NickName.setText("Nick Name");
+            lastName.setText(NameUser.getLastName());
+        if (NameUser.getNickName()==null)
+            nickName.setText("Nick Name");
         else
-            NickName.setText(user.getNickName());
+            nickName.setText(NameUser.getNickName());
     }
     private boolean ValidateNameFields()
     {
         boolean flag = true;
-        String fstname = FirstName.getText().toString();
-        String lstname = LastName.getText().toString();
-        String nicname = NickName.getText().toString();
-        if (fstname.length() == 0 || fstname == "First Name")
+        String fstname = firstName.getText().toString();
+        String lstname = lastName.getText().toString();
+        String nicname = nickName.getText().toString();
+        if (fstname.length() == 0 || fstname.equals("First Name"))
         {
-            Warning.setText("Please Fill All the Fields");
-            FirstName.setBackground(getResources().getDrawable(R.drawable.edittext_warning));
+            warning.setText("Please Fill All the Fields");
+            firstName.setBackground(getResources().getDrawable(R.drawable.edittext_warning));
             flag = false;
         }
         else
         {
-            FirstName.setBackground(getResources().getDrawable(R.drawable.edittext_underline));
+            firstName.setBackground(getResources().getDrawable(R.drawable.edittext_underline));
         }
-        if (lstname.length() == 0 || lstname == "Last Name")
+        if (lstname.length() == 0 || lstname.equals("Last Name"))
         {
-            Warning.setText("Please Fill All the Fields");
-            LastName.setBackground(getResources().getDrawable(R.drawable.edittext_warning));
+            warning.setText("Please Fill All the Fields");
+            lastName.setBackground(getResources().getDrawable(R.drawable.edittext_warning));
             flag = false;
         }
         else
         {
-            LastName.setBackground(getResources().getDrawable(R.drawable.edittext_underline));
+            lastName.setBackground(getResources().getDrawable(R.drawable.edittext_underline));
         }
-        if (nicname.length() == 0 || nicname == "Nick Name")
+        if (nicname.length() == 0 || nicname.equals("Nick Name"))
         {
-            Warning.setText("Please Fill All the Fields");
-            NickName.setBackground(getResources().getDrawable(R.drawable.edittext_warning));
+            warning.setText("Please Fill All the Fields");
+            nickName.setBackground(getResources().getDrawable(R.drawable.edittext_warning));
             flag = false;
         }
         else
         {
-            NickName.setBackground(getResources().getDrawable(R.drawable.edittext_underline));
+            nickName.setBackground(getResources().getDrawable(R.drawable.edittext_underline));
         }
         if (flag)
         {
-            Warning.setText("");
+            warning.setText("");
         }
 
         return flag;

@@ -12,6 +12,8 @@ import android.widget.Switch;
 
 import com.snappychat.model.User;
 
+import static com.snappychat.MainActivity.USER_LOGGED_IN;
+
 public class ProfileDataCollector extends AppCompatActivity implements ProfileDataNameQuestions.OnFragmentInteractionListener,ProfileDataSettingsQuestions.OnFragmentInteractionListener,ProfileDataUserInterestsQuestions.OnFragmentInteractionListener,ProileDataProfQuestions.OnFragmentInteractionListener{
 
     private User snappyuser;
@@ -27,7 +29,7 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
         setContentView(R.layout.activity_profiledatacollector);
 
         Intent incoming = getIntent();
-        snappyuser = (User) incoming.getSerializableExtra("user");
+        snappyuser = (User) incoming.getSerializableExtra(USER_LOGGED_IN);
 
 
         ProfileNameQuestionFragment = new ProfileDataNameQuestions();
@@ -62,7 +64,7 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
                 snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfileSettingsQuestionFragment).commit();
                 break;
             case "settings":
-                snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfileNameQuestionFragment).commit();
+                callTimeLine();
                 break;
             case "profilepicture":
                 break;
@@ -86,6 +88,13 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
                 snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfileNameQuestionFragment).commit();
                 break;
         }
+    }
+
+    private void callTimeLine()
+    {
+        Intent timelineIntent = new Intent(getBaseContext(),MainActivity.class);
+        timelineIntent.putExtra(USER_LOGGED_IN,snappyuser);
+        startActivity(timelineIntent);
     }
 
     @Override

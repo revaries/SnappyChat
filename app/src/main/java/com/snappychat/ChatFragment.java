@@ -76,6 +76,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                 ((ChatActivity)getActivity()).userSender.getEmail() + "&user_receiver_id=" + ((ChatActivity)getActivity()).userReceiver.getEmail();
         //token = getToken(chat_friend);
         token = ((ChatActivity)getActivity()).userReceiver.getToken();
+        //token = ((ChatActivity)getActivity()).userSender.getToken();
         msg_edittext = (EditText) view.findViewById(R.id.messageEditText);
         msgListView = (ListView) view.findViewById(R.id.msgListView);
         ImageButton sendButton = (ImageButton) view

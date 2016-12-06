@@ -33,8 +33,8 @@ public class User implements Serializable{
     private String interests;
     private String token;
     private Boolean notification;
-    private String age;
     private String visibility;
+    private String age;
     private String profession;
     private Boolean status;
     private String email;
