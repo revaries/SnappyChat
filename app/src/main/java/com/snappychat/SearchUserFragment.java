@@ -11,8 +11,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -44,7 +42,7 @@ public class SearchUserFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private MyItemRecyclerViewAdapter adapter;
     RecyclerView recyclerView;
-    ArrayList<User> users;
+    SearchView searchView;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -79,91 +77,50 @@ public class SearchUserFragment extends Fragment {
         //setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
-
-            Context context = view.getContext();
-            users = new ArrayList<User>();
-
-            recyclerView = (RecyclerView) view.findViewById(R.id.list);
-            recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            adapter = new MyItemRecyclerViewAdapter(users, mListener);
-            recyclerView.setAdapter(adapter);
-
+        Context context = view.getContext();
+        recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        if (mColumnCount <= 1) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        } else {
+            recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        }
+        adapter = new MyItemRecyclerViewAdapter(new ArrayList<User>(),mListener);
+        recyclerView.setAdapter(adapter);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         mProgressBar.setVisibility(View.GONE);
         SearchManager searchManager = (SearchManager)
                 getActivity().getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) view.findViewById(R.id.searchView);
+        searchView = (SearchView) view.findViewById(R.id.searchView);
         searchView.setVisibility(View.VISIBLE);
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchView.setIconifiedByDefault(false);
         searchView.setSubmitButtonEnabled(true);
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                users = null;
-                setupAdapter();
-                return false;
-            }
-        });
+        searchView.setQuery("", true);
+        searchView.clearFocus();
 
-
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if(!(query.equals(""))){
-                    mProgressBar.setVisibility(View.VISIBLE);
-                    processQuery(query);
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-
-                if(!(query.equals(""))){
-                    mProgressBar.setVisibility(View.VISIBLE);
-                    processQuery(query);
-                }
-                return false;
-            }
-        });
 
         return view;
     }
 
-
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.options_menu, menu);
-
-        SearchManager searchManager = (SearchManager)
-                getActivity().getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-
-        searchView.setSubmitButtonEnabled(true);
+    public void onResume() {
+        super.onResume();
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                users = null;
-                setupAdapter();
+                setupAdapter(null);
                 return false;
             }
         });
 
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //clearBuildingMarkers();
                 if(!(query.equals(""))){
-                    //clearBuildingMarkers();
+                    mProgressBar.setVisibility(View.VISIBLE);
                     processQuery(query);
                 }
                 return false;
@@ -173,15 +130,25 @@ public class SearchUserFragment extends Fragment {
             public boolean onQueryTextChange(String query) {
 
                 if(!(query.equals(""))){
-                    //clearBuildingMarkers();
+                    mProgressBar.setVisibility(View.VISIBLE);
                     processQuery(query);
                 }
                 return false;
             }
         });
+        clearFields();
     }
 
-    void setupAdapter() {
+    public void clearFields(){
+        if(searchView != null) {
+            searchView.setQuery("", false);
+            searchView.clearFocus();
+            setupAdapter(new ArrayList<User>());
+        }
+
+    }
+
+    void setupAdapter(ArrayList<User> users) {
         if (getActivity() == null || recyclerView == null) return;
         mProgressBar.setVisibility(View.GONE);
         adapter.updateData(users);
@@ -238,8 +205,8 @@ public class SearchUserFragment extends Fragment {
 
             @Override
             protected void onPostExecute(ArrayList<User> users) {
-                SearchUserFragment.this.users = users;
-                setupAdapter();
+                //SearchUserFragment.this.users = users;
+                setupAdapter(users);
             }
         };
         userTask.execute(userLoggedIn,query);
@@ -289,9 +256,9 @@ public class SearchUserFragment extends Fragment {
             protected void onPostExecute(ArrayList<User> users) {
                 if(users!=null){
                     Toast.makeText(getActivity(), "Friend deleted!", Toast.LENGTH_SHORT).show();
+                    setupAdapter(users);
                 }
-                SearchUserFragment.this.users = users;
-                setupAdapter();
+
             }
 
         };

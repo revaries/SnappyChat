@@ -27,9 +27,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     private final OnListFragmentInteractionListener mListener;
 
 
-    public MyItemRecyclerViewAdapter(ArrayList<User> items, SearchUserFragment.OnListFragmentInteractionListener listener) {
-        mValues = items;
+    public MyItemRecyclerViewAdapter(ArrayList<User> values, SearchUserFragment.OnListFragmentInteractionListener listener) {
         mListener = listener;
+        mValues = values;
     }
 
     @Override
