@@ -1,7 +1,6 @@
 package com.snappychat;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.opengl.EGLDisplay;
 import android.os.Bundle;
@@ -12,21 +11,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class ProfileDataUserInterestsQuestions extends Fragment {
 
-    private EditText AboutYou;
-    private EditText Interests;
+public class ProileDataProfQuestions extends Fragment {
+
+    private EditText Location;
+    private EditText Profession;
     private Button Next;
+
     private OnFragmentInteractionListener mListener;
 
-    public ProfileDataUserInterestsQuestions() {
+    public ProileDataProfQuestions() {
 
     }
 
 
-    public static ProfileDataUserInterestsQuestions newInstance(String param1, String param2) {
-        ProfileDataUserInterestsQuestions fragment = new ProfileDataUserInterestsQuestions();
+    public static ProileDataProfQuestions newInstance(String param1, String param2) {
+        ProileDataProfQuestions fragment = new ProileDataProfQuestions();
         Bundle args = new Bundle();
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -40,16 +42,13 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view =  inflater.inflate(R.layout.fragment_proile_data_prof_loc, container, false);
 
-        View view =  inflater.inflate(R.layout.fragment_profile_data_user_interests_questions, container, false);
-
-        AboutYou = (EditText) view.findViewById(R.id.about_you);
-        Interests = (EditText) view.findViewById(R.id.interests);
-        Next = (Button) view.findViewById(R.id.interest_question_next);
-
+        Location = (EditText)view.findViewById(R.id.interests);
+        Profession = (EditText)view.findViewById(R.id.profession);
+        Next = (Button)view.findViewById(R.id.proffesion_question_next);
         return view;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -70,6 +69,7 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
 
 
     public interface OnFragmentInteractionListener {
+
         void onFragmentInteraction(Uri uri);
     }
 }

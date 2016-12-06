@@ -68,7 +68,7 @@
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/next"
+            android:id="@+id/name_question_next"
             android:text="NEXT"></Button>
 
     </RelativeLayout>

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Select who can see your Profile"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:paddingLeft="-15dp"
         android:textAlignment="center"
         />
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/profile_settings_radio"
+        android:id="@+id/profile_settings_visibiity_radio"
         android:layout_margin="20dp"
         >
         <RadioButton
@@ -49,6 +49,42 @@
             />
     </RadioGroup>
 
+
+    <TextView
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Would you like to receive Email notifications"
+        android:textSize="15dp"
+        android:paddingLeft="-15dp"
+        android:textAlignment="center"
+        />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/profie_settings_emailnotifications"
+        android:layout_margin="20dp">
+        <RadioButton
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/email_notification_yes"
+            android:text="Yes"
+            android:buttonTint="@color/com_facebook_button_background_color"
+            />
+        <RadioButton
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/email_notification_no"
+            android:text="No"
+            android:buttonTint="@color/com_facebook_button_background_color"
+            />
+    </RadioGroup>
+
     <RelativeLayout
         android:layout_margin="30dp"
         android:layout_width="match_parent"
@@ -57,7 +93,7 @@
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/next"
+            android:id="@+id/profile_settings_next"
             android:text="NEXT"></Button>
 
     </RelativeLayout>

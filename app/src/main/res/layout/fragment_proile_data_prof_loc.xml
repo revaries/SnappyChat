@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.snappychat.ProileDataUserQuestions">
+    tools:context="com.snappychat.ProileDataProfQuestions">
 
     <TextView
         android:layout_marginTop="50dp"
@@ -29,7 +29,7 @@
             android:background="@drawable/edittext_underline"
             />
         <EditText
-            android:id="@+id/last_name"
+            android:id="@+id/profession"
             android:paddingBottom="5dp"
             android:layout_margin="15dp"
             android:layout_width="match_parent"
@@ -49,7 +49,7 @@
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/next"
+            android:id="@+id/proffesion_question_next"
             android:text="NEXT"></Button>
 
     </RelativeLayout>
