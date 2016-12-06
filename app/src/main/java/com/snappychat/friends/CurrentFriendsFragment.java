@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.snappychat.MainActivity;
@@ -32,6 +33,7 @@ public class CurrentFriendsFragment extends Fragment {
     public static ArrayList<User> currentFriendCards = new ArrayList<User>();
     private SearchUserFragment.OnListFragmentInteractionListener mListener;
     private MyItemRecyclerViewAdapter adapter;
+    private ProgressBar mProgressBar;
     RecyclerView recyclerView;
     private User userLoggedIn;
 
@@ -47,7 +49,7 @@ public class CurrentFriendsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         userLoggedIn = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
-        getFriendsList();
+
     }
 
     @Override
@@ -60,10 +62,10 @@ public class CurrentFriendsFragment extends Fragment {
         //adapter = new RecyclerAdapter(currentFriendCards);
         adapter = new MyItemRecyclerViewAdapter(currentFriendCards, mListener);
         recyclerView.setAdapter( adapter);
-
+        mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         //LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         //recyclerView.setLayoutManager(llm);
-
+        getFriendsList();
         return v;
     }
 
@@ -86,6 +88,9 @@ public class CurrentFriendsFragment extends Fragment {
 
     void setupAdapter() {
         if (getActivity() == null || recyclerView == null) return;
+        if(mProgressBar != null)
+            mProgressBar.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
         adapter.updateData(currentFriendCards);
     }
 
@@ -109,7 +114,8 @@ public class CurrentFriendsFragment extends Fragment {
             }
 
         };
-        friendsTask.execute(userLoggedIn.getEmail());
+        if(userLoggedIn != null)
+            friendsTask.execute(userLoggedIn.getEmail());
     }
 
     public void deleteFriend(User userToDelete){

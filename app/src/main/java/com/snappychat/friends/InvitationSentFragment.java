@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.snappychat.MainActivity;
@@ -35,6 +36,8 @@ public class InvitationSentFragment extends Fragment {
     public static RecyclerAdapterInvitation adapter;
     private OnListFragmentInteractionListener mListener;
     private User userLoggedIn;
+    private ProgressBar mProgressBar;
+    RecyclerView recyclerView;
 
     public static InvitationSentFragment newInstance(User user) {
         InvitationSentFragment fragment = new InvitationSentFragment();
@@ -48,20 +51,20 @@ public class InvitationSentFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         userLoggedIn = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
-        getInvitationFriendsList();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.invitation_fragment, container, false);
-        RecyclerView rv = (RecyclerView) v.findViewById(R.id.recycler_view_invitation);
-        rv.setHasFixedSize(true);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view_invitation);
+        recyclerView.setHasFixedSize(true);
         adapter = new RecyclerAdapterInvitation(invitationFriendCards,mListener);
-        rv.setAdapter(adapter);
-
+        recyclerView.setAdapter(adapter);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        rv.setLayoutManager(llm);
-
+        recyclerView.setLayoutManager(llm);
+        mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+        getInvitationFriendsList();
         return v;
     }
 
@@ -74,6 +77,11 @@ public class InvitationSentFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -97,6 +105,12 @@ public class InvitationSentFragment extends Fragment {
         void onCancelRequest(FriendCard item);
     }
 
+    void setupAdapter(ArrayList<FriendCard> result) {
+        if (getActivity() == null || recyclerView == null) return;
+        mProgressBar.setVisibility(View.GONE);
+        adapter.updateData(result);
+    }
+
     public void getInvitationFriendsList(){
         invitationFriendsTask = new AsyncTask<String, Void, String>() {
             @Override
@@ -114,7 +128,8 @@ public class InvitationSentFragment extends Fragment {
             }
 
         };
-        invitationFriendsTask.execute(userLoggedIn.getEmail());
+        if(userLoggedIn != null)
+            invitationFriendsTask.execute(userLoggedIn.getEmail());
     }
 
     public void cancelRequest(FriendCard friendCard){
@@ -139,7 +154,7 @@ public class InvitationSentFragment extends Fragment {
                 if(result != null){
                     Toast.makeText(getActivity(), "Friend request canceled!", Toast.LENGTH_SHORT).show();
                 }
-                adapter.updateData(result);
+                setupAdapter(result);
             }
 
         };
