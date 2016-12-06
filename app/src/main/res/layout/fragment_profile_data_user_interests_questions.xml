@@ -15,6 +15,14 @@
         android:paddingLeft="-15dp"
         android:textAlignment="center"
         />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:paddingLeft="25dp"
+        android:id="@+id/interests_warning"
+        android:textColor="#ffff0000"/>
+
     <EditText
             android:id="@+id/about_you"
             android:paddingBottom="5dp"
@@ -22,8 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="About You"
-            android:inputType="textImeMultiLine"
-            android:layout_weight="1.75"
+
             android:background="@drawable/edittext_underline"
             />
 
@@ -34,25 +41,45 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_underline"
-            android:layout_weight="0.5"
+
             android:layout_margin="15dp"
             android:paddingBottom="5dp"
             android:text="Interests"/>
 
 
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_margin="30dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/interest_question_next"
-            android:text="NEXT"></Button>
+            android:layout_weight="1"
+            >
+            <Button
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/interest_question_back"
+                android:text="BACK"></Button>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
-    </RelativeLayout>
+            <Button
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/interest_question_next"
+                android:text="NEXT"></Button>
+        </RelativeLayout>
+
+
+    </LinearLayout>
 
 
 </LinearLayout>

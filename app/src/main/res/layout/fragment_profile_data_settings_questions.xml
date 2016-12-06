@@ -85,18 +85,36 @@
             />
     </RadioGroup>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_margin="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <Button
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_settings_back"
+                android:text="BACK"></Button>
+        </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
         <Button
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/profile_settings_next"
             android:text="NEXT"></Button>
-
     </RelativeLayout>
+
+
+
+    </LinearLayout>
 
 
 </LinearLayout>

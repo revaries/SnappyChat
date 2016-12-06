@@ -12,7 +12,7 @@ import android.widget.Switch;
 
 import com.snappychat.model.User;
 
-public class profiledatacollector extends AppCompatActivity implements ProfileDataNameQuestions.OnFragmentInteractionListener,ProfileDataSettingsQuestions.OnFragmentInteractionListener,ProfileDataUserInterestsQuestions.OnFragmentInteractionListener,ProileDataProfQuestions.OnFragmentInteractionListener{
+public class ProfileDataCollector extends AppCompatActivity implements ProfileDataNameQuestions.OnFragmentInteractionListener,ProfileDataSettingsQuestions.OnFragmentInteractionListener,ProfileDataUserInterestsQuestions.OnFragmentInteractionListener,ProileDataProfQuestions.OnFragmentInteractionListener{
 
     private User snappyuser;
     private Fragment ProfileNameQuestionFragment;

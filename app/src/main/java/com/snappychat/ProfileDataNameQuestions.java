@@ -62,7 +62,7 @@ public class ProfileDataNameQuestions extends Fragment {
         Next = (Button) view.findViewById(R.id.name_question_next);
         Warning = (TextView) view.findViewById(R.id.name_warning);
 
-        user = ((profiledatacollector)getActivity()).getUserObject();
+        user = ((ProfileDataCollector)getActivity()).getUserObject();
 
         InitialCellValues();
 
@@ -77,7 +77,7 @@ public class ProfileDataNameQuestions extends Fragment {
                     user.setFirstName(FirstName.getText().toString());
                     user.setLastName(LastName.getText().toString());
                     user.setNickName(NickName.getText().toString());
-                    ((profiledatacollector)getActivity()).nextpagehandler("name");
+                    ((ProfileDataCollector)getActivity()).nextpagehandler("name");
                     }
                 }
         });
