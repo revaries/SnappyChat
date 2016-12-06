@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.snappychat.SearchUserFragment;
 import com.snappychat.model.User;
 
 import java.util.Vector;

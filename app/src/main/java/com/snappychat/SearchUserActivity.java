@@ -9,11 +9,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 
+import com.snappychat.ChatActivity;
+import com.snappychat.R;
+import com.snappychat.friends.SearchUserFragment;
 import com.snappychat.model.User;
 
 import static com.snappychat.MainActivity.USER_LOGGED_IN;
 
-public class SearchUserActivity extends AppCompatActivity implements SearchUserFragment.OnListFragmentInteractionListener{
+public class SearchUserActivity extends AppCompatActivity implements SearchUserFragment.OnListFragmentInteractionListener {
     private User userLoggedIn;
 
     @Override

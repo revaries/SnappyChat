@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.friends;
 
 
 import android.app.SearchManager;
@@ -17,6 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.snappychat.MainActivity;
+import com.snappychat.R;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
 
@@ -200,6 +202,7 @@ public class SearchUserFragment extends Fragment {
             @Override
             protected ArrayList<User> doInBackground(Object... params) {
                 //Update user status to online
+                userLoggedIn = ServiceHandler.getUser(((User)params[0]).getEmail()); //update user in case a request was accepted
                 return ServiceHandler.getUsers((User)params[0],(String) params[1]);
             }
 

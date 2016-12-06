@@ -12,9 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.snappychat.MainActivity;
-import com.snappychat.MyItemRecyclerViewAdapter;
 import com.snappychat.R;
-import com.snappychat.SearchUserFragment;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
 

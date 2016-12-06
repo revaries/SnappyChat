@@ -15,6 +15,7 @@ import com.snappychat.friends.CurrentFriendsFragment;
 import com.snappychat.friends.InvitationSentFragment;
 import com.snappychat.friends.PagerAdapter;
 import com.snappychat.friends.PendingRequestsFragment;
+import com.snappychat.friends.SearchUserFragment;
 import com.snappychat.model.FriendCard;
 import com.snappychat.model.User;
 

@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.timeline;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.snappychat.MainActivity;
+import com.snappychat.R;
 import com.snappychat.model.Timeline;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
