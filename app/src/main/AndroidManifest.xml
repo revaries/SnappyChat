@@ -65,7 +65,7 @@
         <activity
             android:name=".FriendsActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/AppTheme" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data

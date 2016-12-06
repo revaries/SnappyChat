@@ -62,7 +62,7 @@ public class PendingRequestsFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
-        getPendingFriendsList();
+        //getPendingFriendsList();
         return v;
     }
 
