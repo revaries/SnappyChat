@@ -58,7 +58,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
 
     private static final String TAG = "UPDATE_VIEW";
 
-    public static AsyncTask<Void, Void, String> updateViewTask;
+    public static AsyncTask<Void, Void, Void> updateViewTask;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -196,6 +196,8 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
             chatMessage.Date = getCurrentDate();
             chatMessage.Time = getCurrentTime();
             msg_edittext.setText("");
+            //updateView(chatMessage);
+            postMessage(chatMessage);
             updateView(chatMessage);
         }
     }
@@ -219,11 +221,10 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
 
     }
 
-    public static void updateView(final ChatMessage chatMessage){
-        updateViewTask = new AsyncTask<Void, Void, String>() {
-
+    private void postMessage (final ChatMessage chatMessage){
+        updateViewTask = new AsyncTask<Void, Void, Void>() {
             @Override
-            protected String doInBackground(Void... params) {
+            protected Void doInBackground(Void... params) {
 
                 String response = null;
                 JSONObject json = new JSONObject();
@@ -238,7 +239,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                     String url = Uri.parse(GOOGLE_API_URL).buildUpon()
                             .build().toString();
                     response = ServiceHandler.makeRequest(url,"POST",json.toString());
-                    //postToDatabase(chatMessage);
+                    postToDatabase(chatMessage);
                     if(response != null){
                         Log.v(TAG,"Send Message response is "+response);
                     }
@@ -247,19 +248,19 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                chatAdapter.add(chatMessage);
-                return "Chat message added!. Response "+response;
+                //chatAdapter.add(chatMessage);
+                //return "Chat message added!. Response "+response;
+                return null;
             }
 
-            @Override
-            protected void onPostExecute(String result) {
-                chatAdapter.notifyDataSetChanged();
-                updateViewTask = null;
-                Log.d(TAG, "onPostExecute: result: " + result);
-            }
 
         };
-        updateViewTask.execute(null, null, null);
+        updateViewTask.execute();
+    }
+
+    public static void updateView(final ChatMessage chatMessage){
+        chatAdapter.add(chatMessage);
+        chatAdapter.notifyDataSetChanged();
     }
 
     public static String getCurrentTime(){
