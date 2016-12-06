@@ -267,7 +267,6 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
 
     public void updateView(final ChatMessage chatMessage){
         chatAdapter.add(chatMessage);
-        chatAdapter.notifyDataSetChanged();
     }
 
     @Override
