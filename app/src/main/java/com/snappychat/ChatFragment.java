@@ -203,7 +203,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         }
     }
 
-    public static void postToDatabase(ChatMessage chatMessage){
+    public void postToDatabase(ChatMessage chatMessage){
         JSONObject updateDB = new JSONObject();
         String responseChat;
         try {
@@ -259,7 +259,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         updateViewTask.execute();
     }
 
-    public static void updateView(final ChatMessage chatMessage){
+    public void updateView(final ChatMessage chatMessage){
         chatAdapter.add(chatMessage);
         chatAdapter.notifyDataSetChanged();
     }
