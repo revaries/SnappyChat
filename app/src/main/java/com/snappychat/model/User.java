@@ -27,22 +27,22 @@ public class User implements Serializable{
     private String nickName;
     @SerializedName("location")
     private String location;
-    @SerializedName("profession")
-    private String profession;
     @SerializedName("about_me")
     private String AboutMe;
-    @SerializedName("Intersts")
-    private String Interest;
-
-
-
-
+    @SerializedName("interests")
+    private String interests;
+    private String token;
+    private Boolean notification;
+    private String age;
+    private String visibility;
+    private String profession;
     private Boolean status;
-
     private String email;
     private List<String>friends;
-    public User(){};
     private transient boolean friend;
+    private transient String message;
+
+    public User(){};
 
     public User(String id, String firstName, String lastName, String nickName, String image){
         this.setId(id);
@@ -147,20 +147,13 @@ public class User implements Serializable{
         }
         return decodedByte;
     }
+
     public String getAboutMe() {
         return AboutMe;
     }
 
     public void setAboutMe(String aboutMe) {
         AboutMe = aboutMe;
-    }
-
-    public String getInterest() {
-        return Interest;
-    }
-
-    public void setInterest(String interest) {
-        Interest = interest;
     }
 
     public String getLocation() {
@@ -177,6 +170,54 @@ public class User implements Serializable{
 
     public void setProfession(String profession) {
         this.profession = profession;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(String visibility) {
+        this.visibility = visibility;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Boolean getNotification() {
+        return notification;
+    }
+
+    public void setNotification(Boolean notification) {
+        this.notification = notification;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public String getInterests() {
+        return interests;
+    }
+
+    public void setInterests(String interests) {
+        this.interests = interests;
     }
 
 }

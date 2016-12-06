@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +14,7 @@ import android.widget.Toast;
 
 import com.snappychat.MainActivity;
 import com.snappychat.R;
-import com.snappychat.model.FriendCard;
 import com.snappychat.model.User;
-import com.snappychat.networking.FriendsHandler;
 import com.snappychat.networking.ServiceHandler;
 
 import org.json.JSONException;
@@ -31,8 +28,7 @@ import java.util.ArrayList;
 
 public class InvitationSentFragment extends Fragment {
     public static final String TAG = "INVITATION_FRIENDS";
-    private static AsyncTask<String, Void, String> invitationFriendsTask;
-    public static ArrayList<FriendCard> invitationFriendCards = new ArrayList<>();
+    private static AsyncTask<String, Void, ArrayList<User>> invitationFriendsTask;
     public static RecyclerAdapterInvitation adapter;
     private OnListFragmentInteractionListener mListener;
     private User userLoggedIn;
@@ -51,7 +47,7 @@ public class InvitationSentFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         userLoggedIn = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
-
+        getInvitationFriendsList();
     }
 
     @Override
@@ -59,12 +55,12 @@ public class InvitationSentFragment extends Fragment {
         View v = inflater.inflate(R.layout.invitation_fragment, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view_invitation);
         recyclerView.setHasFixedSize(true);
-        adapter = new RecyclerAdapterInvitation(invitationFriendCards,mListener);
+        adapter = new RecyclerAdapterInvitation(new ArrayList<User>(),mListener);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
-        //getInvitationFriendsList();
+        //
         return v;
     }
 
@@ -102,29 +98,25 @@ public class InvitationSentFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onCancelRequest(FriendCard item);
+        void onCancelRequest(User item);
     }
 
-    void setupAdapter(ArrayList<FriendCard> result) {
+    void setupAdapter(ArrayList<User> result) {
         if (getActivity() == null || recyclerView == null) return;
         mProgressBar.setVisibility(View.GONE);
         adapter.updateData(result);
     }
 
     public void getInvitationFriendsList(){
-        invitationFriendsTask = new AsyncTask<String, Void, String>() {
+        invitationFriendsTask = new AsyncTask<String, Void, ArrayList<User>>() {
             @Override
-            protected String doInBackground(String... params) {
-                String response = FriendsHandler.getFriends(params[0],FriendsHandler.REQUESTED_URL);
-                return response;
+            protected ArrayList<User> doInBackground(String... params) {
+                return ServiceHandler.getFriendsRequest(params[0]);
             }
 
             @Override
-            protected void onPostExecute(String result) {
-                invitationFriendsTask = null;
-                Log.d(TAG, "onPostExecute: result: " + result);
-                invitationFriendCards = FriendsHandler.processJsonResponse(result, FriendsHandler.REQUESTED_URL);
-                adapter.updateData(invitationFriendCards);
+            protected void onPostExecute(ArrayList<User> result) {
+                setupAdapter(result);
             }
 
         };
@@ -132,25 +124,22 @@ public class InvitationSentFragment extends Fragment {
             invitationFriendsTask.execute(userLoggedIn.getEmail());
     }
 
-    public void cancelRequest(FriendCard friendCard){
-        AsyncTask<String, Void, ArrayList<FriendCard>> invitationFriendsTask = new AsyncTask<String, Void, ArrayList<FriendCard>>() {
+    public void cancelRequest(User friendRequestToCancel){
+        AsyncTask<String, Void, ArrayList<User>> invitationFriendsTask = new AsyncTask<String, Void, ArrayList<User>>() {
             @Override
-            protected ArrayList<FriendCard> doInBackground(String... params) {
+            protected ArrayList<User> doInBackground(String... params) {
                 JSONObject jsonObject = new JSONObject();
                 try {
                     jsonObject.put("email",(String)params[0]);
                     ServiceHandler.deleteFriendRequest(params[1], jsonObject);
-                    String result = FriendsHandler.getFriends(params[1],FriendsHandler.REQUESTED_URL);
-                    if(result != null)
-                        return FriendsHandler.processJsonResponse(result, FriendsHandler.REQUESTED_URL);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                return null;
+                return ServiceHandler.getFriendsRequest(params[1]);
             }
 
             @Override
-            protected void onPostExecute(ArrayList<FriendCard> result) {
+            protected void onPostExecute(ArrayList<User> result) {
                 if(result != null){
                     Toast.makeText(getActivity(), "Friend request canceled!", Toast.LENGTH_SHORT).show();
                 }
@@ -158,6 +147,6 @@ public class InvitationSentFragment extends Fragment {
             }
 
         };
-        invitationFriendsTask.execute(friendCard.getEmail(),userLoggedIn.getEmail());
+        invitationFriendsTask.execute(friendRequestToCancel.getEmail(),userLoggedIn.getEmail());
     }
 }

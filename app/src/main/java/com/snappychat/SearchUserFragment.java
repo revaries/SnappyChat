@@ -92,7 +92,7 @@ public class SearchUserFragment extends Fragment {
         SearchManager searchManager = (SearchManager)
                 getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) view.findViewById(R.id.searchView);
-        searchView.setVisibility(View.VISIBLE);
+
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchView.setIconifiedByDefault(false);
@@ -107,6 +107,7 @@ public class SearchUserFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        searchView.setVisibility(View.VISIBLE);
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -212,13 +213,14 @@ public class SearchUserFragment extends Fragment {
         userTask.execute(userLoggedIn,query);
     }
 
-    public void addFriend(User userToAdd){
+    public void addFriend(User userToAdd, String message){
         AsyncTask<String, Void, String> friendsTask = new AsyncTask<String, Void, String>() {
             @Override
             protected String doInBackground(String... params) {
                 JSONObject jsonObject = new JSONObject();
                 try {
                     jsonObject.put("email",(String)params[0]);
+                    jsonObject.put("message",(String)params[2]);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -233,7 +235,7 @@ public class SearchUserFragment extends Fragment {
             }
 
         };
-        friendsTask.execute(userToAdd.getEmail(),userLoggedIn.getEmail());
+        friendsTask.execute(userToAdd.getEmail(),userLoggedIn.getEmail(),message);
     }
 
     public void deleteFriend(User userToDelete){
