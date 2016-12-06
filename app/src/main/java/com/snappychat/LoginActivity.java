@@ -254,7 +254,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             //Update user status to online
             JSONObject user = new JSONObject();
             try {
-                user.put("status",true);
+                //user.put("status",true);
                 user.put("token",params[1]);
                 ServiceHandler.updateUser(params[0],user);
             } catch (JSONException e) {
