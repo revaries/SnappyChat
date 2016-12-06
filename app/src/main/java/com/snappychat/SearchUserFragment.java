@@ -40,6 +40,7 @@ public class SearchUserFragment extends Fragment {
     private int mColumnCount = 1;
     private User userLoggedIn;
     private OnListFragmentInteractionListener mListener;
+    private MyItemRecyclerViewAdapter adapter;
     RecyclerView recyclerView;
     ArrayList<User> users;
     /**
@@ -68,7 +69,6 @@ public class SearchUserFragment extends Fragment {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
             userLoggedIn = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
         }
-
     }
 
     @Override
@@ -77,8 +77,7 @@ public class SearchUserFragment extends Fragment {
         //setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
-        // Set the adapter
-        //if (view instanceof RecyclerView) {
+
             Context context = view.getContext();
             users = new ArrayList<User>();
 
@@ -89,8 +88,9 @@ public class SearchUserFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(users, mListener));
-        //}
+            adapter = new MyItemRecyclerViewAdapter(users, mListener);
+            recyclerView.setAdapter(adapter);
+
 
         SearchManager searchManager = (SearchManager)
                 getActivity().getSystemService(Context.SEARCH_SERVICE);
@@ -181,13 +181,7 @@ public class SearchUserFragment extends Fragment {
 
     void setupAdapter() {
         if (getActivity() == null || recyclerView == null) return;
-        if (users != null) {
-//            mGridView.setAdapter(new ArrayAdapter<GalleryItem>(getActivity(),
-//                    android.R.layout.simple_gallery_item, mItems));
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(users,mListener));
-        } else {
-            recyclerView.setAdapter(null);
-        }
+        adapter.updateData(users);
     }
 
     public ArrayList<String> processQuery(String query){
@@ -229,6 +223,7 @@ public class SearchUserFragment extends Fragment {
         // TODO: Update argument type and name
         void onChatRequested(User item);
         void onFriendAdded(User item);
+        void onFriendRemoved(User item);
     }
 
     private class FilterUsersTask extends AsyncTask<Object,Void,ArrayList<User>> {
@@ -268,5 +263,34 @@ public class SearchUserFragment extends Fragment {
 
         };
         friendsTask.execute(userToAdd.getEmail(),userLoggedIn.getEmail());
+    }
+
+    public void deleteFriend(User userToDelete){
+        AsyncTask<String, Void, ArrayList<User>> friendsTask = new AsyncTask<String, Void, ArrayList<User>>() {
+            @Override
+            protected ArrayList<User> doInBackground(String... params) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("email",params[0]);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                String response = ServiceHandler.deleteFriend(params[1], jsonObject);
+                if(response != null)
+                    return ServiceHandler.getFriends(params[1]);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<User> users) {
+                if(users!=null){
+                    Toast.makeText(getActivity(), "Friend deleted!", Toast.LENGTH_SHORT).show();
+                }
+                SearchUserFragment.this.users = users;
+                setupAdapter();
+            }
+
+        };
+        friendsTask.execute(userToDelete.getEmail(),userLoggedIn.getEmail());
     }
 }

@@ -24,15 +24,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static com.snappychat.friends.InvitationSentFragment.invitationFriendCards;
-
 /**
  * Created by Jelson on 12/2/2016.
  */
 
 public class PendingRequestsFragment extends Fragment {
     public static final String TAG = "PENDING_FRIENDS";
-    private static AsyncTask<String, Void, String> pendingFriendsTask;
+    private static AsyncTask<String, Void, ArrayList<FriendCard>> pendingFriendsTask;
     public static ArrayList<FriendCard> pendingFriendCards = new ArrayList<>();
     public static RecyclerAdapterPending adapter;
     private User userLoggedIn;
@@ -90,19 +88,19 @@ public class PendingRequestsFragment extends Fragment {
     }
 
     public void getPendingFriendsList(){
-        pendingFriendsTask = new AsyncTask<String, Void, String>() {
+        pendingFriendsTask = new AsyncTask<String, Void, ArrayList<FriendCard>>() {
             @Override
-            protected String doInBackground(String... params) {
+            protected ArrayList<FriendCard> doInBackground(String... params) {
                 String response = FriendsHandler.getFriends(params[0],FriendsHandler.PENDING_URL);
-                return response;
+                if(response != null)
+                    return pendingFriendCards = FriendsHandler.processJsonResponse(response, FriendsHandler.PENDING_URL);
+                return null;
             }
 
             @Override
-            protected void onPostExecute(String result) {
+            protected void onPostExecute(ArrayList<FriendCard> friends_pending) {
                 pendingFriendsTask = null;
-                Log.d(TAG, "onPostExecute: result: " + result);
-                pendingFriendCards = FriendsHandler.processJsonResponse(result, FriendsHandler.PENDING_URL);
-                adapter.updateData(pendingFriendCards);
+                adapter.updateData(friends_pending);
             }
 
         };
@@ -110,28 +108,29 @@ public class PendingRequestsFragment extends Fragment {
     }
 
     public void modifyPendingRequest(FriendCard friendCard, boolean answer){
-        AsyncTask<Object, Void, String> invitationFriendsTask = new AsyncTask<Object, Void, String>() {
+        AsyncTask<Object, Void, ArrayList<FriendCard>> invitationFriendsTask = new AsyncTask<Object, Void, ArrayList<FriendCard>>() {
             @Override
-            protected String doInBackground(Object... params) {
+            protected ArrayList<FriendCard> doInBackground(Object... params) {
                 JSONObject jsonObject = new JSONObject();
                 try {
                     jsonObject.put("email",(String)params[0]);
                     jsonObject.put("accept",(Boolean) params[2]);
                     String result = ServiceHandler.updateFriendPending((String)params[1], jsonObject);
+                    if(result != null)
+                        return FriendsHandler.processJsonResponse(result, FriendsHandler.REQUESTED_URL);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                return FriendsHandler.getFriends((String)params[1],FriendsHandler.PENDING_URL);
+                return null;
             }
 
             @Override
-            protected void onPostExecute(String result) {
-                Log.d(TAG, "onPostExecute: result: " + result);
-                invitationFriendCards = FriendsHandler.processJsonResponse(result, FriendsHandler.REQUESTED_URL);
+            protected void onPostExecute(ArrayList<FriendCard> result) {
                 if(result != null){
                     Toast.makeText(getActivity(), "Friend request canceled!", Toast.LENGTH_SHORT).show();
                 }
-                adapter.updateData(invitationFriendCards);
+                adapter.updateData(result);
             }
 
         };

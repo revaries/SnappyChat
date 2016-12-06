@@ -8,14 +8,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.snappychat.MainActivity;
 import com.snappychat.MyItemRecyclerViewAdapter;
 import com.snappychat.R;
 import com.snappychat.SearchUserFragment;
 import com.snappychat.model.User;
-import com.snappychat.networking.FriendsHandler;
 import com.snappychat.networking.ServiceHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -28,6 +31,7 @@ public class CurrentFriendsFragment extends Fragment {
     private static AsyncTask<String, Void, ArrayList<User>> friendsTask;
     public static ArrayList<User> currentFriendCards = new ArrayList<User>();
     private SearchUserFragment.OnListFragmentInteractionListener mListener;
+    private MyItemRecyclerViewAdapter adapter;
     RecyclerView recyclerView;
     private User userLoggedIn;
 
@@ -54,7 +58,8 @@ public class CurrentFriendsFragment extends Fragment {
         recyclerView = (RecyclerView) v.findViewById(R.id.list);
         recyclerView.setHasFixedSize(true);
         //adapter = new RecyclerAdapter(currentFriendCards);
-        recyclerView.setAdapter( new MyItemRecyclerViewAdapter(currentFriendCards,mListener));
+        adapter = new MyItemRecyclerViewAdapter(currentFriendCards, mListener);
+        recyclerView.setAdapter( adapter);
 
         //LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         //recyclerView.setLayoutManager(llm);
@@ -81,13 +86,7 @@ public class CurrentFriendsFragment extends Fragment {
 
     void setupAdapter() {
         if (getActivity() == null || recyclerView == null) return;
-        if (currentFriendCards != null) {
-//            mGridView.setAdapter(new ArrayAdapter<GalleryItem>(getActivity(),
-//                    android.R.layout.simple_gallery_item, mItems));
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(currentFriendCards,mListener));
-        } else {
-            recyclerView.setAdapter(null);
-        }
+        adapter.updateData(currentFriendCards);
     }
 
 
@@ -96,7 +95,7 @@ public class CurrentFriendsFragment extends Fragment {
         friendsTask = new AsyncTask<String, Void, ArrayList<User>>() {
             @Override
             protected ArrayList<User> doInBackground(String... params) {
-                return ServiceHandler.getFriends(params[0],FriendsHandler.FRIENDS_URL);
+                return ServiceHandler.getFriends(params[0]);
             }
 
             @Override
@@ -111,5 +110,34 @@ public class CurrentFriendsFragment extends Fragment {
 
         };
         friendsTask.execute(userLoggedIn.getEmail());
+    }
+
+    public void deleteFriend(User userToDelete){
+        AsyncTask<String, Void, ArrayList<User>> friendsTask = new AsyncTask<String, Void, ArrayList<User>>() {
+            @Override
+            protected ArrayList<User> doInBackground(String... params) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("email",params[0]);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                String response = ServiceHandler.deleteFriend(params[1], jsonObject);
+                if(response != null)
+                    return ServiceHandler.getFriends(params[1]);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<User> users) {
+                if(users!=null){
+                    Toast.makeText(getActivity(), "Friend deleted!", Toast.LENGTH_SHORT).show();
+                }
+                CurrentFriendsFragment.this.currentFriendCards = users;
+                setupAdapter();
+            }
+
+        };
+        friendsTask.execute(userToDelete.getEmail(),userLoggedIn.getEmail());
     }
 }

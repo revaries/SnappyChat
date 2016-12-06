@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.snappychat.model.ChatMessage;
 import com.snappychat.networking.FriendsHandler;
 import com.snappychat.networking.ServiceHandler;
 

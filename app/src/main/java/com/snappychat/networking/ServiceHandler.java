@@ -92,7 +92,7 @@ public class ServiceHandler {
         return users;
     }
 
-    public static ArrayList<User> getFriends(String user_id, String param){
+    public static ArrayList<User> getFriends(String user_id){
         ArrayList<User> friends = null;
         try {
             String url = Uri.parse(ENDPOINT_USER).buildUpon()
@@ -157,7 +157,26 @@ public class ServiceHandler {
             }
 
         } catch (Exception e) {
-            Log.e(TAG, "Failed to update user", e);
+            Log.e(TAG, "Failed to add Friend", e);
+        }
+        return response;
+    }
+
+    public static String deleteFriend(String user_id, JSONObject json) {
+        String response = null;
+        try {
+            String url = Uri.parse(ENDPOINT_USER).buildUpon()
+                    .appendEncodedPath(user_id)
+                    .appendPath(FRIENDS_URL)
+                    .build().toString();
+
+            response = makeRequest(url,"DELETE",json.toString());
+            if(response != null){
+                Log.v(TAG,response);
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to delete user", e);
         }
         return response;
     }

@@ -48,8 +48,7 @@ public class InvitationSentFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         userLoggedIn = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
-
-
+        getInvitationFriendsList();
     }
 
     @Override
@@ -62,7 +61,7 @@ public class InvitationSentFragment extends Fragment {
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
-        getInvitationFriendsList();
+
         return v;
     }
 
@@ -119,27 +118,28 @@ public class InvitationSentFragment extends Fragment {
     }
 
     public void cancelRequest(FriendCard friendCard){
-        AsyncTask<String, Void, String> invitationFriendsTask = new AsyncTask<String, Void, String>() {
+        AsyncTask<String, Void, ArrayList<FriendCard>> invitationFriendsTask = new AsyncTask<String, Void, ArrayList<FriendCard>>() {
             @Override
-            protected String doInBackground(String... params) {
+            protected ArrayList<FriendCard> doInBackground(String... params) {
                 JSONObject jsonObject = new JSONObject();
                 try {
                     jsonObject.put("email",(String)params[0]);
-                    String result = ServiceHandler.deleteFriendRequest(params[1], jsonObject);
+                    ServiceHandler.deleteFriendRequest(params[1], jsonObject);
+                    String result = FriendsHandler.getFriends(params[1],FriendsHandler.REQUESTED_URL);
+                    if(result != null)
+                        return FriendsHandler.processJsonResponse(result, FriendsHandler.REQUESTED_URL);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                return FriendsHandler.getFriends(params[1],FriendsHandler.REQUESTED_URL);
+                return null;
             }
 
             @Override
-            protected void onPostExecute(String result) {
-                Log.d(TAG, "onPostExecute: result: " + result);
-                invitationFriendCards = FriendsHandler.processJsonResponse(result, FriendsHandler.REQUESTED_URL);
+            protected void onPostExecute(ArrayList<FriendCard> result) {
                 if(result != null){
                     Toast.makeText(getActivity(), "Friend request canceled!", Toast.LENGTH_SHORT).show();
                 }
-                adapter.updateData(invitationFriendCards);
+                adapter.updateData(result);
             }
 
         };

@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.model;
 
 import java.util.Random;
 
