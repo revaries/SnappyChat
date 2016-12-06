@@ -40,7 +40,7 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
         userLoggedIn = (User) getIntent().getSerializableExtra(USER_LOGGED_IN);
         //String currentUserEmail = getIntent().getStringExtra("CURRENT_USER_ID");
         //Log.d(TAG, "Email: "+currentUserEmail);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Friends"));
         tabLayout.addTab(tabLayout.newTab().setText("Pending"));
         tabLayout.addTab(tabLayout.newTab().setText("Invitations"));
@@ -48,7 +48,7 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         //initialise the list of fragments
-        Vector<Fragment> fragments = new Vector<Fragment>();
+        final Vector<Fragment> fragments = new Vector<Fragment>();
 
         //fill up the list with out fragments
         fragments.add(CurrentFriendsFragment.newInstance(userLoggedIn));
@@ -59,14 +59,52 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         adapter = new PagerAdapter
-                (userLoggedIn,getSupportFragmentManager(), tabLayout.getTabCount(),fragments);
+                (userLoggedIn,getSupportFragmentManager(),tabLayout.getTabCount(),fragments);
         viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        //viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        /*viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.d(TAG, "TAB Selected "+Integer.toString(tab.getPosition()));
+                //viewPager.setCurrentItem(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });*/
+        //viewPager.setCurrentItem(0);
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Log.d(TAG, "TAB Selected "+Integer.toString(tab.getPosition()));
+                Log.d(TAG, "TAB Text "+tab.getText());
+                switch (tab.getPosition()) {
+                    case 0:
+                        CurrentFriendsFragment tab1 = (CurrentFriendsFragment) fragments.get(0);
+                        tab1.getFriendsList();
+                        break;
+                    case 1:
+                        PendingRequestsFragment tab2 = (PendingRequestsFragment) fragments.get(1);
+                        tab2.getPendingFriendsList();
+                        break;
+                    case 2:
+                        InvitationSentFragment tab3 = (InvitationSentFragment) fragments.get(2);
+                        tab3.getInvitationFriendsList();
+                        break;
+                    case 3:
+                        SearchUserFragment tab4 = (SearchUserFragment) fragments.get(3);
+                        break;
+                    default:
+                        break;
+                }
                 viewPager.setCurrentItem(tab.getPosition());
             }
 
@@ -80,6 +118,13 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
 
             }
         });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewPager.setCurrentItem(0);
     }
 
     @Override

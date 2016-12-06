@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ public class SearchUserFragment extends Fragment {
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
+    private ProgressBar mProgressBar;
     private int mColumnCount = 1;
     private User userLoggedIn;
     private OnListFragmentInteractionListener mListener;
@@ -91,7 +93,8 @@ public class SearchUserFragment extends Fragment {
             adapter = new MyItemRecyclerViewAdapter(users, mListener);
             recyclerView.setAdapter(adapter);
 
-
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        mProgressBar.setVisibility(View.GONE);
         SearchManager searchManager = (SearchManager)
                 getActivity().getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) view.findViewById(R.id.searchView);
@@ -114,9 +117,8 @@ public class SearchUserFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //clearBuildingMarkers();
                 if(!(query.equals(""))){
-                    //clearBuildingMarkers();
+                    mProgressBar.setVisibility(View.VISIBLE);
                     processQuery(query);
                 }
                 return false;
@@ -126,7 +128,7 @@ public class SearchUserFragment extends Fragment {
             public boolean onQueryTextChange(String query) {
 
                 if(!(query.equals(""))){
-                    //clearBuildingMarkers();
+                    mProgressBar.setVisibility(View.VISIBLE);
                     processQuery(query);
                 }
                 return false;
@@ -181,14 +183,12 @@ public class SearchUserFragment extends Fragment {
 
     void setupAdapter() {
         if (getActivity() == null || recyclerView == null) return;
+        mProgressBar.setVisibility(View.GONE);
         adapter.updateData(users);
     }
 
-    public ArrayList<String> processQuery(String query){
-        ArrayList<String> matches = new ArrayList<>();
-        String[] words = query.toLowerCase().split("\\s+");
-        new FilterUsersTask().execute(userLoggedIn,query);
-        return matches;
+    public void processQuery(String query){
+        getFriends(query);
     }
 
 
@@ -226,19 +226,23 @@ public class SearchUserFragment extends Fragment {
         void onFriendRemoved(User item);
     }
 
-    private class FilterUsersTask extends AsyncTask<Object,Void,ArrayList<User>> {
-        @Override
-        protected ArrayList<User> doInBackground(Object... params) {
-            //Update user status to online
-            return ServiceHandler.getUsers((User)params[0],(String) params[1]);
-        }
+
+    public void getFriends(String query){
+        AsyncTask<Object, Void, ArrayList<User>> userTask = new AsyncTask<Object,Void,ArrayList<User>>(){
+            @Override
+            protected ArrayList<User> doInBackground(Object... params) {
+                //Update user status to online
+                return ServiceHandler.getUsers((User)params[0],(String) params[1]);
+            }
 
 
-        @Override
-        protected void onPostExecute(ArrayList<User> users) {
-            SearchUserFragment.this.users = users;
-            setupAdapter();
-        }
+            @Override
+            protected void onPostExecute(ArrayList<User> users) {
+                SearchUserFragment.this.users = users;
+                setupAdapter();
+            }
+        };
+        userTask.execute(userLoggedIn,query);
     }
 
     public void addFriend(User userToAdd){

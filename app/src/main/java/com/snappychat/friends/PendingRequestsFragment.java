@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.snappychat.MainActivity;
@@ -35,6 +35,8 @@ public class PendingRequestsFragment extends Fragment {
     public static RecyclerAdapterPending adapter;
     private User userLoggedIn;
     OnListFragmentInteractionListener mListener;
+    private ProgressBar mProgressBar;
+    RecyclerView recyclerView;
 
     public static PendingRequestsFragment newInstance(User user) {
         PendingRequestsFragment fragment = new PendingRequestsFragment();
@@ -48,20 +50,19 @@ public class PendingRequestsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         userLoggedIn = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
-        getPendingFriendsList();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.pending_requests_fragment, container, false);
-        RecyclerView rv = (RecyclerView) v.findViewById(R.id.recycler_view_pending);
-        rv.setHasFixedSize(true);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view_pending);
+        recyclerView.setHasFixedSize(true);
         adapter = new RecyclerAdapterPending(pendingFriendCards,mListener);
-        rv.setAdapter(adapter);
-
+        recyclerView.setAdapter(adapter);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        rv.setLayoutManager(llm);
-
+        recyclerView.setLayoutManager(llm);
+        mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+        getPendingFriendsList();
         return v;
     }
 
@@ -87,6 +88,12 @@ public class PendingRequestsFragment extends Fragment {
         void onPendingChanged(FriendCard item, boolean answer);
     }
 
+    void setupAdapter(ArrayList<FriendCard> result) {
+        if (getActivity() == null || recyclerView == null) return;
+        mProgressBar.setVisibility(View.GONE);
+        adapter.updateData(result);
+    }
+
     public void getPendingFriendsList(){
         pendingFriendsTask = new AsyncTask<String, Void, ArrayList<FriendCard>>() {
             @Override
@@ -99,12 +106,12 @@ public class PendingRequestsFragment extends Fragment {
 
             @Override
             protected void onPostExecute(ArrayList<FriendCard> friends_pending) {
-                pendingFriendsTask = null;
-                adapter.updateData(friends_pending);
+                setupAdapter(friends_pending);
             }
 
         };
-        pendingFriendsTask.execute(userLoggedIn.getEmail());
+        if(userLoggedIn != null)
+            pendingFriendsTask.execute(userLoggedIn.getEmail());
     }
 
     public void modifyPendingRequest(FriendCard friendCard, boolean answer){
@@ -128,7 +135,7 @@ public class PendingRequestsFragment extends Fragment {
             @Override
             protected void onPostExecute(ArrayList<FriendCard> result) {
                 if(result != null){
-                    Toast.makeText(getActivity(), "Friend request canceled!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Friend pending modified!", Toast.LENGTH_SHORT).show();
                 }
                 adapter.updateData(result);
             }
