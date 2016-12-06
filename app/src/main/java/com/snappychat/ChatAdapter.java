@@ -76,5 +76,11 @@ public class ChatAdapter extends BaseAdapter {
 
     public void add(ChatMessage object) {
         chatMessageList.add(object);
+        notifyDataSetChanged();
+    }
+
+    public void updateData(ArrayList<ChatMessage> list){
+        this.chatMessageList = list;
+        notifyDataSetChanged();
     }
 }

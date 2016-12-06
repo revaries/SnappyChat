@@ -17,6 +17,9 @@ import com.snappychat.model.ChatMessage;
 import com.snappychat.networking.FriendsHandler;
 import com.snappychat.networking.ServiceHandler;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +55,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
     //send message
     private static final String TAG_SEND = "MessageSender";
     private AsyncTask<Void, Void, String> requestTask;
-    private AsyncTask<Void, Void, String> getMessagesTask;
+    private AsyncTask<Void, Void, ArrayList<ChatMessage>> getMessagesTask;
     //AtomicInteger ccsMsgId = new AtomicInteger();
     //FirebaseMessaging fm = FirebaseMessaging.getInstance();
 
@@ -139,17 +142,18 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
 
     public void getHistoryChatMessages(){
         Log.d(TAG, "Entering update view.");
-        getMessagesTask = new AsyncTask<Void, Void, String>() {
+        getMessagesTask = new AsyncTask<Void, Void, ArrayList<ChatMessage>>() {
             @Override
-            protected String doInBackground(Void... params) {
-
+            protected ArrayList<ChatMessage> doInBackground(Void... params) {
                 String getMessages = null;
+                ArrayList<ChatMessage> messages = null;
                 try {
                     getMessages = ServiceHandler.makeRequest(getMessageUrl,"GET",null);
                     JSONArray jsonArray = new JSONArray(getMessages);
                     JSONObject parser = jsonArray.getJSONObject(0);
                     JSONArray chatMessages = parser.getJSONArray("chat_messages");
                     Log.d(TAG, "ChatMessages "+ chatMessages);
+                    messages = new ArrayList<ChatMessage>();
                     for(int i=0; i < chatMessages.length(); i++){
                         JSONObject message = chatMessages.getJSONObject(i);
                         String sender_email = message.getJSONObject("user_sender_id").getString("email");
@@ -164,8 +168,10 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                         }
                         ChatMessage chatMessage = new ChatMessage(sender_email, receiver_email,
                                 msg, "" + random.nextInt(1000), isMine);
-                        chatAdapter.add(chatMessage);
+                        messages.add(chatMessage);
+                        //chatAdapter.add(chatMessage);
                     }
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -173,18 +179,18 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                     e.printStackTrace();
                 }
                 Log.d(TAG, "Response Chat "+getMessages);
-                return "List of messages!";
+                return messages;
             }
 
             @Override
-            protected void onPostExecute(String result) {
-                chatAdapter.notifyDataSetChanged();
-                getMessagesTask = null;
-                Log.d(TAG, "onPostExecute: result: " + result);
+            protected void onPostExecute(ArrayList<ChatMessage> result) {
+                if(result != null){
+                    chatAdapter.updateData(result);
+                }
             }
 
         };
-        getMessagesTask.execute(null, null, null);
+        getMessagesTask.execute();
     }
 
     public void sendTextMessage() {
@@ -263,6 +269,23 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         chatAdapter.add(chatMessage);
         chatAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        updateView(event.getChatMessage());
+    };
 
     public static String getCurrentTime(){
         Date today = Calendar.getInstance().getTime();
