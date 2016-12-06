@@ -13,16 +13,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.snappychat.model.User;
+
 import java.net.Inet4Address;
 
 public class ProfileDataUserInterestsQuestions extends Fragment {
 
-    private EditText AboutYou;
+    private EditText AboutMe;
     private EditText Interests;
     private Button Next;
     private Button Back;
     private TextView Warning;
     private OnFragmentInteractionListener mListener;
+    private User user;
 
     public ProfileDataUserInterestsQuestions() {
 
@@ -49,16 +52,16 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_profile_data_user_interests_questions, container, false);
 
         //Inflating Views
-        AboutYou = (EditText) view.findViewById(R.id.about_you);
+        AboutMe = (EditText) view.findViewById(R.id.about_me);
         Interests = (EditText) view.findViewById(R.id.interests);
         Next = (Button) view.findViewById(R.id.interest_question_next);
         Back = (Button) view.findViewById(R.id.interest_question_back);
         Warning = (TextView) view.findViewById(R.id.interests_warning);
 
-        AboutYou.setOnFocusChangeListener(cellCleaner);
+        AboutMe.setOnFocusChangeListener(cellCleaner);
         Interests.setOnFocusChangeListener(cellCleaner);
 
-
+        user = ((ProfileDataCollector)getActivity()).getUserObject();
         Next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,10 +100,10 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
     private View.OnFocusChangeListener cellCleaner = new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View view, boolean b) {
-            if (view == AboutYou)
+            if (view == AboutMe)
             {
-                if (AboutYou.getText().toString()=="About You") {
-                    AboutYou.setText("");
+                if (AboutMe.getText().toString()=="About Me") {
+                    AboutMe.setText("");
                 }
             }
             else if (view == Interests)
@@ -111,6 +114,23 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
             }
         }
     };
+
+    private void InitialCellValues()
+    {
+        if (user.getInterests()==null)
+        {
+            Interests.setText("");
+        }
+        else
+        {
+            Interests.setText(user.getInterests());
+        }
+        if (user.getAboutMe()==null)
+        {
+            AboutYou
+        }
+
+    }
 
 
     public interface OnFragmentInteractionListener {
