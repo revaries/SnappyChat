@@ -25,39 +25,6 @@ public class User implements Serializable{
     private String image;
     @SerializedName("nick_name")
     private String nickName;
-
-    public String getAboutMe() {
-        return AboutMe;
-    }
-
-    public void setAboutMe(String aboutMe) {
-        AboutMe = aboutMe;
-    }
-
-    public String getInterest() {
-        return Interest;
-    }
-
-    public void setInterest(String interest) {
-        Interest = interest;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getProfession() {
-        return profession;
-    }
-
-    public void setProfession(String profession) {
-        this.profession = profession;
-    }
-
     @SerializedName("location")
     private String location;
     @SerializedName("profession")
@@ -180,4 +147,36 @@ public class User implements Serializable{
         }
         return decodedByte;
     }
+    public String getAboutMe() {
+        return AboutMe;
+    }
+
+    public void setAboutMe(String aboutMe) {
+        AboutMe = aboutMe;
+    }
+
+    public String getInterest() {
+        return Interest;
+    }
+
+    public void setInterest(String interest) {
+        Interest = interest;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
+
 }
