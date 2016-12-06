@@ -80,6 +80,7 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
                         break;
                     case 3:
                         SearchUserFragment tab4 = (SearchUserFragment) fragments.get(3);
+                        tab4.clearFields();
                         break;
                     default:
                         break;
