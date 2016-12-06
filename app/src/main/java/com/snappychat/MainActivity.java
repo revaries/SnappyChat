@@ -1,6 +1,7 @@
 package com.snappychat;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,10 @@ import android.view.View;
 
 import com.snappychat.model.Timeline;
 import com.snappychat.model.User;
+import com.snappychat.networking.ServiceHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements TimelineFragment.OnListFragmentInteractionListener{
 
@@ -106,17 +111,42 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        new UpdateUserTask().execute(userLoggedIn.getEmail(),true);
+    }
+
+    @Override
     public void onBackPressed()
     {
-        if (getIntent().getExtras().getBoolean(FROM_LOGIN))
+        if (getIntent().getExtras().getBoolean(FROM_LOGIN)) {
+            new UpdateUserTask().execute(userLoggedIn.getEmail(),false);
             moveTaskToBack(true); // exist app
-        else
+
+        }else
             finish();
 
     }
 
     @Override
     public void onListFragmentInteraction(Timeline timeline) {
+
+    }
+
+    private class UpdateUserTask extends AsyncTask<Object,Void,Void> {
+        @Override
+        protected Void doInBackground(Object... params) {
+            //Update user status to online
+            JSONObject user = new JSONObject();
+            try {
+                user.put("status",(Boolean)params[1]);
+                ServiceHandler.updateUser((String)params[0],user);
+            } catch (JSONException e) {
+                Log.e(TAG, "JSONException",e);
+            }
+            return null;
+        }
+
 
     }
 }

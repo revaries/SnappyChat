@@ -44,13 +44,14 @@ public class ServiceHandler {
 
 
     // Return a JsonObject which is a key,value pair of the JSON string
-    public static void updateUser(String param, JSONObject json) {
+    public static String updateUser(String param, JSONObject json) {
+        String response = null;
         try {
             String url = Uri.parse(ENDPOINT_USER).buildUpon()
                     .appendEncodedPath(param)
                     .build().toString();
 
-            String response = makeRequest(url,"PUT",json.toString());
+            response = makeRequest(url,"PUT",json.toString());
             if(response != null){
                 Log.v(TAG,response);
             }
@@ -58,6 +59,7 @@ public class ServiceHandler {
         } catch (Exception e) {
             Log.e(TAG, "Failed to update user", e);
         }
+        return response;
     }
 
     public static ArrayList<User> getUsers(User userLoggedIn, String param){
