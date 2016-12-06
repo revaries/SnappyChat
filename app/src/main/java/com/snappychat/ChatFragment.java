@@ -237,7 +237,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                     String url = Uri.parse(GOOGLE_API_URL).buildUpon()
                             .build().toString();
                     response = ServiceHandler.makeRequest(url,"POST",json.toString());
-                    postToDatabase(chatMessage);
+                    //postToDatabase(chatMessage);
                     if(response != null){
                         Log.v(TAG,"Send Message response is "+response);
                     }
