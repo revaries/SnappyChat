@@ -1,0 +1,82 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.snappychat.ProileDataProfQuestions">
+
+    <TextView
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" A little More"
+        android:textSize="20dp"
+        android:paddingLeft="-15dp"
+        android:textAlignment="center"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:paddingLeft="25dp"
+        android:id="@+id/location_warning"
+        android:textColor="#ffff0000"/>
+
+
+        <EditText
+            android:id="@+id/location"
+            android:drawableLeft="@drawable/ic_location"
+            android:paddingBottom="5dp"
+            android:layout_margin="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_underline"
+            />
+        <EditText
+            android:id="@+id/profession"
+            android:paddingBottom="5dp"
+            android:layout_margin="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:drawableLeft="@drawable/ic_profession"
+            android:background="@drawable/edittext_underline"
+            />
+
+
+
+    <LinearLayout
+        android:layout_margin="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <Button
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/proffesion_question_back"
+                android:text="BACK"></Button>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/proffesion_question_next"
+                android:text="NEXT"></Button>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class profileview extends AppCompatActivity {
+public class ProfileView extends AppCompatActivity {
 
     private ImageView profilepicture;
     private Uri imagefileuri;

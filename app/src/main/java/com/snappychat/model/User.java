@@ -25,16 +25,17 @@ public class User implements Serializable{
     private String image;
     @SerializedName("nick_name")
     private String nickName;
-    private String token;
-    private Boolean notification;
-    private String age;
+    @SerializedName("location")
     private String location;
-    private String visibility;
-    private String profession;
     @SerializedName("about_me")
-    private String aboutMe;
+    private String AboutMe;
     @SerializedName("interests")
     private String interests;
+    private String token;
+    private Boolean notification;
+    private String visibility;
+    private String age;
+    private String profession;
     private Boolean status;
     private String email;
     private List<String>friends;
@@ -148,11 +149,27 @@ public class User implements Serializable{
     }
 
     public String getAboutMe() {
-        return aboutMe;
+        return AboutMe;
     }
 
     public void setAboutMe(String aboutMe) {
-        this.aboutMe = aboutMe;
+        AboutMe = aboutMe;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
     }
 
     public String getMessage() {
@@ -202,4 +219,5 @@ public class User implements Serializable{
     public void setInterests(String interests) {
         this.interests = interests;
     }
+
 }
