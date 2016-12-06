@@ -102,11 +102,6 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        viewPager.setCurrentItem(0);
-    }
 
     @Override
     public void onChatRequested(User userReceiver) {
