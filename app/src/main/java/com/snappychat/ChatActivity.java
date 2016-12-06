@@ -8,6 +8,10 @@ import android.util.Log;
 
 import com.snappychat.model.User;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import static com.snappychat.MainActivity.USER_LOGGED_IN;
 
 /**
@@ -45,14 +49,14 @@ public class ChatActivity extends AppCompatActivity {
         super.onStart();
         Log.d("CHAT", "State was called OnStart()");
         isActive = true;
-        //EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         isActive = true;
-        //EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(this);
         Log.d("CHAT", "State was called OnStop()");
     }
 
@@ -77,16 +81,15 @@ public class ChatActivity extends AppCompatActivity {
         Log.d("CHAT", "State was called OnDestroy()");
     }
 
-    /*
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
         FragmentManager fm = getSupportFragmentManager();
         ChatFragment fragment = (ChatFragment) fm.findFragmentById(R.id.fragment_container);
-
         if (fragment != null) {
             fragment.updateView(event.getChatMessage());
         }
-    };*/
+    };
 
 }
 

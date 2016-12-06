@@ -17,9 +17,6 @@ import com.snappychat.model.ChatMessage;
 import com.snappychat.networking.FriendsHandler;
 import com.snappychat.networking.ServiceHandler;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -269,22 +266,6 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         chatAdapter.add(chatMessage);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent event) {
-        updateView(event.getChatMessage());
-    };
 
     public static String getCurrentTime(){
         Date today = Calendar.getInstance().getTime();
