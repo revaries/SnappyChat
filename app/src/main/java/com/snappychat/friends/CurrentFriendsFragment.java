@@ -30,7 +30,6 @@ import java.util.ArrayList;
 public class CurrentFriendsFragment extends Fragment {
     public static final String TAG = "CURRENT_FRIENDS";
     private static AsyncTask<String, Void, ArrayList<User>> friendsTask;
-    public static ArrayList<User> currentFriendCards = new ArrayList<User>();
     private SearchUserFragment.OnListFragmentInteractionListener mListener;
     private MyItemRecyclerViewAdapter adapter;
     private ProgressBar mProgressBar;
@@ -58,9 +57,10 @@ public class CurrentFriendsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_item_list, container, false);
         //RecyclerView rv = (RecyclerView) v.findViewById(R.id.recycler_view);
         recyclerView = (RecyclerView) v.findViewById(R.id.list);
+        recyclerView.removeAllViewsInLayout();
         recyclerView.setHasFixedSize(true);
         //adapter = new RecyclerAdapter(currentFriendCards);
-        adapter = new MyItemRecyclerViewAdapter(currentFriendCards, mListener);
+        adapter = new MyItemRecyclerViewAdapter(new ArrayList<User>(),mListener);
         recyclerView.setAdapter( adapter);
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         //LinearLayoutManager llm = new LinearLayoutManager(getActivity());
@@ -86,12 +86,12 @@ public class CurrentFriendsFragment extends Fragment {
         mListener = null;
     }
 
-    void setupAdapter() {
+    void setupAdapter(ArrayList<User> users) {
         if (getActivity() == null || recyclerView == null) return;
         if(mProgressBar != null)
             mProgressBar.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.GONE);
-        adapter.updateData(currentFriendCards);
+        adapter.updateData(users);
     }
 
 
@@ -109,8 +109,7 @@ public class CurrentFriendsFragment extends Fragment {
                 //Log.d(TAG, "onPostExecute: result: " + result);
                 //currentFriendCards = FriendsHandler.processJsonResponse(result, FriendsHandler.FRIENDS_URL);
                 //adapter.updateData(result);
-                CurrentFriendsFragment.this.currentFriendCards = result;
-                setupAdapter();
+                setupAdapter(result);
             }
 
         };
@@ -139,8 +138,7 @@ public class CurrentFriendsFragment extends Fragment {
                 if(users!=null){
                     Toast.makeText(getActivity(), "Friend deleted!", Toast.LENGTH_SHORT).show();
                 }
-                CurrentFriendsFragment.this.currentFriendCards = users;
-                setupAdapter();
+                setupAdapter(users);
             }
 
         };
