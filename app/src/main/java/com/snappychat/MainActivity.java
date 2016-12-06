@@ -15,6 +15,7 @@ import android.view.View;
 import com.snappychat.model.Timeline;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
+import com.snappychat.timeline.TimelineFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;

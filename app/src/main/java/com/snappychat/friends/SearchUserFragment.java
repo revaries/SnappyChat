@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.friends;
 
 
 import android.app.SearchManager;
@@ -17,6 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.snappychat.MainActivity;
+import com.snappychat.R;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
 
@@ -24,6 +26,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import static com.snappychat.networking.ServiceHandler.getFriends;
 
 /**
  * A fragment representing a list of Items.
@@ -156,7 +160,7 @@ public class SearchUserFragment extends Fragment {
     }
 
     public void processQuery(String query){
-        getFriends(query);
+        getUsers(query);
     }
 
 
@@ -195,12 +199,12 @@ public class SearchUserFragment extends Fragment {
     }
 
 
-    public void getFriends(String query){
+    public void getUsers(String query){
         AsyncTask<Object, Void, ArrayList<User>> userTask = new AsyncTask<Object,Void,ArrayList<User>>(){
             @Override
             protected ArrayList<User> doInBackground(Object... params) {
-                //Update user status to online
-                return ServiceHandler.getUsers((User)params[0],(String) params[1]);
+                userLoggedIn = ServiceHandler.getUser(((User)params[0]).getEmail()); //update user in case a friend request was accepted
+                return ServiceHandler.getUsers(userLoggedIn,(String) params[1]);
             }
 
 
@@ -250,7 +254,7 @@ public class SearchUserFragment extends Fragment {
                 }
                 String response = ServiceHandler.deleteFriend(params[1], jsonObject);
                 if(response != null)
-                    return ServiceHandler.getFriends(params[1]);
+                    return getFriends(params[1]);
                 return null;
             }
 

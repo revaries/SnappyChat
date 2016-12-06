@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.friends;
 
 import android.content.res.ColorStateList;
 import android.os.Build;
@@ -10,7 +10,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.snappychat.SearchUserFragment.OnListFragmentInteractionListener;
+import com.snappychat.R;
+import com.snappychat.friends.SearchUserFragment.OnListFragmentInteractionListener;
 import com.snappychat.model.User;
 
 import java.util.ArrayList;
