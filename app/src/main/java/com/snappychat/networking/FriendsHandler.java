@@ -90,8 +90,8 @@ public class FriendsHandler {
             name = parser.getString("first_name");
             last = parser.getString("last_name");
             email = parser.getString("email");
-            //description = p.getString("description");
-            description = "This is a description";
+            description = parser.optString("message");
+            //description = "This is a description";
 
         } catch (JSONException e) {
             e.printStackTrace();

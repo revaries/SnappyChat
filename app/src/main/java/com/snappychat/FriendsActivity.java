@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.snappychat.friends.CurrentFriendsFragment;
 import com.snappychat.friends.InvitationSentFragment;
@@ -116,11 +117,34 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
     }
 
     @Override
-    public void onFriendAdded(User item) {
-        SearchUserFragment fragment = (SearchUserFragment) adapter.getItem(viewPager.getCurrentItem());
-        if (fragment != null) {
-            fragment.addFriend(item);
-        }
+    public void onFriendAdded(final User item) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        final EditText edittext = new EditText(this);
+        builder1.setMessage("Send a message");
+        builder1.setCancelable(true);
+        builder1.setView(edittext);
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        SearchUserFragment fragment = (SearchUserFragment) adapter.getItem(viewPager.getCurrentItem());
+                        if (fragment != null) {
+                            fragment.addFriend(item,edittext.getText().toString());
+                        }
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+
     }
 
     @Override
@@ -153,7 +177,7 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
     }
 
     @Override
-    public void onCancelRequest(FriendCard item) {
+    public void onCancelRequest(User item) {
         InvitationSentFragment fragment = (InvitationSentFragment) adapter.getItem(viewPager.getCurrentItem());
         if (fragment != null) {
             fragment.cancelRequest(item);

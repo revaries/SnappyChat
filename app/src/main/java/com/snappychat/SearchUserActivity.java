@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.EditText;
 
 import com.snappychat.model.User;
 
@@ -48,12 +49,34 @@ public class SearchUserActivity extends AppCompatActivity implements SearchUserF
     }
 
     @Override
-    public void onFriendAdded(User item) {
-        FragmentManager fm = getSupportFragmentManager();
-        SearchUserFragment fragment = (SearchUserFragment) fm.findFragmentById(R.id.fragmentContainer);
-        if (fragment != null) {
-            fragment.addFriend(item);
-        }
+    public void onFriendAdded(final User item) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        final EditText edittext = new EditText(this);
+        builder1.setMessage("Send a message");
+        builder1.setCancelable(true);
+        builder1.setView(edittext);
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        FragmentManager fm = getSupportFragmentManager();
+                        SearchUserFragment fragment = (SearchUserFragment) fm.findFragmentById(R.id.fragmentContainer);
+                        if (fragment != null) {
+                            fragment.addFriend(item, edittext.getText().toString());
+                        }
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 
     @Override

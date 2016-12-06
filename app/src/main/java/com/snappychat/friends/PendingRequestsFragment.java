@@ -50,6 +50,7 @@ public class PendingRequestsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         userLoggedIn = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
+        getPendingFriendsList();
     }
 
     @Override
@@ -62,7 +63,6 @@ public class PendingRequestsFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
-        //getPendingFriendsList();
         return v;
     }
 

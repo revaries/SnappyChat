@@ -25,57 +25,23 @@ public class User implements Serializable{
     private String image;
     @SerializedName("nick_name")
     private String nickName;
-
-    public String getAboutMe() {
-        return AboutMe;
-    }
-
-    public void setAboutMe(String aboutMe) {
-        AboutMe = aboutMe;
-    }
-
-    public String getInterest() {
-        return Interest;
-    }
-
-    public void setInterest(String interest) {
-        Interest = interest;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getProfession() {
-        return profession;
-    }
-
-    public void setProfession(String profession) {
-        this.profession = profession;
-    }
-
-    @SerializedName("location")
+    private String token;
+    private Boolean notification;
+    private String age;
     private String location;
-    @SerializedName("profession")
+    private String visibility;
     private String profession;
     @SerializedName("about_me")
-    private String AboutMe;
-    @SerializedName("Intersts")
-    private String Interest;
-
-
-
-
+    private String aboutMe;
+    @SerializedName("interests")
+    private String interests;
     private Boolean status;
-
     private String email;
     private List<String>friends;
-    public User(){};
     private transient boolean friend;
+    private transient String message;
+
+    public User(){};
 
     public User(String id, String firstName, String lastName, String nickName, String image){
         this.setId(id);
@@ -179,5 +145,61 @@ public class User implements Serializable{
             Log.e("User", "Error converting image to bitmap",ex);
         }
         return decodedByte;
+    }
+
+    public String getAboutMe() {
+        return aboutMe;
+    }
+
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(String visibility) {
+        this.visibility = visibility;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Boolean getNotification() {
+        return notification;
+    }
+
+    public void setNotification(Boolean notification) {
+        this.notification = notification;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public String getInterests() {
+        return interests;
+    }
+
+    public void setInterests(String interests) {
+        this.interests = interests;
     }
 }
