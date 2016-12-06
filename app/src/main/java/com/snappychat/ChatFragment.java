@@ -75,6 +75,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         getMessageUrl = "https://snappychatapi.herokuapp.com/api/chats?user_sender_id=" +
                 ((ChatActivity)getActivity()).userSender.getEmail() + "&user_receiver_id=" + ((ChatActivity)getActivity()).userReceiver.getEmail();
         //token = getToken(chat_friend);
+        token = ((ChatActivity)getActivity()).userReceiver.getToken();
         msg_edittext = (EditText) view.findViewById(R.id.messageEditText);
         msgListView = (ListView) view.findViewById(R.id.msgListView);
         ImageButton sendButton = (ImageButton) view
