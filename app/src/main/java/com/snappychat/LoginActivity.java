@@ -41,6 +41,8 @@ import com.snappychat.networking.ServiceHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -77,7 +79,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     email = user.getEmail();
                     new GetUserTask().execute(email, FirebaseInstanceId.getInstance().getToken());
 
+
                 } else {
+                    try {
+                        FirebaseInstanceId.getInstance().deleteInstanceId();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     LoginManager.getInstance().logOut();
                     signOut();
                     Log.v("User SIgned out", "No User");
