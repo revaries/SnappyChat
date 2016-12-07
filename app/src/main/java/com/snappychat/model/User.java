@@ -31,9 +31,14 @@ public class User implements Serializable{
     private String AboutMe;
     @SerializedName("interests")
     private String interests;
-    private String token;
+    @SerializedName("notification")
     private Boolean notification;
+    @SerializedName("visibility")
     private String visibility;
+
+    private String token;
+
+
     private String age;
     private String profession;
     private Boolean status;

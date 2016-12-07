@@ -14,8 +14,7 @@
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name= "android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -65,7 +64,7 @@
         <activity
             android:name=".FriendsActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -75,15 +74,15 @@
         <activity
             android:name=".AddTimelineActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ProfileView"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ChatActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
 
         <service android:name=".MessagingService">
             <intent-filter>
@@ -96,8 +95,12 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ProfileDataCollector"
-            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".ProfileDataCollector"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ImageActivity"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>
