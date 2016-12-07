@@ -23,6 +23,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -77,6 +79,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                 } else {
                     LoginManager.getInstance().logOut();
+                    signOut();
                     Log.v("User SIgned out", "No User");
                 }
             }
@@ -137,6 +140,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         //Facebook Login Button Closure
 
 
+    }
+
+    private void signOut() {
+        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        // [START_EXCLUDE]
+                        //updateUI(false);
+                        // [END_EXCLUDE]
+                    }
+                });
     }
 
     private void selectActivity() {
