@@ -32,7 +32,8 @@ import java.util.List;
 public class ServiceHandler {
 
     public static final String TAG = "ServiceHandler";
-    private static final String ENDPOINT_USER = "https://snappychatapi.herokuapp.com/api/users";
+    public static final String ENDPOINT_USER = "https://snappychatapi.herokuapp.com/api/users";
+    public static final String ENDPOINT_CHAT = "https://snappychatapi.herokuapp.com/api/chats";
     public static final String FRIENDS_URL = "friends";
     public static final String FRIENDS_REQUEST_URL = "friends_request";
     public static final String FRIENDS_PENDING_URL = "friends_pending";
@@ -41,7 +42,7 @@ public class ServiceHandler {
 
 
 
-    // Return a JsonObject which is a key,value pair of the JSON string
+
     public static String updateUser(String param, JSONObject json) {
         String response = null;
         try {
@@ -268,6 +269,24 @@ public class ServiceHandler {
                     .build().toString();
 
             response = makeRequest(url,"POST",json.toString());
+            if(response != null){
+                Log.v(TAG,response);
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to update user", e);
+        }
+        return response;
+    }
+
+    public static String updateChat(String url,JSONObject json) {
+        String response = null;
+        try {
+            //String url = Uri.parse(ENDPOINT_CHAT).buildUpon()
+            //        .appendEncodedPath(url)
+            //        .build().toString();
+
+            response = makeRequest(url,"PUT",json.toString());
             if(response != null){
                 Log.v(TAG,response);
             }

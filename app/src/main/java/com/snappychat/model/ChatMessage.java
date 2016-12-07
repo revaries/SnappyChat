@@ -1,5 +1,7 @@
 package com.snappychat.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Random;
 
 /**
@@ -9,7 +11,12 @@ import java.util.Random;
 
 public class ChatMessage {
 
-    public String body, sender, receiver, senderName;
+    @SerializedName("chat_id")
+    private String chatId;
+    public String body;
+    private String sender;
+    private String receiver;
+    public String senderName;
     public String Date, Time;
     public String msgid;
     public boolean isMine;// Did I send the message.
@@ -18,16 +25,40 @@ public class ChatMessage {
                        String ID, boolean isMINE) {
         body = messageString;
         isMine = isMINE;
-        sender = Sender;
+        setSender(Sender);
         msgid = ID;
-        receiver = Receiver;
-        senderName = sender;
+        setReceiver(Receiver);
+        senderName = getSender();
     }
 
     public void setMsgID() {
 
         msgid += "-" + String.format("%02d", new Random().nextInt(100));
         ;
+    }
+
+    public String getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
 }
 

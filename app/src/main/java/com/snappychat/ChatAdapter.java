@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class ChatAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
-    ArrayList<ChatMessage> chatMessageList;
+    private ArrayList<ChatMessage> chatMessageList;
 
     public ChatAdapter(Activity activity, ArrayList<ChatMessage> list) {
         chatMessageList = list;
@@ -35,7 +35,7 @@ public class ChatAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return chatMessageList.size();
+        return getChatMessageList().size();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ChatAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ChatMessage message = (ChatMessage) chatMessageList.get(position);
+        ChatMessage message = (ChatMessage) getChatMessageList().get(position);
         View vi = convertView;
         if (convertView == null)
             vi = inflater.inflate(R.layout.adapter_chat, null);
@@ -84,12 +84,16 @@ public class ChatAdapter extends BaseAdapter {
     }
 
     public void add(ChatMessage object) {
-        chatMessageList.add(object);
+        getChatMessageList().add(object);
         notifyDataSetChanged();
     }
 
     public void updateData(ArrayList<ChatMessage> list){
         this.chatMessageList = list;
         notifyDataSetChanged();
+    }
+
+    public ArrayList<ChatMessage> getChatMessageList() {
+        return chatMessageList;
     }
 }

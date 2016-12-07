@@ -64,14 +64,11 @@ public class MessagingService extends FirebaseMessagingService {
 //            Log.d("topActivity", "CURRENT Activity ::" + taskInfo.get(0).topActivity.getClassName());
             //EventBus.getDefault().post(new MessageEvent(chatMessage));
 
-            if(ChatActivity.isActive){
+            if(ChatActivity.isActive) {
                 //ChatActivity.updateView(chatMessage);
                 //ChatFragment.updateView(chatMessage);
                 EventBus.getDefault().post(new MessageEvent(chatMessage));
             }
-            //else{
-             //   ChatFragment.postToDatabase(chatMessage);
-            //}
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -105,4 +102,7 @@ public class MessagingService extends FirebaseMessagingService {
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
         Log.d(TAG, "sendNotification called.");
     }
+
+
+
 }
