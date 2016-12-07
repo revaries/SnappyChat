@@ -37,9 +37,7 @@ public class ServiceHandler {
     public static final String FRIENDS_REQUEST_URL = "friends_request";
     public static final String FRIENDS_PENDING_URL = "friends_pending";
     private static final String FIRABASE_SERVER_KEY =
-            "key=AAAAtfwALJk:APA91bHXBxoCZ8_kuK5ML6CCfVBEMezJ7DMHft8fGpriIK5wGD4Fj07pDktiIT16bIyy" +
-                    "MyMyHHHwYBMU8Jxcb5cVYyEoaGoLwzCHv3gW8fAV49zBachwromew0ms3YbU493p8wfJHZ8eJ_-_" +
-                    "w57KqFJzzgp7mDxg_A";
+            "key=AAAARKxcUQ8:APA91bEQZuqZeh6e3CLk1oSXbwY5EtlPz3uHixdmQLu67_LpfOinSZN3ua3hE35-HZMhJOMXT-CGCKs5kv3R9PMT33E82WZPqk1bMFxOewViTwn_VoU5619Cg9xrCXIcNXvqAZGx0x2aG2n6ddnFJubdaI7kus6L2A";
 
 
 
