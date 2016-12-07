@@ -30,7 +30,7 @@ public class ProfileView extends AppCompatActivity {
 
     private ImageView profilepicture;
     private Uri imagefileuri;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    final int REQUEST_IMAGE_CAPTURE = 1;
 
     private TextView Name;
     private TextView Interests;
@@ -112,45 +112,6 @@ public class ProfileView extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-          /*
-            boolean fromcamera;
-
-            if (data == null) {
-                fromcamera = true;
-            } else {
-                final String action = data.getAction();
-                if (action == null) {
-                    fromcamera = false;
-                } else {
-                    fromcamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                }
-            }
-            if (fromcamera)
-            {
-                Bundle extras = data.getExtras();
-                imagebitmap = (Bitmap) extras.get("data");
-            }
-            else
-            {
-               // if (data == null)
-                //{
-                    imagebitmap = null;
-                //}
-                //else
-                //{
-                    Uri imguri = data.getData();
-                    try{
-                        imagebitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),imguri);
-                    }
-                    catch (IOException e)
-                    {
-                        Log.e("IOEXception", e.toString());
-                    }
-
-                //}
-
-            }
-            */
             Bitmap imagebitmap  = null;
             Bundle extras = data.getExtras();
             if (extras!=null)
