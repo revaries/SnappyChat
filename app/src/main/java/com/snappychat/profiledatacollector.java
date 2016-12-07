@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Switch;
 
+import com.google.gson.Gson;
 import com.snappychat.model.User;
 
 import static com.snappychat.MainActivity.USER_LOGGED_IN;
@@ -92,9 +93,14 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
 
     private void callTimeLine()
     {
+        Gson gson = new Gson();
+        String userproilfe = gson.toJson(snappyuser);
+
+
         Intent timelineIntent = new Intent(getBaseContext(),MainActivity.class);
         timelineIntent.putExtra(USER_LOGGED_IN,snappyuser);
         startActivity(timelineIntent);
+
     }
 
     @Override
