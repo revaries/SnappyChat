@@ -149,6 +149,37 @@ public class ServiceHandler {
         return friends;
     }
 
+    public static ArrayList<User> getFriendsPending(String user_id){
+        ArrayList<User> friends = null;
+        try {
+            String url = Uri.parse(ENDPOINT_USER).buildUpon()
+                    .appendEncodedPath(user_id)
+                    .appendPath(FRIENDS_PENDING_URL)
+                    .build().toString();
+            String response = makeRequest(url,"GET",null);
+            if(response != null){
+                JSONArray jsonArray = new JSONArray(response);
+                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                if(jsonObject.optJSONArray("friends_pending") != null) {
+                    friends = new ArrayList<User>();
+                    for(int i = 0; i < jsonObject.optJSONArray("friends_pending").length(); i++){
+                        JSONObject js = jsonObject.optJSONArray("friends_pending").getJSONObject(i);
+                        User user = new Gson().fromJson(js.getJSONObject("user_id").toString(),User.class);
+                        if(js.optString("message") != null)
+                            user.setMessage(js.optString("message"));
+                        friends.add(user);
+                    }
+                }
+
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to fetch pending requests", e);
+        }
+
+        return friends;
+    }
+
     public static User getUser(String param) {
         try {
             String url = Uri.parse(ENDPOINT_USER).buildUpon()

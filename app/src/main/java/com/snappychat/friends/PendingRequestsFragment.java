@@ -14,9 +14,7 @@ import android.widget.Toast;
 
 import com.snappychat.MainActivity;
 import com.snappychat.R;
-import com.snappychat.model.FriendCard;
 import com.snappychat.model.User;
-import com.snappychat.networking.FriendsHandler;
 import com.snappychat.networking.ServiceHandler;
 
 import org.json.JSONException;
@@ -30,8 +28,7 @@ import java.util.ArrayList;
 
 public class PendingRequestsFragment extends Fragment {
     public static final String TAG = "PENDING_FRIENDS";
-    private static AsyncTask<String, Void, ArrayList<FriendCard>> pendingFriendsTask;
-    public static ArrayList<FriendCard> pendingFriendCards = new ArrayList<>();
+    private static AsyncTask<String, Void, ArrayList<User>> pendingFriendsTask;
     public static RecyclerAdapterPending adapter;
     private User userLoggedIn;
     OnListFragmentInteractionListener mListener;
@@ -58,7 +55,7 @@ public class PendingRequestsFragment extends Fragment {
         View v = inflater.inflate(R.layout.pending_requests_fragment, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view_pending);
         recyclerView.setHasFixedSize(true);
-        adapter = new RecyclerAdapterPending(pendingFriendCards,mListener);
+        adapter = new RecyclerAdapterPending(new ArrayList<User>(),mListener);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
@@ -85,28 +82,25 @@ public class PendingRequestsFragment extends Fragment {
 
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onPendingChanged(FriendCard item, boolean answer);
+        void onPendingChanged(User item, boolean answer);
     }
 
-    void setupAdapter(ArrayList<FriendCard> result) {
+    void setupAdapter(ArrayList<User> result) {
         if (getActivity() == null || recyclerView == null) return;
         mProgressBar.setVisibility(View.GONE);
         adapter.updateData(result);
     }
 
     public void getPendingFriendsList(){
-        pendingFriendsTask = new AsyncTask<String, Void, ArrayList<FriendCard>>() {
+        pendingFriendsTask = new AsyncTask<String, Void, ArrayList<User>>() {
             @Override
-            protected ArrayList<FriendCard> doInBackground(String... params) {
-                String response = FriendsHandler.getFriends(params[0],FriendsHandler.PENDING_URL);
-                if(response != null)
-                    return pendingFriendCards = FriendsHandler.processJsonResponse(response, FriendsHandler.PENDING_URL);
-                return null;
+            protected ArrayList<User> doInBackground(String... params) {
+                return ServiceHandler.getFriendsPending(params[0]);
             }
 
             @Override
-            protected void onPostExecute(ArrayList<FriendCard> friends_pending) {
-                setupAdapter(friends_pending);
+            protected void onPostExecute(ArrayList<User> result) {
+                setupAdapter(result);
             }
 
         };
@@ -114,17 +108,18 @@ public class PendingRequestsFragment extends Fragment {
             pendingFriendsTask.execute(userLoggedIn.getEmail());
     }
 
-    public void modifyPendingRequest(FriendCard friendCard, boolean answer){
-        AsyncTask<Object, Void, ArrayList<FriendCard>> invitationFriendsTask = new AsyncTask<Object, Void, ArrayList<FriendCard>>() {
+
+    public void modifyPendingRequest(User friendCard, boolean answer){
+        AsyncTask<Object, Void, ArrayList<User>> invitationFriendsTask = new AsyncTask<Object, Void, ArrayList<User>>() {
             @Override
-            protected ArrayList<FriendCard> doInBackground(Object... params) {
+            protected ArrayList<User> doInBackground(Object... params) {
                 JSONObject jsonObject = new JSONObject();
                 try {
                     jsonObject.put("email",(String)params[0]);
                     jsonObject.put("accept",(Boolean) params[2]);
                     String result = ServiceHandler.updateFriendPending((String)params[1], jsonObject);
                     if(result != null)
-                        return FriendsHandler.processJsonResponse(result, FriendsHandler.REQUESTED_URL);
+                        return ServiceHandler.getFriendsPending((String)params[1]);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -133,11 +128,11 @@ public class PendingRequestsFragment extends Fragment {
             }
 
             @Override
-            protected void onPostExecute(ArrayList<FriendCard> result) {
+            protected void onPostExecute(ArrayList<User> result) {
                 if(result != null){
                     Toast.makeText(getActivity(), "Friend pending modified!", Toast.LENGTH_SHORT).show();
+                    setupAdapter(result);
                 }
-                adapter.updateData(result);
             }
 
         };

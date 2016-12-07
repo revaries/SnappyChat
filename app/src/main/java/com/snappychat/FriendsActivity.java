@@ -16,7 +16,6 @@ import com.snappychat.friends.InvitationSentFragment;
 import com.snappychat.friends.PagerAdapter;
 import com.snappychat.friends.PendingRequestsFragment;
 import com.snappychat.friends.SearchUserFragment;
-import com.snappychat.model.FriendCard;
 import com.snappychat.model.User;
 
 import java.util.Vector;
@@ -178,10 +177,10 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
         if (fragment != null) {
             fragment.cancelRequest(item);
         }
-}
+    }
 
     @Override
-    public void onPendingChanged(FriendCard item, boolean answer) {
+    public void onPendingChanged(User item, boolean answer) {
         PendingRequestsFragment fragment = (PendingRequestsFragment) adapter.getItem(viewPager.getCurrentItem());
         if (fragment != null) {
             fragment.modifyPendingRequest(item, answer);

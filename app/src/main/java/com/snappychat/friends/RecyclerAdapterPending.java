@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.snappychat.R;
 import com.snappychat.model.FriendCard;
+import com.snappychat.model.User;
 
 import java.util.ArrayList;
 
@@ -20,10 +21,10 @@ import java.util.ArrayList;
 
 public class RecyclerAdapterPending extends RecyclerView.Adapter<RecyclerAdapterPending.FriendViewHolder> {
     private static String TAG = "RECYCLER_PENDING";
-    private ArrayList<FriendCard> mDataset;
+    private ArrayList<User> mDataset;
     private final PendingRequestsFragment.OnListFragmentInteractionListener mListener;
 
-    public RecyclerAdapterPending(ArrayList<FriendCard> myDataset, PendingRequestsFragment.OnListFragmentInteractionListener listener) {
+    public RecyclerAdapterPending(ArrayList<User> myDataset, PendingRequestsFragment.OnListFragmentInteractionListener listener) {
 
         mDataset = myDataset;
         mListener = listener;
@@ -35,7 +36,7 @@ public class RecyclerAdapterPending extends RecyclerView.Adapter<RecyclerAdapter
         public TextView mTextViewCardName;
         public Button mButton;
         public Button mReject;
-        public FriendCard mItem;
+        public User mItem;
         public FriendViewHolder(View v) {
             super(v);
             mCardView = (CardView) v.findViewById(R.id.card_view);
@@ -72,8 +73,8 @@ public class RecyclerAdapterPending extends RecyclerView.Adapter<RecyclerAdapter
     @Override
     public void onBindViewHolder(final FriendViewHolder holder, int position) {
         holder.mItem = mDataset.get(position);
-        holder.mTextView.setText(mDataset.get(position).getName() + " " +mDataset.get(position).getLast());
-        holder.mTextViewCardName.setText(mDataset.get(position).getDescription());
+        holder.mTextView.setText(mDataset.get(position).getFirstName() + " " +mDataset.get(position).getLastName());
+        holder.mTextViewCardName.setText(mDataset.get(position).getMessage());
         holder.mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +102,7 @@ public class RecyclerAdapterPending extends RecyclerView.Adapter<RecyclerAdapter
         return mDataset.size();
     }
 
-    public void updateData(ArrayList<FriendCard> data){
+    public void updateData(ArrayList<User> data){
         mDataset = data;
         notifyDataSetChanged();
     }

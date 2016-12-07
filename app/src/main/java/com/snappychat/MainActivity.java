@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.snappychat.model.Timeline;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
@@ -103,6 +104,10 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
                 intent = new Intent(this, SearchUserActivity.class);
                 intent.putExtra(USER_LOGGED_IN,userLoggedIn);
                 startActivity(intent);
+                return true;
+            case R.id.sign_out:
+                FirebaseAuth.getInstance().signOut();
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

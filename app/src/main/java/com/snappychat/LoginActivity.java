@@ -14,6 +14,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -75,6 +76,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     new GetUserTask().execute(email, FirebaseInstanceId.getInstance().getToken());
 
                 } else {
+                    LoginManager.getInstance().logOut();
                     Log.v("User SIgned out", "No User");
                 }
             }
@@ -94,6 +96,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .build();
 
         googlesignIn = (SignInButton) findViewById(R.id.google_login_button);
+        googlesignIn.setSize(SignInButton.SIZE_STANDARD);
         googlesignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,10 +201,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 // Google Sign In failed, update UI appropriately
                 // ...
             }
+        }else{
+            //Call Back Facebook SDK
+            callbackManager.onActivityResult(requestcode, resultcode, data);
         }
 
-        //Call Back Facebook SDK
-        callbackManager.onActivityResult(requestcode, resultcode, data);
+
     }
 
 
