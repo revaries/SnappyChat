@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Parcelable;
@@ -12,16 +13,20 @@ import android.provider.MediaStore;
 import android.support.v4.util.DebugUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.snappychat.model.User;
 
 import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,13 +36,15 @@ public class ProfileView extends AppCompatActivity {
     private ImageView profilepicture;
     private Uri imagefileuri;
     final int REQUEST_IMAGE_CAPTURE = 1;
-
+    private User userLoggedIn;
     private TextView Name;
     private TextView Interests;
     private TextView Location;
     private TextView Profession;
     private TextView AboutMe;
-    private TextView Birthday;
+    private User profileUser;
+    private ProfileDataCollector profileDataCollector;
+    //private TextView Birthday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +57,40 @@ public class ProfileView extends AppCompatActivity {
         Location = (TextView) findViewById(R.id.location);
         Profession = (TextView) findViewById(R.id.profession);
         AboutMe = (TextView) findViewById(R.id.about_me);
-        Birthday = (TextView) findViewById(R.id.birthday);
-
-
-
-
+        //Birthday = (TextView) findViewById(R.id.birthday);
         profilepicture = (ImageView) findViewById(R.id.profilepicture);
+
+        Intent intent = getIntent();
+        profileUser = (User) intent.getSerializableExtra(MainActivity.USER_LOGGED_IN);
+       // userLoggedIn = profileDataCollector.getUserObject();
+
+
+        Name.setText(profileUser.getFirstName()+" "+profileUser.getLastName());
+        Interests.setText(profileUser.getInterests());
+        Location.setText(profileUser.getLocation());
+        Profession.setText(profileUser.getProfession());
+        AboutMe.setText(profileUser.getAboutMe());
+
+
+
+
+        if (profileUser.getImage()!=null)
+        {
+
+            byte[] imagearray = Base64.decode(profileUser.getImage(), Base64.DEFAULT);
+            Bitmap image = BitmapFactory.decodeByteArray(imagearray, 0, imagearray.length);
+            profilepicture.setImageBitmap(image);
+        }
+
+
+
         profilepicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Log.v("Clicked On Picture"," Camera APp should Open ");
-                ProfilePictureSelector();
-
+               // if (userLoggedIn.getEmail().equals(profileUser.getEmail())) {
+                    Log.v("Clicked On Picture", " Camera APp should Open ");
+                    ProfilePictureSelector();
+               // }
             }
         });
     }

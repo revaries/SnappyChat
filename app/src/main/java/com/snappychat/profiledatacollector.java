@@ -3,6 +3,7 @@ package com.snappychat;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -11,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Parcelable;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -133,6 +135,7 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
 
 
         Intent timelineIntent = new Intent(getBaseContext(),MainActivity.class);
+        //Intent timelineIntent = new Intent(getBaseContext(), ProfileView.class);
         timelineIntent.putExtra(USER_LOGGED_IN,snappyuser);
         startActivity(timelineIntent);
 
@@ -206,6 +209,7 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
                 Uri imguri = data.getData();
                 try{
                     imagebitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),imguri);
+                    imagebitmap = scaleDownBitmap(imagebitmap,100,this);
                 }
                 catch (IOException e)
                 {
@@ -216,13 +220,26 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
             if (imagebitmap!=null)
             {
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                imagebitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                imagebitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                 byte[] imagebyte = byteArrayOutputStream.toByteArray();
                 String imagestring = Base64.encodeToString(imagebyte, Base64.DEFAULT);
                 snappyuser.setImage(imagestring);
             }
 
         }
+    }
+
+
+    public static Bitmap scaleDownBitmap(Bitmap photo, int newHeight, Context context) {
+
+        final float densityMultiplier = context.getResources().getDisplayMetrics().density;
+
+        int h= (int) (newHeight*densityMultiplier);
+        int w= (int) (h * photo.getWidth()/((double) photo.getHeight()));
+
+        photo=Bitmap.createScaledBitmap(photo, w, h, true);
+
+        return photo;
     }
 
 

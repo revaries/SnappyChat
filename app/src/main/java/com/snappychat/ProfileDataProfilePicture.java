@@ -25,7 +25,7 @@ public class ProfileDataProfilePicture extends Fragment {
     private Button backProfilePic;
     private Button nextProfilePic;
     private User picUser;
-
+    private User userLoggedIn;
     public ProfileDataProfilePicture() {
 
     }
@@ -67,6 +67,7 @@ public class ProfileDataProfilePicture extends Fragment {
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 ((ProfileDataCollector)getActivity()).profilePictureSelector();
 
             }

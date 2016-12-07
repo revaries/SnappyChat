@@ -12,7 +12,11 @@
         android:icon="@drawable/friends_icon"
         android:title="Hello"
         app:showAsAction="always"/>
-
+    <item
+        android:id="@+id/profile_menu_option"
+        android:title="Profile"
+        app:showAsAction="always"
+        />
         <item
             android:id="@+id/sign_out"
             android:title="Sign Out"

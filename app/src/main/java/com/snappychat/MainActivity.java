@@ -109,6 +109,10 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
                 FirebaseAuth.getInstance().signOut();
                 finish();
                 return true;
+            case R.id.profile_menu_option:
+                intent = new Intent(this,ProfileView.class);
+                intent.putExtra(USER_LOGGED_IN,userLoggedIn);
+                startActivity(intent);
             default:
                 return super.onOptionsItemSelected(item);
 
