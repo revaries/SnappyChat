@@ -2,7 +2,9 @@ package com.snappychat;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,16 +61,23 @@ public class ChatAdapter extends BaseAdapter {
                 .findViewById(R.id.bubble_layout);
         LinearLayout parent_layout = (LinearLayout) vi
                 .findViewById(R.id.bubble_layout_parent);
-
         // if message is mine then align to right
         if (message.isMine) {
             layout.setBackgroundResource(R.drawable.bubble2);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                layout.setBackgroundTintList(ColorStateList.valueOf(vi.getContext().getResources().getColor(R.color.com_facebook_button_login_silver_background_color)));
+            }
             parent_layout.setGravity(Gravity.RIGHT);
         }
         // If not mine then align to left
         else {
             layout.setBackgroundResource(R.drawable.bubble1);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                layout.setBackgroundTintList(ColorStateList.valueOf(vi.getContext().getResources().getColor(R.color.com_facebook_button_background_color_selected)));
+            }
             parent_layout.setGravity(Gravity.LEFT);
+
+
         }
         msg.setTextColor(Color.BLACK);
         return vi;
