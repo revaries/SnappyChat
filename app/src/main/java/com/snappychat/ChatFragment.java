@@ -52,13 +52,14 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
     //send message
     private static final String TAG_SEND = "MessageSender";
     private AsyncTask<Void, Void, String> requestTask;
-    private AsyncTask<Void, Void, ArrayList<ChatMessage>> getMessagesTask;
+    private AsyncTask<String, Void, ArrayList<ChatMessage>> getMessagesTask;
     //AtomicInteger ccsMsgId = new AtomicInteger();
     //FirebaseMessaging fm = FirebaseMessaging.getInstance();
 
     private static final String TAG = "UPDATE_VIEW";
 
     public static AsyncTask<Void, Void, Void> updateViewTask;
+    public String chatId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,7 +98,6 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         chatlist = new ArrayList<ChatMessage>();
         chatAdapter = new ChatAdapter(getActivity(), chatlist);
         msgListView.setAdapter(chatAdapter);
-        getHistoryChatMessages();
         return view;
     }
 
@@ -139,9 +139,9 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
 
     public void getHistoryChatMessages(){
         Log.d(TAG, "Entering update view.");
-        getMessagesTask = new AsyncTask<Void, Void, ArrayList<ChatMessage>>() {
+        getMessagesTask = new AsyncTask<String, Void, ArrayList<ChatMessage>>() {
             @Override
-            protected ArrayList<ChatMessage> doInBackground(Void... params) {
+            protected ArrayList<ChatMessage> doInBackground(String... params) {
                 String getMessages = null;
                 ArrayList<ChatMessage> messages = null;
                 try {
@@ -150,6 +150,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                     JSONObject parser = jsonArray.getJSONObject(0);
                     JSONArray chatMessages = parser.getJSONArray("chat_messages");
                     Log.d(TAG, "ChatMessages "+ chatMessages);
+                    boolean pending = parser.getBoolean("pending");
                     messages = new ArrayList<ChatMessage>();
                     for(int i=0; i < chatMessages.length(); i++){
                         JSONObject message = chatMessages.getJSONObject(i);
@@ -165,16 +166,24 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                         }
                         ChatMessage chatMessage = new ChatMessage(sender_email, receiver_email,
                                 msg, "" + random.nextInt(1000), isMine);
+                        chatMessage.setChatId(message.optString("chat_id"));
                         messages.add(chatMessage);
                         //chatAdapter.add(chatMessage);
                     }
+                    String receiver_email = messages.get(messages.size()-1).getReceiver();
+                    //Verify if there are pending messages and the checker is the receiver,
+                    //so only the receiver can update the status of the conversation
+                    if(pending && receiver_email.equals(params[0])) {
+                        //Update the chat conversation status
+                        JSONObject chat = new JSONObject();
+                        chat.put("pending", false);
+                        ServiceHandler.updateChat(ServiceHandler.ENDPOINT_CHAT+"?user_sender_id="+params[0]+"&user_receiver_id="+params[1], chat);
+                    }
 
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
+
                 Log.d(TAG, "Response Chat "+getMessages);
                 return messages;
             }
@@ -182,13 +191,15 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
             @Override
             protected void onPostExecute(ArrayList<ChatMessage> result) {
                 if(result != null){
+                    chatId = result.get(0).getChatId();
                     chatAdapter.updateData(result);
                 }
             }
 
         };
-        getMessagesTask.execute();
+        getMessagesTask.execute(((ChatActivity)getActivity()).userSender.getEmail(), ((ChatActivity)getActivity()).userReceiver.getEmail());
     }
+
 
     public void sendTextMessage() {
         String message = msg_edittext.getEditableText().toString();
@@ -196,13 +207,14 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
             final ChatMessage chatMessage = new ChatMessage(((ChatActivity)getActivity()).userSender.getEmail(), ((ChatActivity)getActivity()).userReceiver.getEmail(),
                     message, "" + random.nextInt(1000), true);
             chatMessage.setMsgID();
+            chatMessage.setChatId(chatId);
             chatMessage.body = message;
             chatMessage.Date = getCurrentDate();
             chatMessage.Time = getCurrentTime();
             msg_edittext.setText("");
             //updateView(chatMessage);
             postMessage(chatMessage);
-            updateView(chatMessage);
+            updateViewAndChatStatus(chatMessage,true);
         }
     }
 
@@ -210,8 +222,8 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         JSONObject updateDB = new JSONObject();
         String responseChat;
         try {
-            updateDB.put("user_sender_id", chatMessage.sender);
-            updateDB.put("user_receiver_id", chatMessage.receiver);
+            updateDB.put("user_sender_id", chatMessage.getSender());
+            updateDB.put("user_receiver_id", chatMessage.getReceiver());
             updateDB.put("message", chatMessage.body);
             String chatUrl = Uri.parse(CHAT_URL).buildUpon()
                     .build().toString();
@@ -235,8 +247,8 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                 JSONObject data = new JSONObject();
                 try {
                     data.put("message", chatMessage.body);
-                    data.put("user_sender_id", chatMessage.sender);
-                    data.put("user_receiver_id", chatMessage.receiver);
+                    data.put("user_sender_id", chatMessage.getSender());
+                    data.put("user_receiver_id", chatMessage.getReceiver());
                     json.put("data", data);
                     json.put("to", token);
 
@@ -262,10 +274,27 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         updateViewTask.execute();
     }
 
-    public void updateView(final ChatMessage chatMessage){
+    public void updateViewAndChatStatus(final ChatMessage chatMessage,boolean status){
         chatAdapter.add(chatMessage);
+        updateChat(chatMessage.getSender(),chatMessage.getReceiver(),status);
     }
 
+    public void updateChat(final String userSenderEmail, String userReceiverEmail, boolean status){
+        AsyncTask<Object,Void,Void> asyncTask = new AsyncTask<Object, Void, Void>() {
+            @Override
+            protected Void doInBackground(Object... params) {
+                JSONObject chat = new JSONObject();
+                try {
+                    chat.put("pending", (Boolean) params[2]);
+                    ServiceHandler.updateChat(ServiceHandler.ENDPOINT_CHAT+"?user_sender_id="+params[0]+"&user_receiver_id="+params[1], chat);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+        asyncTask.execute(userSenderEmail,userReceiverEmail,status);
+    }
 
     public static String getCurrentTime(){
         Date today = Calendar.getInstance().getTime();

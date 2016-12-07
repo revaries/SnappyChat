@@ -92,7 +92,7 @@ public class ChatActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         ChatFragment fragment = (ChatFragment) fm.findFragmentById(R.id.fragment_container);
         if (fragment != null) {
-            fragment.updateView(event.getChatMessage());
+            fragment.updateViewAndChatStatus(event.getChatMessage(),false);
         }
     };
 
