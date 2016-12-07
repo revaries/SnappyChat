@@ -61,7 +61,7 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
         adapter = new PagerAdapter
                 (userLoggedIn,getSupportFragmentManager(),tabLayout.getTabCount(),fragments);
         viewPager.setAdapter(adapter);
-        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Log.d(TAG, "TAB Selected "+Integer.toString(tab.getPosition()));
@@ -96,6 +96,22 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                tabLayout.getTabAt(position).select();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
             }
         });
