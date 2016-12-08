@@ -56,9 +56,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private CallbackManager callbackManager;
     private GoogleApiClient googleApiClient;
     private SignInButton googlesignIn;
+    private LoginButton fbloginbutton;
     private static final int RC_SIGN_IN = 1001;
     public static final String OPERATION = "OPERATION";
     private User user;
+    private static User loginuser;
     String email;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +82,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     Log.v("User Logged In EMAIL", user.getEmail());
                     email = user.getEmail();
                     new GetUserTask().execute(email, FirebaseInstanceId.getInstance().getToken());
-
-
                 } else {
+                    googlesignIn.setVisibility(View.VISIBLE);
+                    fbloginbutton.setVisibility(View.VISIBLE);
                     try {
                         FirebaseInstanceId.getInstance().deleteInstanceId();
                     } catch (IOException e) {
@@ -127,7 +129,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         //Facebook Login Button Intialization
         callbackManager = CallbackManager.Factory.create();
-        LoginButton fbloginbutton = (LoginButton) findViewById(R.id.facebook_login_button);
+        fbloginbutton = (LoginButton) findViewById(R.id.facebook_login_button);
         fbloginbutton.setReadPermissions("email", "public_profile");
         fbloginbutton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -172,17 +174,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             Intent i = new Intent(getBaseContext(), MainActivity.class);
             i.putExtra(MainActivity.USER_LOGGED_IN,user);
             i.putExtra(MainActivity.FROM_LOGIN,true);
+            loginuser = user;
             startActivity(i);
 
 
             //Remove After Implementation is checked and Works
             /*
+<<<<<<< HEAD
+                Intent i = new Intent(getBaseContext(),ProfileDataCollector.java.class);
+=======
                 Intent i = new Intent(getBaseContext(),ProfileDataCollectorActivity.class);
+>>>>>>> e8f8249aee162e8ca59c43044a5276afebf045e0
                 i.putExtra("user",user);
                 startActivity(i);
             */
         }else { //if user doesn't exist redirects to user profile activity
-            User user = new User();
+            user = new User();
+            loginuser = user;
             user.setEmail(email);
             //Intent i = new Intent(getBaseContext(), UserProfileActitivy.class);
             Intent i = new Intent(getBaseContext(),ProfileDataCollectorActivity.class);
@@ -312,5 +320,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             setUser(user);
             selectActivity();
         }
+    }
+
+    public User getLoginuser()
+    {
+        return loginuser;
     }
 }

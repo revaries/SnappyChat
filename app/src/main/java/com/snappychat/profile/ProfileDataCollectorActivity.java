@@ -26,15 +26,18 @@ import com.snappychat.R;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
 
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static com.snappychat.MainActivity.USER_LOGGED_IN;
 
-public class ProfileDataCollectorActivity extends AppCompatActivity implements ProfileDataNameQuestionsFragment.OnFragmentInteractionListener,ProfileDataSettingsQuestionsFragment.OnFragmentInteractionListener,ProfileDataUserInterestsQuestionsFragment.OnFragmentInteractionListener,ProileDataProfQuestionsFragment.OnFragmentInteractionListener,ProfileDataProfilePictureFragment.OnFragmentInteractionListener{
+public class ProfileDataCollectorActivity extends AppCompatActivity implements ProfileDataNameQuestionsFragment.OnFragmentInteractionListener,ProfileDataSettingsQuestionsFragment.OnFragmentInteractionListener,ProfileDataUserInterestsQuestionsFragment.OnFragmentInteractionListener,ProfileDataProfQuestionsFragment.OnFragmentInteractionListener,ProfileDataProfilePictureFragment.OnFragmentInteractionListener{
 
     private Uri imagefileuri;
     final int REQUEST_IMAGE_CAPTURE = 1;
@@ -60,7 +63,7 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
         ProfileNameQuestionFragment = new ProfileDataNameQuestionsFragment();
         ProfileSettingsQuestionFragment = new ProfileDataSettingsQuestionsFragment();
         ProfileInterestQuestionFragment = new ProfileDataUserInterestsQuestionsFragment();
-        ProfileProfessionQuestionFragment = new ProileDataProfQuestionsFragment();
+        ProfileProfessionQuestionFragment = new ProfileDataProfQuestionsFragment();
         ProfilePictureFragment = new ProfileDataProfilePictureFragment();
 
         snappyfragmanager = getSupportFragmentManager();
@@ -83,7 +86,9 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
                 case "Profession":
                     snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfileProfessionQuestionFragment).commit();
                     break;
-        }
+                case "settings":
+                    snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfileSettingsQuestionFragment).commit();
+            }
         }
 
 
@@ -226,6 +231,8 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
 
             Gson userGson = new Gson();
             String userString = userGson.toJson(snappyuser);
+            
+
             Log.v("My JSON Object",userString.toString());
             ServiceHandler.updateUserWithString(snappyuser.getEmail(),userString);
             return null;

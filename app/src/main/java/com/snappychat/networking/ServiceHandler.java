@@ -68,7 +68,7 @@ public class ServiceHandler {
             String url = Uri.parse(ENDPOINT_USER).buildUpon()
                     .appendEncodedPath(param)
                     .build().toString();
-
+            Log.v("JSON",json);
             response = makeRequest(url,"PUT",json);
             if(response != null){
                 Log.v(TAG,response);
