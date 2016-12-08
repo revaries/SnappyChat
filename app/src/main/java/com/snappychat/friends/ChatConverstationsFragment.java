@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class ChatConverstationsFragment extends Fragment{
     public static final String TAG = "PENDING_FRIENDS";
-    private static AsyncTask<String, Void, ArrayList<User>> pendingFriendsTask;
+    private static AsyncTask<String, Void, ArrayList<User>> chatConversationTask;
     public static RecyclerConverstationsAdapter adapter;
     private User userLoggedIn;
     //PendingRequestsFragment.OnListFragmentInteractionListener mListener;
@@ -44,7 +44,7 @@ public class ChatConverstationsFragment extends Fragment{
         fragment.setArguments(args);
         return fragment;
     }
-
+  
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -95,7 +95,7 @@ public class ChatConverstationsFragment extends Fragment{
     }
 
     public void getPendingFriendsList(){
-        pendingFriendsTask = new AsyncTask<String, Void, ArrayList<User>>() {
+        chatConversationTask = new AsyncTask<String, Void, ArrayList<User>>() {
             @Override
             protected ArrayList<User> doInBackground(String... params) {
                 return ServiceHandler.getFriendsPending(params[0]);
@@ -108,7 +108,7 @@ public class ChatConverstationsFragment extends Fragment{
 
         };
         if(userLoggedIn != null)
-            pendingFriendsTask.execute(userLoggedIn.getEmail());
+            chatConversationTask.execute(userLoggedIn.getEmail());
     }
 
 
