@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.snappychat.R;
 import com.snappychat.model.FriendCard;
+import com.snappychat.model.User;
 
 import java.util.ArrayList;
 
@@ -20,9 +21,9 @@ import java.util.ArrayList;
 
 public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<RecyclerConverstationsAdapter.ChatConversationViewHolder> {
     private static String TAG = "RECYCLER_FRIENDS";
-    private ArrayList<FriendCard> mDataset;
+    private ArrayList<User> mDataset;
 
-    public RecyclerConverstationsAdapter(ArrayList<FriendCard> myDataset) {
+    public RecyclerConverstationsAdapter(ArrayList<User> myDataset) {
         mDataset = myDataset;
     }
 
@@ -65,8 +66,10 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
 
     @Override
     public void onBindViewHolder(RecyclerConverstationsAdapter.ChatConversationViewHolder holder, int position) {
-        holder.mTextView.setText(mDataset.get(position).getName() + " " +mDataset.get(position).getLast());
-        holder.mTextViewCardName.setText(mDataset.get(position).getDescription());
+//        holder.mTextView.setText(mDataset.get(position).getName() + " " +mDataset.get(position).getLast());
+//        holder.mTextViewCardName.setText(mDataset.get(position).getDescription());
+        holder.mTextView.setText(mDataset.get(position).getFirstName() + " " +mDataset.get(position).getLastName());
+        holder.mTextViewCardName.setText(mDataset.get(position).getMessage());
     }
 
     @Override
@@ -74,7 +77,7 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
         return mDataset.size();
     }
 
-    public void updateData(ArrayList<FriendCard> data){
+    public void updateData(ArrayList<User> data){
         mDataset = data;
         notifyDataSetChanged();
     }

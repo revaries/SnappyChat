@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
     public static final String TAG = "MainActivity";
     public static final String FROM_LOGIN = "login";
     //This is temporary and it should be set at login
-    private static final String CURRENT_USER_LOGGED_IN_ID = "jesantos0527@gmail.com";
+    public static final String CURRENT_USER_LOGGED_IN_ID = "jesantos0527@gmail.com";
     public static final String USER_LOGGED_IN = "USER_LOGGED_IN";
     private User userLoggedIn;
     private static User userforShare;

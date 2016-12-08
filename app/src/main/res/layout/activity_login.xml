@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
@@ -11,27 +12,37 @@
     android:orientation="vertical"
     tools:context="com.snappychat.LoginActivity">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:src="@drawable/snap"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            <com.facebook.login.widget.LoginButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/facebook_login_button"
+                android:layout_marginBottom="56dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_alignBottom="@+id/google_login_button"
+                android:layout_centerHorizontal="true"
+                android:visibility="gone"/>
 
-        <com.google.android.gms.common.SignInButton
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:id="@+id/google_login_button"
-            android:layout_centerVertical="true"
-            android:layout_alignStart="@+id/facebook_login_button"
-            android:layout_alignEnd="@+id/facebook_login_button" />
+            <com.google.android.gms.common.SignInButton
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/google_login_button"
+                android:layout_marginBottom="125dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/facebook_login_button"
+                android:layout_alignEnd="@+id/facebook_login_button"
+                android:visibility="gone"/>
 
-        <com.facebook.login.widget.LoginButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/facebook_login_button"
-            android:layout_marginBottom="54dp"
-            android:layout_above="@+id/google_login_button"
-            android:layout_centerHorizontal="true" />
-    </RelativeLayout>
+        </RelativeLayout>
 
 
 </LinearLayout>
