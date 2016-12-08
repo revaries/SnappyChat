@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private CallbackManager callbackManager;
     private GoogleApiClient googleApiClient;
     private SignInButton googlesignIn;
+    private LoginButton fbloginbutton;
     private static final int RC_SIGN_IN = 1001;
     public static final String OPERATION = "OPERATION";
     private User user;
@@ -76,6 +77,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
+                    googlesignIn.setVisibility(View.GONE);
+                    fbloginbutton.setVisibility(View.GONE);
                     Log.v("User Logged In", user.getUid());
                     Log.v("User Logged In EMAIL", user.getEmail());
                     email = user.getEmail();
@@ -83,6 +86,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
                 } else {
+                    googlesignIn.setVisibility(View.VISIBLE);
+                    fbloginbutton.setVisibility(View.VISIBLE);
                     try {
                         FirebaseInstanceId.getInstance().deleteInstanceId();
                     } catch (IOException e) {
@@ -127,7 +132,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         //Facebook Login Button Intialization
         callbackManager = CallbackManager.Factory.create();
-        LoginButton fbloginbutton = (LoginButton) findViewById(R.id.facebook_login_button);
+        fbloginbutton = (LoginButton) findViewById(R.id.facebook_login_button);
         fbloginbutton.setReadPermissions("email", "public_profile");
         fbloginbutton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
