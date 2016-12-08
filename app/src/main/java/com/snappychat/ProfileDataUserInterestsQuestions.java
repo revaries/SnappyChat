@@ -19,9 +19,10 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
     private EditText userInterests;
     private Button next;
     private Button back;
+    private Button save;
     private TextView warning;
     private OnFragmentInteractionListener mListener;
-
+    private String operationToPerform;
     private User interestsUser;
 
     public ProfileDataUserInterestsQuestions() {
@@ -53,9 +54,11 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
         userInterests = (EditText) view.findViewById(R.id.interests);
         next = (Button) view.findViewById(R.id.interest_question_next);
         back = (Button) view.findViewById(R.id.interest_question_back);
+        save = (Button) view.findViewById(R.id.interest_question_save);
         warning = (TextView) view.findViewById(R.id.interests_warning);
 
         interestsUser = ((ProfileDataCollector)getActivity()).getUserObject();
+        operationToPerform = ((ProfileDataCollector)getActivity()).getOperation();
         aboutMe.setOnFocusChangeListener(cellCleaner);
         userInterests.setOnFocusChangeListener(cellCleaner);
 
@@ -80,6 +83,29 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
             }
         });
 
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(ValidateNameFields()) {
+                    interestsUser.setAboutMe(aboutMe.getText().toString());
+                    interestsUser.setInterests(userInterests.getText().toString());
+                    ((ProfileDataCollector) getActivity()).savePageHandeler();
+                }
+            }
+        });
+
+        if (operationToPerform.equals(ProfileDataCollector.NEW))
+        {
+            next.setVisibility(View.VISIBLE);
+            back.setVisibility(View.VISIBLE);
+            save.setVisibility(View.INVISIBLE);
+        }
+        else if (operationToPerform.equals(ProfileDataCollector.EDIT))
+        {
+            next.setVisibility(View.INVISIBLE);
+            back.setVisibility(View.INVISIBLE);
+            save.setVisibility(View.VISIBLE);
+        }
         return view;
     }
 

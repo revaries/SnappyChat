@@ -26,9 +26,10 @@ public class ProfileDataNameQuestions extends Fragment {
     private EditText nickName;
     private TextView warning;
     private Button next;
+    private Button save;
 
     private User NameUser;
-
+    private String operationToPerform;
     public ProfileDataNameQuestions() {
 
     }
@@ -58,14 +59,28 @@ public class ProfileDataNameQuestions extends Fragment {
         nickName = (EditText) view.findViewById(R.id.nick_name);
         next = (Button) view.findViewById(R.id.name_question_next);
         warning = (TextView) view.findViewById(R.id.name_warning);
+        save = (Button) view.findViewById(R.id.name_question_save);
 
         NameUser = ((ProfileDataCollector)getActivity()).getUserObject();
+        operationToPerform = ((ProfileDataCollector)getActivity()).getOperation();
 
         InitialCellValues();
 
         firstName.setOnFocusChangeListener(cellcleaner);
         lastName.setOnFocusChangeListener(cellcleaner);
         nickName.setOnFocusChangeListener(cellcleaner);
+
+
+
+        if (operationToPerform.equals(ProfileDataCollector.EDIT))
+        {
+            save.setVisibility(View.VISIBLE);
+            next.setVisibility(View.INVISIBLE);
+        }
+        else if (operationToPerform.equals(ProfileDataCollector.NEW)) {
+            save.setVisibility(View.INVISIBLE);
+            next.setVisibility(View.VISIBLE);
+        }
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +92,20 @@ public class ProfileDataNameQuestions extends Fragment {
                     ((ProfileDataCollector)getActivity()).nextpagehandler("name");
                     }
                 }
+        });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(ValidateNameFields())
+                {
+                    NameUser.setFirstName(firstName.getText().toString());
+                    NameUser.setLastName(lastName.getText().toString());
+                    NameUser.setNickName(nickName.getText().toString());
+                    ((ProfileDataCollector)getActivity()).savePageHandeler();
+
+                }
+            }
         });
 
         return view;

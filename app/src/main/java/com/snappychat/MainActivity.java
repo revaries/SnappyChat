@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
     private static final String CURRENT_USER_LOGGED_IN_ID = "jesantos0527@gmail.com";
     public static final String USER_LOGGED_IN = "USER_LOGGED_IN";
     private User userLoggedIn;
+    private static User userforShare;
 
     private FloatingActionButton addTimelineButton;
 
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
             userLoggedIn = (User)savedInstanceState.getSerializable(USER_LOGGED_IN);
         if(getIntent().getSerializableExtra(USER_LOGGED_IN) != null)
             userLoggedIn = (User) getIntent().getSerializableExtra(USER_LOGGED_IN);
+
+        userforShare = userLoggedIn;
 
         setContentView(R.layout.activity_main);
 
@@ -112,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
             case R.id.profile_menu_option:
                 intent = new Intent(this,ProfileView.class);
                 intent.putExtra(USER_LOGGED_IN,userLoggedIn);
+                //intent.putExtra("from","menuoption");
                 startActivity(intent);
             default:
                 return super.onOptionsItemSelected(item);
@@ -119,6 +123,11 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
         }
     }
 
+
+    public User getUserforShare()
+    {
+        return userforShare;
+    }
 
     @Override
     protected void onResume() {
