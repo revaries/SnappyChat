@@ -44,6 +44,7 @@ public class ProfileView extends AppCompatActivity {
     private TextView AboutMe;
     private User profileUser;
     private ProfileDataCollector profileDataCollector;
+    private MainActivity mainActivity;
     //private TextView Birthday;
 
     @Override
@@ -60,9 +61,11 @@ public class ProfileView extends AppCompatActivity {
         //Birthday = (TextView) findViewById(R.id.birthday);
         profilepicture = (ImageView) findViewById(R.id.profilepicture);
 
+        mainActivity = new MainActivity();
+
         Intent intent = getIntent();
         profileUser = (User) intent.getSerializableExtra(MainActivity.USER_LOGGED_IN);
-       // userLoggedIn = profileDataCollector.getUserObject();
+        userLoggedIn =  mainActivity.getUserforShare();
 
 
         Name.setText(profileUser.getFirstName()+" "+profileUser.getLastName());
@@ -71,6 +74,11 @@ public class ProfileView extends AppCompatActivity {
         Profession.setText(profileUser.getProfession());
         AboutMe.setText(profileUser.getAboutMe());
 
+        Name.setOnClickListener(textClickListeners);
+        Interests.setOnClickListener(textClickListeners);
+        Location.setOnClickListener(textClickListeners);
+        Profession.setOnClickListener(textClickListeners);
+        AboutMe.setOnClickListener(textClickListeners);
 
 
 
@@ -87,15 +95,70 @@ public class ProfileView extends AppCompatActivity {
         profilepicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // if (userLoggedIn.getEmail().equals(profileUser.getEmail())) {
+                if (userLoggedIn.getEmail().equals(profileUser.getEmail())) {
                     Log.v("Clicked On Picture", " Camera APp should Open ");
                     ProfilePictureSelector();
-               // }
+                }
             }
         });
     }
 
 
+
+    /*
+
+            case "name":
+                snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfileInterestQuestionFragment).commit();
+                break;
+            case "interests":
+                snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfileProfessionQuestionFragment).commit();
+                break;
+            case "profession":
+                snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfilePictureFragment).commit();
+                break;
+            case "profilepicture":
+                snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfileSettingsQuestionFragment).commit();
+                break;
+            case "settings":
+                callTimeLine();
+                break;
+
+     */
+
+
+
+    private View.OnClickListener textClickListeners = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent editIntent = new Intent(getBaseContext(),ProfileDataCollector.class);
+            editIntent.putExtra(LoginActivity.OPERATION,"EDIT");
+            editIntent.putExtra(MainActivity.USER_LOGGED_IN,userLoggedIn);
+            if (profileUser.getEmail().equals(userLoggedIn.getEmail()))
+            {
+                if (view == Name)
+                {
+                    editIntent.putExtra("FragmentToEdit","Name");
+                }
+                else if (view==Interests)
+                {
+                    editIntent.putExtra("FragmentToEdit","Interests");
+                }
+                else if (view == Location)
+                {
+                    editIntent.putExtra("FragmentToEdit","Profession");
+                }
+                else if (view == Profession)
+                {
+                    editIntent.putExtra("FragmentToEdit","Profession");
+                }
+                else if (view == AboutMe)
+                {
+                    editIntent.putExtra("FragmentToEdit","Interests");
+                }
+            }
+            startActivity(editIntent);
+        }
+    };
 
     private void callingpictureTaker()
     {
@@ -161,7 +224,7 @@ public class ProfileView extends AppCompatActivity {
             }
             profilepicture.setImageBitmap(imagebitmap);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            imagebitmap.compress(Bitmap.CompressFormat.JPEG, 200, byteArrayOutputStream);
+            imagebitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] imagebyte = byteArrayOutputStream.toByteArray();
         }
     }

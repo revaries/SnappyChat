@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private GoogleApiClient googleApiClient;
     private SignInButton googlesignIn;
     private static final int RC_SIGN_IN = 1001;
+    public static final String OPERATION = "OPERATION";
     private User user;
     String email;
 
@@ -185,6 +186,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             //Intent i = new Intent(getBaseContext(), UserProfile.class);
             Intent i = new Intent(getBaseContext(),ProfileDataCollector.class);
             i.putExtra(MainActivity.USER_LOGGED_IN,user);
+            i.putExtra(OPERATION,"NEW");
             startActivity(i);
         }
     }

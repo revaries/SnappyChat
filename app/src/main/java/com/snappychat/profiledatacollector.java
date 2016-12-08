@@ -44,13 +44,16 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
 
     private Uri imagefileuri;
     final int REQUEST_IMAGE_CAPTURE = 1;
-    private User snappyuser;
+    public final static String EDIT = "EDIT";
+    public final static String NEW = "NEW";
+    private static User snappyuser;
     private Fragment ProfileNameQuestionFragment;
     private Fragment ProfileSettingsQuestionFragment;
     private Fragment ProfileInterestQuestionFragment;
     private Fragment ProfileProfessionQuestionFragment;
     private Fragment ProfilePictureFragment;
     private FragmentManager snappyfragmanager;
+    private String operation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +61,7 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
 
         Intent incoming = getIntent();
         snappyuser = (User) incoming.getSerializableExtra(USER_LOGGED_IN);
-
+        operation = incoming.getStringExtra(LoginActivity.OPERATION);
 
         ProfileNameQuestionFragment = new ProfileDataNameQuestions();
         ProfileSettingsQuestionFragment = new ProfileDataSettingsQuestions();
@@ -66,10 +69,31 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
         ProfileProfessionQuestionFragment = new ProileDataProfQuestions();
         ProfilePictureFragment = new ProfileDataProfilePicture();
 
-
-
         snappyfragmanager = getSupportFragmentManager();
-        snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfileNameQuestionFragment).commit();
+
+        if (operation.equals("NEW"))
+        {
+            snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfileNameQuestionFragment).commit();
+        }
+        else if (operation.equals("EDIT"))
+        {
+            String page = incoming.getStringExtra("FragmentToEdit");
+
+            switch(page){
+                case "Name":
+                    snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfileNameQuestionFragment).commit();
+                    break;
+                case "Interests":
+                    snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfileInterestQuestionFragment).commit();
+                    break;
+                case "Profession":
+                    snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfileProfessionQuestionFragment).commit();
+                    break;
+        }
+        }
+
+
+
 
     }
 
@@ -79,6 +103,10 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
         return snappyuser;
     }
 
+    public String getOperation()
+    {
+        return operation;
+    }
 
     public void nextpagehandler(String pageid)
     {
@@ -122,6 +150,27 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
         }
     }
 
+    public void savePageHandeler()
+    {
+        saveUpdatedValues();
+
+    }
+
+    public void profileEditHandler(String editRequestItem)
+    {
+        switch (editRequestItem){
+            case "one":
+                break;
+            case "two":
+                break;
+            case "three":
+                break;
+            case "four":
+                break;
+        }
+    }
+
+
     private void callTimeLine()
     {
 
@@ -141,6 +190,22 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
 
     }
 
+    private void saveUpdatedValues()
+    {
+        try
+        {
+            new UpdateUser().execute();
+        }
+        catch (Exception e )
+        {
+            Log.e("Error",e.toString());
+        }
+        Intent timelineIntent = new Intent(getBaseContext(),ProfileView.class);
+        //Intent timelineIntent = new Intent(getBaseContext(), ProfileView.class);
+        timelineIntent.putExtra(USER_LOGGED_IN,snappyuser);
+        startActivity(timelineIntent);
+
+    }
 
     private class NewUserCreator extends AsyncTask<Void, Void, Void>
     {
@@ -153,6 +218,22 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
             String userString = userGson.toJson(snappyuser);
             Log.v("My JSON Object",userString.toString());
             ServiceHandler.createUser(userString);
+            return null;
+        }
+
+    }
+
+    private class UpdateUser extends AsyncTask<Void, Void, Void>
+    {
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            Gson userGson = new Gson();
+            String userString = userGson.toJson(snappyuser);
+            Log.v("My JSON Object",userString.toString());
+            ServiceHandler.updateUserWithString(snappyuser.getEmail(),userString);
             return null;
         }
 

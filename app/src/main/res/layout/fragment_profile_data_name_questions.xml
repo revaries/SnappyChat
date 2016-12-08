@@ -66,7 +66,9 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:layout_margin="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
@@ -74,7 +76,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/name_question_next"
-            android:text="NEXT"></Button>
+            android:text="NEXT"
+            android:visibility="invisible"
+            ></Button>
+
+    </RelativeLayout>
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/name_question_save"
+            android:visibility="invisible"
+            android:text="SAVE"></Button>
 
     </RelativeLayout>
 

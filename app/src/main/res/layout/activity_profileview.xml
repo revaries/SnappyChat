@@ -31,6 +31,8 @@
             android:textSize="22dp"
             android:gravity="center"
             android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
             />
 
         <TextView
@@ -38,6 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:onClick="onClick"
+            android:clickable="true"
             />
 
         <TextView
@@ -45,6 +49,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:onClick="onClick"
+            android:clickable="true"
             android:drawableLeft="@drawable/ic_interests"/>
 
         <TextView
@@ -52,6 +58,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:onClick="onClick"
+            android:clickable="true"
             android:drawableLeft="@drawable/ic_profession"/>
 
         <TextView
@@ -59,10 +67,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:onClick="onClick"
+            android:clickable="true"
             android:drawableLeft="@drawable/ic_location"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:onClick="onClick"
+            android:clickable="true"
             android:layout_weight="1"/>
     </LinearLayout>
 

@@ -63,7 +63,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/interest_question_back"
+                android:visibility="invisible"
                 android:text="BACK"></Button>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            >
+            <Button
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/interest_question_save"
+                android:visibility="invisible"
+                android:text="SAVE"></Button>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -75,11 +89,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/interest_question_next"
+                android:visibility="invisible"
                 android:text="NEXT"></Button>
         </RelativeLayout>
-
-
     </LinearLayout>
-
-
 </LinearLayout>
