@@ -46,7 +46,7 @@ public class ProfileView extends AppCompatActivity {
     private ProfileDataCollector profileDataCollector;
     private MainActivity mainActivity;
     //private TextView Birthday;
-
+    private String option;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -65,14 +65,15 @@ public class ProfileView extends AppCompatActivity {
 
         Intent intent = getIntent();
         profileUser = (User) intent.getSerializableExtra(MainActivity.USER_LOGGED_IN);
+
         userLoggedIn =  mainActivity.getUserforShare();
 
 
-        Name.setText(profileUser.getFirstName()+" "+profileUser.getLastName());
-        Interests.setText(profileUser.getInterests());
-        Location.setText(profileUser.getLocation());
-        Profession.setText(profileUser.getProfession());
-        AboutMe.setText(profileUser.getAboutMe());
+        Name.setText(userLoggedIn.getFirstName()+" "+userLoggedIn.getLastName());
+        Interests.setText(userLoggedIn.getInterests());
+        Location.setText(userLoggedIn.getLocation());
+        Profession.setText(userLoggedIn.getProfession());
+        AboutMe.setText(userLoggedIn.getAboutMe());
 
         Name.setOnClickListener(textClickListeners);
         Interests.setOnClickListener(textClickListeners);

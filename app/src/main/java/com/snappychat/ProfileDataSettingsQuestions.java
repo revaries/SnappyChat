@@ -28,13 +28,14 @@ public class ProfileDataSettingsQuestions extends Fragment {
     private RadioButton notificationYes;
     private RadioButton notifcationNo;
 
+    private Button save;
     private Button next;
     private Button back;
     private User settingsUser;
     private OnFragmentInteractionListener mListener;
     private String visibility;
     private boolean notifications;
-
+    private String operationToPerform;
 
     public ProfileDataSettingsQuestions() {
 
@@ -68,13 +69,13 @@ public class ProfileDataSettingsQuestions extends Fragment {
         visibilityFriends = (RadioButton) view.findViewById(R.id.profile_settings_friendsonly);
         visibilityPublic = (RadioButton) view.findViewById(R.id.profile_settings_public);
 
-
+        save = (Button) view.findViewById(R.id.profile_settings_save);
         next = (Button) view.findViewById(R.id.profile_settings_next);
         back = (Button) view.findViewById(R.id.profile_settings_back);
 
 
         settingsUser = ((ProfileDataCollector)getActivity()).getUserObject();
-
+        operationToPerform = ((ProfileDataCollector)getActivity()).getOperation();
         //Setting Keyboard Off for this Fragment
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -82,9 +83,25 @@ public class ProfileDataSettingsQuestions extends Fragment {
         SetInitialValues();
 
 
-
+        save.setOnClickListener(radioClickListener);
         next.setOnClickListener(radioClickListener);
         back.setOnClickListener(radioClickListener);
+
+        if (operationToPerform.equals(ProfileDataCollector.NEW))
+        {
+            next.setVisibility(View.VISIBLE);
+            back.setVisibility(View.VISIBLE);
+            save.setVisibility(View.INVISIBLE);
+        }
+        else if (operationToPerform.equals(ProfileDataCollector.EDIT))
+        {
+            next.setVisibility(View.INVISIBLE);
+            back.setVisibility(View.INVISIBLE);
+            save.setVisibility(View.VISIBLE);
+        }
+
+
+
         return  view;
     }
 
@@ -183,9 +200,38 @@ public class ProfileDataSettingsQuestions extends Fragment {
                 settingsUser.setNotification(notifications);
                 ((ProfileDataCollector)getActivity()).nextpagehandler("settings");
             }
-            else
+            else if (view == back)
             {
                 ((ProfileDataCollector)getActivity()).prevpagehandler("settings");
+            }
+            else if (view==save)
+            {
+                int visibilityid = visibilitySettings.getCheckedRadioButtonId();
+                int notificationid = notificationSettings.getCheckedRadioButtonId();
+
+                switch (visibilityid){
+                    case R.id.profile_settings_friendsonly:
+                        visibility = "friends";
+                        break;
+                    case R.id.profile_settings_private:
+                        visibility = "private";
+                        break;
+                    case R.id.profile_settings_public:
+                        visibility = "public";
+                        break;
+
+                }
+                switch (notificationid){
+                    case R.id.email_notification_yes:
+                        notifications = true;
+                        break;
+                    case R.id.email_notification_no:
+                        notifications = false;
+                        break;
+                }
+                settingsUser.setVisibility(visibility);
+                settingsUser.setNotification(notifications);
+                ((ProfileDataCollector)getActivity()).savePageHandeler();
             }
         }
     };
