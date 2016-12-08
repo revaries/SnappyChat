@@ -13,6 +13,11 @@
         android:title="Hello"
         app:showAsAction="always"/>
     <item
+        android:id="@+id/chat_messages"
+        android:icon="@drawable/message"
+        android:title="Hello"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/profile_menu_option"
         android:title="Profile"
         app:showAsAction="collapseActionView"
