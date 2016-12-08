@@ -115,7 +115,7 @@ public class SearchUserActivity extends AppCompatActivity implements SearchUserF
     public void onProfileRequested(User user) {
         Intent intent = new Intent(this,ProfileViewActivity.class);
         intent.putExtra(ProfileViewActivity.USER_TYPE,"friend");
-        intent.putExtra("user","friend");
+        intent.putExtra(USER_LOGGED_IN,user);
         startActivity(intent);
     }
 }
