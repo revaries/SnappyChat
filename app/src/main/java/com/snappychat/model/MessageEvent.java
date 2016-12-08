@@ -1,6 +1,4 @@
-package com.snappychat;
-
-import com.snappychat.model.ChatMessage;
+package com.snappychat.model;
 
 /**
  * Created by Fabrizio on 6/12/2016.

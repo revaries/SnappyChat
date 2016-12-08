@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.profile;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -7,32 +7,32 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.v4.util.DebugUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.snappychat.LoginActivity;
+import com.snappychat.MainActivity;
+import com.snappychat.R;
 import com.snappychat.model.User;
-
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ProfileView extends AppCompatActivity {
+public class ProfileViewActivity extends AppCompatActivity {
 
+    public static final String USER_TYPE = "user type";
     private ImageView profilepicture;
     private Uri imagefileuri;
     final int REQUEST_IMAGE_CAPTURE = 1;
@@ -43,7 +43,6 @@ public class ProfileView extends AppCompatActivity {
     private TextView Profession;
     private TextView AboutMe;
     private User profileUser;
-    private ProfileDataCollector profileDataCollector;
     private MainActivity mainActivity;
     //private TextView Birthday;
     private String option;
@@ -131,7 +130,7 @@ public class ProfileView extends AppCompatActivity {
     private View.OnClickListener textClickListeners = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent editIntent = new Intent(getBaseContext(),ProfileDataCollector.class);
+            Intent editIntent = new Intent(getBaseContext(),ProfileDataCollectorActivity.class);
             editIntent.putExtra(LoginActivity.OPERATION,"EDIT");
             editIntent.putExtra(MainActivity.USER_LOGGED_IN,userLoggedIn);
             if (profileUser.getEmail().equals(userLoggedIn.getEmail()))

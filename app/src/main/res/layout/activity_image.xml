@@ -4,7 +4,7 @@
     android:id="@+id/activity_image"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.snappychat.ImageActivity">
+    tools:context="com.snappychat.profile.ImageActivity">
 
     <ImageView
         android:layout_width="match_parent"

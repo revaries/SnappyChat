@@ -24,7 +24,7 @@
             android:parentActivityName=".LoginActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".SearchUserActivity"
+            android:name=".friends.SearchUserActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -60,10 +60,10 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".UserProfile"
+            android:name=".profile.UserProfileActitivy"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".FriendsActivity"
+            android:name=".friends.FriendsActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">
 
@@ -73,35 +73,36 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".AddTimelineActivity"
+            android:name=".timeline.AddTimelineActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ProfileView"
+            android:name=".profile.ProfileViewActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".ChatActivity"
+            android:name=".friends.ChatActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme" />
 
-        <service android:name=".MessagingService">
+        <service android:name=".networking.MessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".IDService">
+        <service android:name=".networking.IDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
         <activity
-            android:name=".ProfileDataCollector"
+            android:name=".profile.ProfileDataCollectorActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ImageActivity"
+        <activity android:name=".profile.ImageActivity"
             android:theme="@style/AppTheme">
         </activity>
+
     </application>
 
 </manifest>

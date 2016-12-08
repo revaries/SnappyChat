@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.profile;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,10 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.snappychat.R;
 import com.snappychat.model.User;
 
 
-public class ProfileDataProfilePicture extends Fragment {
+public class ProfileDataProfilePictureFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
@@ -26,12 +27,12 @@ public class ProfileDataProfilePicture extends Fragment {
     private Button nextProfilePic;
     private User picUser;
     private User userLoggedIn;
-    public ProfileDataProfilePicture() {
+    public ProfileDataProfilePictureFragment() {
 
     }
 
-    public static ProfileDataProfilePicture newInstance(String param1, String param2) {
-        ProfileDataProfilePicture fragment = new ProfileDataProfilePicture();
+    public static ProfileDataProfilePictureFragment newInstance(String param1, String param2) {
+        ProfileDataProfilePictureFragment fragment = new ProfileDataProfilePictureFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -52,7 +53,7 @@ public class ProfileDataProfilePicture extends Fragment {
         backProfilePic = (Button) view.findViewById(R.id.profile_pic_back);
         nextProfilePic = (Button) view.findViewById(R.id.profile_pic_next);
 
-        picUser = ((ProfileDataCollector)getActivity()).getUserObject();
+        picUser = ((ProfileDataCollectorActivity)getActivity()).getUserObject();
 
         if (picUser.getImage()!=null)
         {
@@ -68,14 +69,14 @@ public class ProfileDataProfilePicture extends Fragment {
             @Override
             public void onClick(View view) {
 
-                ((ProfileDataCollector)getActivity()).profilePictureSelector();
+                ((ProfileDataCollectorActivity)getActivity()).profilePictureSelector();
 
             }
         });
         nextProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    ((ProfileDataCollector) getActivity()).nextpagehandler("profilepicture");
+                    ((ProfileDataCollectorActivity) getActivity()).nextpagehandler("profilepicture");
 
             }
         });
@@ -83,7 +84,7 @@ public class ProfileDataProfilePicture extends Fragment {
         backProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((ProfileDataCollector)getActivity()).prevpagehandler("profilepicture");
+                ((ProfileDataCollectorActivity)getActivity()).prevpagehandler("profilepicture");
             }
         });
 

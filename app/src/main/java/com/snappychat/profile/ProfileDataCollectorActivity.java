@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.profile;
 
 
 import android.content.ComponentName;
@@ -20,6 +20,9 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.snappychat.LoginActivity;
+import com.snappychat.MainActivity;
+import com.snappychat.R;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
 
@@ -31,7 +34,7 @@ import java.util.List;
 
 import static com.snappychat.MainActivity.USER_LOGGED_IN;
 
-public class ProfileDataCollector extends AppCompatActivity implements ProfileDataNameQuestions.OnFragmentInteractionListener,ProfileDataSettingsQuestions.OnFragmentInteractionListener,ProfileDataUserInterestsQuestions.OnFragmentInteractionListener,ProileDataProfQuestions.OnFragmentInteractionListener,ProfileDataProfilePicture.OnFragmentInteractionListener{
+public class ProfileDataCollectorActivity extends AppCompatActivity implements ProfileDataNameQuestionsFragment.OnFragmentInteractionListener,ProfileDataSettingsQuestionsFragment.OnFragmentInteractionListener,ProfileDataUserInterestsQuestionsFragment.OnFragmentInteractionListener,ProileDataProfQuestionsFragment.OnFragmentInteractionListener,ProfileDataProfilePictureFragment.OnFragmentInteractionListener{
 
     private Uri imagefileuri;
     final int REQUEST_IMAGE_CAPTURE = 1;
@@ -54,11 +57,11 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
         snappyuser = (User) incoming.getSerializableExtra(USER_LOGGED_IN);
         operation = incoming.getStringExtra(LoginActivity.OPERATION);
 
-        ProfileNameQuestionFragment = new ProfileDataNameQuestions();
-        ProfileSettingsQuestionFragment = new ProfileDataSettingsQuestions();
-        ProfileInterestQuestionFragment = new ProfileDataUserInterestsQuestions();
-        ProfileProfessionQuestionFragment = new ProileDataProfQuestions();
-        ProfilePictureFragment = new ProfileDataProfilePicture();
+        ProfileNameQuestionFragment = new ProfileDataNameQuestionsFragment();
+        ProfileSettingsQuestionFragment = new ProfileDataSettingsQuestionsFragment();
+        ProfileInterestQuestionFragment = new ProfileDataUserInterestsQuestionsFragment();
+        ProfileProfessionQuestionFragment = new ProileDataProfQuestionsFragment();
+        ProfilePictureFragment = new ProfileDataProfilePictureFragment();
 
         snappyfragmanager = getSupportFragmentManager();
 
@@ -191,7 +194,7 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
         {
             Log.e("Error",e.toString());
         }
-        Intent timelineIntent = new Intent(getBaseContext(),ProfileView.class);
+        Intent timelineIntent = new Intent(getBaseContext(),ProfileViewActivity.class);
         //Intent timelineIntent = new Intent(getBaseContext(), ProfileView.class);
         timelineIntent.putExtra(USER_LOGGED_IN,snappyuser);
         startActivity(timelineIntent);

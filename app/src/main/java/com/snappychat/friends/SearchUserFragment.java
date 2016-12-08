@@ -196,6 +196,7 @@ public class SearchUserFragment extends Fragment {
         void onChatRequested(User item);
         void onFriendAdded(User item);
         void onFriendRemoved(User item);
+        void onProfileRequested(User user);
     }
 
 

@@ -1,9 +1,11 @@
-package com.snappychat;
+package com.snappychat.profile;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class UserProfile extends AppCompatActivity {
+import com.snappychat.R;
+
+public class UserProfileActitivy extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.friends;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,10 +9,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 
-import com.snappychat.ChatActivity;
 import com.snappychat.R;
-import com.snappychat.friends.SearchUserFragment;
 import com.snappychat.model.User;
+import com.snappychat.profile.ProfileViewActivity;
 
 import static com.snappychat.MainActivity.USER_LOGGED_IN;
 
@@ -110,5 +109,13 @@ public class SearchUserActivity extends AppCompatActivity implements SearchUserF
 
         AlertDialog alert11 = builder1.create();
         alert11.show();
+    }
+
+    @Override
+    public void onProfileRequested(User user) {
+        Intent intent = new Intent(this,ProfileViewActivity.class);
+        intent.putExtra(ProfileViewActivity.USER_TYPE,"friend");
+        intent.putExtra("user","friend");
+        startActivity(intent);
     }
 }

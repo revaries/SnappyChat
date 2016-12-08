@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.snappychat.UserProfile">
+    tools:context="com.snappychat.profile.UserProfileActitivy">
 
     <ImageView
         android:id="@+id/ProfilePicture"

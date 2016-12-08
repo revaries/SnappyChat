@@ -13,9 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.snappychat.friends.FriendsActivity;
+import com.snappychat.friends.SearchUserActivity;
 import com.snappychat.model.Timeline;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
+import com.snappychat.profile.ProfileViewActivity;
+import com.snappychat.timeline.AddTimelineActivity;
 import com.snappychat.timeline.TimelineFragment;
 
 import org.json.JSONException;
@@ -113,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
                 finish();
                 return true;
             case R.id.profile_menu_option:
-                intent = new Intent(this,ProfileView.class);
+                intent = new Intent(this,ProfileViewActivity.class);
                 intent.putExtra(USER_LOGGED_IN,userLoggedIn);
                 //intent.putExtra("from","menuoption");
                 startActivity(intent);

@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.friends;
 
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.snappychat.R;
 import com.snappychat.model.ChatMessage;
 import com.snappychat.networking.FriendsHandler;
 import com.snappychat.networking.ServiceHandler;

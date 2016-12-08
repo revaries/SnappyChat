@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.profile;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,10 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.snappychat.R;
 import com.snappychat.model.User;
 
 
-public class ProileDataProfQuestions extends Fragment {
+public class ProileDataProfQuestionsFragment extends Fragment {
 
     private EditText userLocation;
     private EditText userProfession;
@@ -26,13 +27,13 @@ public class ProileDataProfQuestions extends Fragment {
     private OnFragmentInteractionListener mListener;
     private String operationToPerform;
 
-    public ProileDataProfQuestions() {
+    public ProileDataProfQuestionsFragment() {
 
     }
 
 
-    public static ProileDataProfQuestions newInstance(String param1, String param2) {
-        ProileDataProfQuestions fragment = new ProileDataProfQuestions();
+    public static ProileDataProfQuestionsFragment newInstance(String param1, String param2) {
+        ProileDataProfQuestionsFragment fragment = new ProileDataProfQuestionsFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -56,8 +57,8 @@ public class ProileDataProfQuestions extends Fragment {
         back = (Button) view.findViewById(R.id.proffesion_question_back);
         save = (Button) view.findViewById(R.id.proffesion_question_save);
         warning = (TextView) view.findViewById(R.id.location_warning);
-        locationUser = ((ProfileDataCollector)getActivity()).getUserObject();
-        operationToPerform = ((ProfileDataCollector)getActivity()).getOperation();
+        locationUser = ((ProfileDataCollectorActivity)getActivity()).getUserObject();
+        operationToPerform = ((ProfileDataCollectorActivity)getActivity()).getOperation();
         setInitialValues();
 
         userLocation.setOnFocusChangeListener(cellCleaner);
@@ -70,7 +71,7 @@ public class ProileDataProfQuestions extends Fragment {
                 if (ValidateCells()) {
                     locationUser.setLocation(userLocation.getText().toString());
                     locationUser.setProfession(userLocation.getText().toString());
-                    ((ProfileDataCollector) getActivity()).nextpagehandler("profession");
+                    ((ProfileDataCollectorActivity) getActivity()).nextpagehandler("profession");
                 }
             }
         });
@@ -78,7 +79,7 @@ public class ProileDataProfQuestions extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((ProfileDataCollector)getActivity()).prevpagehandler("profession");
+                ((ProfileDataCollectorActivity)getActivity()).prevpagehandler("profession");
             }
         });
 
@@ -88,18 +89,18 @@ public class ProileDataProfQuestions extends Fragment {
                 if (ValidateCells()) {
                     locationUser.setLocation(userLocation.getText().toString());
                     locationUser.setProfession(userProfession.getText().toString());
-                    ((ProfileDataCollector) getActivity()).savePageHandeler();
+                    ((ProfileDataCollectorActivity) getActivity()).savePageHandeler();
                 }
             }
         });
 
-        if (operationToPerform.equals(ProfileDataCollector.EDIT))
+        if (operationToPerform.equals(ProfileDataCollectorActivity.EDIT))
         {
             next.setVisibility(View.INVISIBLE);
             back.setVisibility(View.INVISIBLE);
             save.setVisibility(View.VISIBLE);
         }
-        else if (operationToPerform.equals(ProfileDataCollector.NEW))
+        else if (operationToPerform.equals(ProfileDataCollectorActivity.NEW))
         {
             next.setVisibility(View.VISIBLE);
             back.setVisibility(View.VISIBLE);
