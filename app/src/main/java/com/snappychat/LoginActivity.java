@@ -14,7 +14,6 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -23,9 +22,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -79,18 +78,19 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 if (user != null) {
                     Log.v("User Logged In", user.getUid());
                     Log.v("User Logged In EMAIL", user.getEmail());
-                    email = user.getEmail();
-                    new GetUserTask().execute(email, FirebaseInstanceId.getInstance().getToken());
-                } else {
-                    googlesignIn.setVisibility(View.VISIBLE);
-                    fbloginbutton.setVisibility(View.VISIBLE);
                     try {
                         FirebaseInstanceId.getInstance().deleteInstanceId();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    LoginManager.getInstance().logOut();
-                    signOut();
+                    email = user.getEmail();
+                    new GetUserTask().execute(email, FirebaseInstanceId.getInstance().getToken());
+                } else {
+                    googlesignIn.setVisibility(View.VISIBLE);
+                    fbloginbutton.setVisibility(View.VISIBLE);
+                    //snappyauth.signOut();
+                    //LoginManager.getInstance().logOut();
+                    //signOut();
                     Log.v("User SIgned out", "No User");
                 }
             }
