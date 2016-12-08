@@ -24,6 +24,11 @@
             android:parentActivityName=".LoginActivity"
             android:theme="@style/AppTheme" />
         <activity
+            android:name=".friends.ChatConverstationsActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".friends.SearchUserActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">

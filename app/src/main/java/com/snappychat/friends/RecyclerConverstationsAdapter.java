@@ -6,13 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.snappychat.R;
-import com.snappychat.model.FriendCard;
 import com.snappychat.model.User;
-
 import java.util.ArrayList;
 
 /**
@@ -20,7 +18,7 @@ import java.util.ArrayList;
  */
 
 public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<RecyclerConverstationsAdapter.ChatConversationViewHolder> {
-    private static String TAG = "RECYCLER_FRIENDS";
+    private static String TAG = "CONVERSATION_CHAT";
     private ArrayList<User> mDataset;
 
     public RecyclerConverstationsAdapter(ArrayList<User> myDataset) {
@@ -31,32 +29,37 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
         public CardView mCardView;
         public TextView mTextView;
         public TextView mTextViewCardName;
-        public Button mButton;
+        public ImageButton mButton;
+        public ImageView mImage;
         public ChatConversationViewHolder(View v) {
             super(v);
-            mCardView = (CardView) v.findViewById(R.id.card_view);
-            mTextView = (TextView) v.findViewById(R.id.card_text);
-            mTextViewCardName = (TextView) v.findViewById(R.id.card_name);
-            mButton = (Button) v.findViewById(R.id.card_view_button);
-            setButtonTextAndListener(mButton, "View Profile");
+            mCardView = (CardView) v.findViewById(R.id.card_view_conversations);
+            mTextView = (TextView) v.findViewById(R.id.card_text_chat);
+            mTextViewCardName = (TextView) v.findViewById(R.id.card_name_chat);
+            mButton = (ImageButton) v.findViewById(R.id.remove_chat);
+            mImage = (ImageView) v.findViewById(R.id.card_image_chat);
 
-        }
-
-        public void setButtonTextAndListener(Button button, final String text){
-            button.setText(text);
-            button.setOnClickListener(new View.OnClickListener() {
+            v.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    Log.d(TAG, text + " was clicked!");
+                public void onClick(View view) {
+                    Log.d(TAG, "Card view was clicked!");
                 }
             });
+
+            mButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        Log.d(TAG, "Delete chat was clicked!");
+                    }
+            });
+
         }
     }
 
     @Override
     public RecyclerConverstationsAdapter.ChatConversationViewHolder onCreateViewHolder(ViewGroup parent,
                                                                                        int viewType) {
-        Integer layoutId = R.layout.card_view;
+        Integer layoutId = R.layout.card_view_converstations;
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(layoutId, parent, false);
         RecyclerConverstationsAdapter.ChatConversationViewHolder vh =
@@ -66,10 +69,17 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
 
     @Override
     public void onBindViewHolder(RecyclerConverstationsAdapter.ChatConversationViewHolder holder, int position) {
-//        holder.mTextView.setText(mDataset.get(position).getName() + " " +mDataset.get(position).getLast());
-//        holder.mTextViewCardName.setText(mDataset.get(position).getDescription());
         holder.mTextView.setText(mDataset.get(position).getFirstName() + " " +mDataset.get(position).getLastName());
         holder.mTextViewCardName.setText(mDataset.get(position).getMessage());
+        if(mDataset.get(position).getPending()){
+            holder.mImage.setImageResource(R.drawable.circle_unread);
+        }else {
+            holder.mImage.setImageResource(R.drawable.circle_gray);
+        }
+        if(!mDataset.get(position).getChatOwner()){
+            holder.mButton.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
