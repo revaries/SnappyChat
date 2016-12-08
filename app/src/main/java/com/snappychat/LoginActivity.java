@@ -77,14 +77,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    googlesignIn.setVisibility(View.GONE);
-                    fbloginbutton.setVisibility(View.GONE);
                     Log.v("User Logged In", user.getUid());
                     Log.v("User Logged In EMAIL", user.getEmail());
                     email = user.getEmail();
                     new GetUserTask().execute(email, FirebaseInstanceId.getInstance().getToken());
-
-
                 } else {
                     googlesignIn.setVisibility(View.VISIBLE);
                     fbloginbutton.setVisibility(View.VISIBLE);
