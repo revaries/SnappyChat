@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.snappychat.R;
@@ -31,14 +32,14 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
         public CardView mCardView;
         public TextView mTextView;
         public TextView mTextViewCardName;
-        public Button mButton;
+        public ImageButton mButton;
         public ChatConversationViewHolder(View v) {
             super(v);
-            mCardView = (CardView) v.findViewById(R.id.card_view);
-            mTextView = (TextView) v.findViewById(R.id.card_text);
-            mTextViewCardName = (TextView) v.findViewById(R.id.card_name);
-            mButton = (Button) v.findViewById(R.id.card_view_button);
-            setButtonTextAndListener(mButton, "View Profile");
+            mCardView = (CardView) v.findViewById(R.id.card_view_conversations);
+            mTextView = (TextView) v.findViewById(R.id.card_text_chat);
+            mTextViewCardName = (TextView) v.findViewById(R.id.card_name_chat);
+            mButton = (ImageButton) v.findViewById(R.id.remove_chat);
+            //setButtonTextAndListener(mButton, "View Profile");
 
         }
 
@@ -56,7 +57,7 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
     @Override
     public RecyclerConverstationsAdapter.ChatConversationViewHolder onCreateViewHolder(ViewGroup parent,
                                                                                        int viewType) {
-        Integer layoutId = R.layout.card_view;
+        Integer layoutId = R.layout.card_view_converstations;
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(layoutId, parent, false);
         RecyclerConverstationsAdapter.ChatConversationViewHolder vh =

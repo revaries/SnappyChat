@@ -1,11 +1,13 @@
 package com.snappychat.friends;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import com.snappychat.friends.MyItemRecyclerViewAdapter;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,7 +31,7 @@ import java.util.ArrayList;
  */
 
 public class ChatConverstationsFragment extends Fragment{
-    public static final String TAG = "PENDING_FRIENDS";
+    public static final String TAG = "CHAT_CONVERSATION";
     private static AsyncTask<String, Void, ArrayList<User>> chatConversationTask;
     public static RecyclerConverstationsAdapter adapter;
     private User userLoggedIn;
@@ -36,21 +39,21 @@ public class ChatConverstationsFragment extends Fragment{
     private ProgressBar mProgressBar;
     RecyclerView recyclerView;
 
-    public static PendingRequestsFragment newInstance(User user) {
-        PendingRequestsFragment fragment = new PendingRequestsFragment();
+    public static ChatConverstationsFragment newInstance(User user) {
+        ChatConverstationsFragment fragment = new ChatConverstationsFragment();
         Bundle args = new Bundle();
         //args.putSerializable(MainActivity.USER_LOGGED_IN,user);
         args.putSerializable(MainActivity.CURRENT_USER_LOGGED_IN_ID,user);
         fragment.setArguments(args);
         return fragment;
     }
-  
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         //userLoggedIn = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
-        userLoggedIn = (User) getArguments().get(MainActivity.CURRENT_USER_LOGGED_IN_ID);
         getPendingFriendsList();
+
     }
 
     @Override
@@ -98,7 +101,7 @@ public class ChatConverstationsFragment extends Fragment{
         chatConversationTask = new AsyncTask<String, Void, ArrayList<User>>() {
             @Override
             protected ArrayList<User> doInBackground(String... params) {
-                return ServiceHandler.getFriendsPending(params[0]);
+                return ServiceHandler.getChatConversations(params[0]);
             }
 
             @Override
@@ -109,6 +112,9 @@ public class ChatConverstationsFragment extends Fragment{
         };
         if(userLoggedIn != null)
             chatConversationTask.execute(userLoggedIn.getEmail());
+
+        ///temporary
+        chatConversationTask.execute(MainActivity.CURRENT_USER_LOGGED_IN_ID);
     }
 
 
