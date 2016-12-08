@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:fillViewport="true"
+    android:scrollbars = "vertical"
+    android:scrollbarStyle="insideInset"
+    >
+
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/profile_view"
@@ -9,61 +21,71 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:layout_height="300dp"
         android:id="@+id/profilepicture"
         android:background="#7f8c8d"
         android:padding="3dp"
         android:scaleType="fitXY"
 
         />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
+
 
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="95dp"
             android:textSize="22dp"
             android:gravity="center"
             android:textAlignment="center"
+            android:onClick="onClick"
+            android:clickable="true"
             />
 
-        <TextView
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="95dp"
+
+            android:id="@+id/email"
+            />
+
+    <TextView
             android:id="@+id/about_me"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="95dp"
+            android:onClick="onClick"
+            android:clickable="true"
             />
 
-        <TextView
-            android:id="@+id/interests"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableLeft="@drawable/ic_interests"/>
-
-        <TextView
+    <TextView
             android:id="@+id/profession"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="95dp"
+            android:onClick="onClick"
+            android:clickable="true"
             android:drawableLeft="@drawable/ic_profession"/>
 
-        <TextView
+    <TextView
+        android:id="@+id/interests"
+        android:layout_width="match_parent"
+        android:layout_height="142dp"
+        android:onClick="onClick"
+        android:clickable="true"
+        android:drawableLeft="@drawable/ic_interests"/>
+
+    <TextView
             android:id="@+id/location"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="95dp"
+            android:onClick="onClick"
+            android:clickable="true"
             android:drawableLeft="@drawable/ic_location"/>
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
-    </LinearLayout>
+            android:layout_height="95dp"
+            android:onClick="onClick"
+            android:clickable="true"
+            />
+
 
 </LinearLayout>
+</ScrollView>

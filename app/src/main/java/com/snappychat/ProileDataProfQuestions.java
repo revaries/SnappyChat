@@ -20,9 +20,11 @@ public class ProileDataProfQuestions extends Fragment {
     private EditText userProfession;
     private Button next;
     private Button back;
+    private Button save;
     private User locationUser;
     private TextView warning;
     private OnFragmentInteractionListener mListener;
+    private String operationToPerform;
 
     public ProileDataProfQuestions() {
 
@@ -52,9 +54,10 @@ public class ProileDataProfQuestions extends Fragment {
         userProfession = (EditText)view.findViewById(R.id.profession);
         next = (Button)view.findViewById(R.id.proffesion_question_next);
         back = (Button) view.findViewById(R.id.proffesion_question_back);
+        save = (Button) view.findViewById(R.id.proffesion_question_save);
         warning = (TextView) view.findViewById(R.id.location_warning);
         locationUser = ((ProfileDataCollector)getActivity()).getUserObject();
-
+        operationToPerform = ((ProfileDataCollector)getActivity()).getOperation();
         setInitialValues();
 
         userLocation.setOnFocusChangeListener(cellCleaner);
@@ -78,6 +81,31 @@ public class ProileDataProfQuestions extends Fragment {
                 ((ProfileDataCollector)getActivity()).prevpagehandler("profession");
             }
         });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ValidateCells()) {
+                    locationUser.setLocation(userLocation.getText().toString());
+                    locationUser.setProfession(userProfession.getText().toString());
+                    ((ProfileDataCollector) getActivity()).savePageHandeler();
+                }
+            }
+        });
+
+        if (operationToPerform.equals(ProfileDataCollector.EDIT))
+        {
+            next.setVisibility(View.INVISIBLE);
+            back.setVisibility(View.INVISIBLE);
+            save.setVisibility(View.VISIBLE);
+        }
+        else if (operationToPerform.equals(ProfileDataCollector.NEW))
+        {
+            next.setVisibility(View.VISIBLE);
+            back.setVisibility(View.VISIBLE);
+            save.setVisibility(View.INVISIBLE);
+        }
+
         return view;
     }
 

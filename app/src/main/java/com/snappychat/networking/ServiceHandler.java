@@ -62,6 +62,28 @@ public class ServiceHandler {
     }
 
 
+    public static String updateUserWithString (String param, String json) {
+        String response = null;
+        try {
+            String url = Uri.parse(ENDPOINT_USER).buildUpon()
+                    .appendEncodedPath(param)
+                    .build().toString();
+
+            response = makeRequest(url,"PUT",json);
+            if(response != null){
+                Log.v(TAG,response);
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to update user", e);
+        }
+        return response;
+    }
+
+
+
+
+
     //Creating a Method to Create User
     public static String createUser(String json) {
         String response = null;
