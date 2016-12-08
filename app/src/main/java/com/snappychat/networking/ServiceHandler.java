@@ -384,7 +384,12 @@ public class ServiceHandler {
                 User user = null;
                 for(int i=0; i < jsonArray.length(); i++){
                     Boolean receiver = false;
+                    Boolean chatOwner = false;
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String chat_creator = jsonObject.getJSONObject("user_creator_id").getString("email");
+                    if(chat_creator.equals(user_id)){
+                        chatOwner = true;
+                    }
                     JSONArray chat_messages = jsonObject.getJSONArray("chat_messages");
                     JSONObject last_message = chat_messages.getJSONObject(chat_messages.length() - 1);
 
@@ -402,6 +407,7 @@ public class ServiceHandler {
                     }
                     user.setMessage(message);
                     user.setPending(receiver);
+                    user.setChatOwner(chatOwner);
                     chats.add(user);
 
 
