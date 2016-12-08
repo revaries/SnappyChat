@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.profile;
 
 import android.content.Context;
 import android.net.Uri;
@@ -12,10 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.snappychat.R;
 import com.snappychat.model.User;
 
 
-public class ProfileDataNameQuestions extends Fragment {
+public class ProfileDataNameQuestionsFragment extends Fragment {
 
 
 
@@ -30,13 +31,13 @@ public class ProfileDataNameQuestions extends Fragment {
 
     private User NameUser;
     private String operationToPerform;
-    public ProfileDataNameQuestions() {
+    public ProfileDataNameQuestionsFragment() {
 
     }
 
 
-    public static ProfileDataNameQuestions newInstance(String param1, String param2) {
-        ProfileDataNameQuestions fragment = new ProfileDataNameQuestions();
+    public static ProfileDataNameQuestionsFragment newInstance(String param1, String param2) {
+        ProfileDataNameQuestionsFragment fragment = new ProfileDataNameQuestionsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -61,8 +62,8 @@ public class ProfileDataNameQuestions extends Fragment {
         warning = (TextView) view.findViewById(R.id.name_warning);
         save = (Button) view.findViewById(R.id.name_question_save);
 
-        NameUser = ((ProfileDataCollector)getActivity()).getUserObject();
-        operationToPerform = ((ProfileDataCollector)getActivity()).getOperation();
+        NameUser = ((ProfileDataCollectorActivity)getActivity()).getUserObject();
+        operationToPerform = ((ProfileDataCollectorActivity)getActivity()).getOperation();
 
         InitialCellValues();
 
@@ -72,12 +73,12 @@ public class ProfileDataNameQuestions extends Fragment {
 
 
 
-        if (operationToPerform.equals(ProfileDataCollector.EDIT))
+        if (operationToPerform.equals(ProfileDataCollectorActivity.EDIT))
         {
             save.setVisibility(View.VISIBLE);
             next.setVisibility(View.INVISIBLE);
         }
-        else if (operationToPerform.equals(ProfileDataCollector.NEW)) {
+        else if (operationToPerform.equals(ProfileDataCollectorActivity.NEW)) {
             save.setVisibility(View.INVISIBLE);
             next.setVisibility(View.VISIBLE);
         }
@@ -89,7 +90,7 @@ public class ProfileDataNameQuestions extends Fragment {
                     NameUser.setFirstName(firstName.getText().toString());
                     NameUser.setLastName(lastName.getText().toString());
                     NameUser.setNickName(nickName.getText().toString());
-                    ((ProfileDataCollector)getActivity()).nextpagehandler("name");
+                    ((ProfileDataCollectorActivity)getActivity()).nextpagehandler("name");
                     }
                 }
         });
@@ -102,7 +103,7 @@ public class ProfileDataNameQuestions extends Fragment {
                     NameUser.setFirstName(firstName.getText().toString());
                     NameUser.setLastName(lastName.getText().toString());
                     NameUser.setNickName(nickName.getText().toString());
-                    ((ProfileDataCollector)getActivity()).savePageHandeler();
+                    ((ProfileDataCollectorActivity)getActivity()).savePageHandeler();
 
                 }
             }

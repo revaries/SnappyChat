@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.profile;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,9 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.snappychat.R;
 import com.snappychat.model.User;
 
-public class ProfileDataUserInterestsQuestions extends Fragment {
+public class ProfileDataUserInterestsQuestionsFragment extends Fragment {
 
     private EditText aboutMe;
     private EditText userInterests;
@@ -25,13 +26,13 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
     private String operationToPerform;
     private User interestsUser;
 
-    public ProfileDataUserInterestsQuestions() {
+    public ProfileDataUserInterestsQuestionsFragment() {
 
     }
 
 
-    public static ProfileDataUserInterestsQuestions newInstance(String param1, String param2) {
-        ProfileDataUserInterestsQuestions fragment = new ProfileDataUserInterestsQuestions();
+    public static ProfileDataUserInterestsQuestionsFragment newInstance(String param1, String param2) {
+        ProfileDataUserInterestsQuestionsFragment fragment = new ProfileDataUserInterestsQuestionsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -57,8 +58,8 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
         save = (Button) view.findViewById(R.id.interest_question_save);
         warning = (TextView) view.findViewById(R.id.interests_warning);
 
-        interestsUser = ((ProfileDataCollector)getActivity()).getUserObject();
-        operationToPerform = ((ProfileDataCollector)getActivity()).getOperation();
+        interestsUser = ((ProfileDataCollectorActivity)getActivity()).getUserObject();
+        operationToPerform = ((ProfileDataCollectorActivity)getActivity()).getOperation();
         aboutMe.setOnFocusChangeListener(cellCleaner);
         userInterests.setOnFocusChangeListener(cellCleaner);
 
@@ -71,7 +72,7 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
                 if(ValidateNameFields()) {
                     interestsUser.setAboutMe(aboutMe.getText().toString());
                     interestsUser.setInterests(userInterests.getText().toString());
-                    ((ProfileDataCollector) getActivity()).nextpagehandler("interests");
+                    ((ProfileDataCollectorActivity) getActivity()).nextpagehandler("interests");
                 }
             }
         });
@@ -79,7 +80,7 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((ProfileDataCollector)getActivity()).prevpagehandler("interests");
+                ((ProfileDataCollectorActivity)getActivity()).prevpagehandler("interests");
             }
         });
 
@@ -89,18 +90,18 @@ public class ProfileDataUserInterestsQuestions extends Fragment {
                 if(ValidateNameFields()) {
                     interestsUser.setAboutMe(aboutMe.getText().toString());
                     interestsUser.setInterests(userInterests.getText().toString());
-                    ((ProfileDataCollector) getActivity()).savePageHandeler();
+                    ((ProfileDataCollectorActivity) getActivity()).savePageHandeler();
                 }
             }
         });
 
-        if (operationToPerform.equals(ProfileDataCollector.NEW))
+        if (operationToPerform.equals(ProfileDataCollectorActivity.NEW))
         {
             next.setVisibility(View.VISIBLE);
             back.setVisibility(View.VISIBLE);
             save.setVisibility(View.INVISIBLE);
         }
-        else if (operationToPerform.equals(ProfileDataCollector.EDIT))
+        else if (operationToPerform.equals(ProfileDataCollectorActivity.EDIT))
         {
             next.setVisibility(View.INVISIBLE);
             back.setVisibility(View.INVISIBLE);

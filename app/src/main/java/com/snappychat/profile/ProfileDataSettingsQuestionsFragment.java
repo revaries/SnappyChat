@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.profile;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,16 +7,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.snappychat.R;
 import com.snappychat.model.User;
 
 
-public class ProfileDataSettingsQuestions extends Fragment {
+public class ProfileDataSettingsQuestionsFragment extends Fragment {
 
 
     private RadioGroup notificationSettings;
@@ -37,12 +37,12 @@ public class ProfileDataSettingsQuestions extends Fragment {
     private boolean notifications;
     private String operationToPerform;
 
-    public ProfileDataSettingsQuestions() {
+    public ProfileDataSettingsQuestionsFragment() {
 
     }
 
-    public static ProfileDataSettingsQuestions newInstance(String param1, String param2) {
-        ProfileDataSettingsQuestions fragment = new ProfileDataSettingsQuestions();
+    public static ProfileDataSettingsQuestionsFragment newInstance(String param1, String param2) {
+        ProfileDataSettingsQuestionsFragment fragment = new ProfileDataSettingsQuestionsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -74,8 +74,8 @@ public class ProfileDataSettingsQuestions extends Fragment {
         back = (Button) view.findViewById(R.id.profile_settings_back);
 
 
-        settingsUser = ((ProfileDataCollector)getActivity()).getUserObject();
-        operationToPerform = ((ProfileDataCollector)getActivity()).getOperation();
+        settingsUser = ((ProfileDataCollectorActivity)getActivity()).getUserObject();
+        operationToPerform = ((ProfileDataCollectorActivity)getActivity()).getOperation();
         //Setting Keyboard Off for this Fragment
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -87,13 +87,13 @@ public class ProfileDataSettingsQuestions extends Fragment {
         next.setOnClickListener(radioClickListener);
         back.setOnClickListener(radioClickListener);
 
-        if (operationToPerform.equals(ProfileDataCollector.NEW))
+        if (operationToPerform.equals(ProfileDataCollectorActivity.NEW))
         {
             next.setVisibility(View.VISIBLE);
             back.setVisibility(View.VISIBLE);
             save.setVisibility(View.INVISIBLE);
         }
-        else if (operationToPerform.equals(ProfileDataCollector.EDIT))
+        else if (operationToPerform.equals(ProfileDataCollectorActivity.EDIT))
         {
             next.setVisibility(View.INVISIBLE);
             back.setVisibility(View.INVISIBLE);
@@ -197,11 +197,11 @@ public class ProfileDataSettingsQuestions extends Fragment {
                 }
                 settingsUser.setVisibility(visibility);
                 settingsUser.setNotification(notifications);
-                ((ProfileDataCollector)getActivity()).nextpagehandler("settings");
+                ((ProfileDataCollectorActivity)getActivity()).nextpagehandler("settings");
             }
             else if (view == back)
             {
-                ((ProfileDataCollector)getActivity()).prevpagehandler("settings");
+                ((ProfileDataCollectorActivity)getActivity()).prevpagehandler("settings");
             }
             else if (view==save)
             {
@@ -230,7 +230,7 @@ public class ProfileDataSettingsQuestions extends Fragment {
                 }
                 settingsUser.setVisibility(visibility);
                 settingsUser.setNotification(notifications);
-                ((ProfileDataCollector)getActivity()).savePageHandeler();
+                ((ProfileDataCollectorActivity)getActivity()).savePageHandeler();
             }
         }
     };

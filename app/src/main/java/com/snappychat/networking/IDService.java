@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.networking;
 
 
 import android.util.Log;

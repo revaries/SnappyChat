@@ -1,8 +1,9 @@
-package com.snappychat;
+package com.snappychat.profile;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.snappychat.R;
 
 public class ImageActivity extends Activity {
 

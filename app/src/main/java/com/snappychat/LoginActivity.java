@@ -37,6 +37,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
+import com.snappychat.profile.ProfileDataCollectorActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -178,7 +179,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             //Remove After Implementation is checked and Works
             /*
+<<<<<<< HEAD
                 Intent i = new Intent(getBaseContext(),ProfileDataCollector.java.class);
+=======
+                Intent i = new Intent(getBaseContext(),ProfileDataCollectorActivity.class);
+>>>>>>> e8f8249aee162e8ca59c43044a5276afebf045e0
                 i.putExtra("user",user);
                 startActivity(i);
             */
@@ -186,8 +191,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             user = new User();
             loginuser = user;
             user.setEmail(email);
-            //Intent i = new Intent(getBaseContext(), UserProfile.class);
-            Intent i = new Intent(getBaseContext(),ProfileDataCollector.class);
+            //Intent i = new Intent(getBaseContext(), UserProfileActitivy.class);
+            Intent i = new Intent(getBaseContext(),ProfileDataCollectorActivity.class);
             i.putExtra(MainActivity.USER_LOGGED_IN,user);
             i.putExtra(OPERATION,"NEW");
             startActivity(i);

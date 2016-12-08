@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.profile;
 
 
 import android.content.ComponentName;
@@ -20,18 +20,24 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.snappychat.LoginActivity;
+import com.snappychat.MainActivity;
+import com.snappychat.R;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static com.snappychat.MainActivity.USER_LOGGED_IN;
 
-public class ProfileDataCollector extends AppCompatActivity implements ProfileDataNameQuestions.OnFragmentInteractionListener,ProfileDataSettingsQuestions.OnFragmentInteractionListener,ProfileDataUserInterestsQuestions.OnFragmentInteractionListener,ProileDataProfQuestions.OnFragmentInteractionListener,ProfileDataProfilePicture.OnFragmentInteractionListener{
+public class ProfileDataCollectorActivity extends AppCompatActivity implements ProfileDataNameQuestionsFragment.OnFragmentInteractionListener,ProfileDataSettingsQuestionsFragment.OnFragmentInteractionListener,ProfileDataUserInterestsQuestionsFragment.OnFragmentInteractionListener,ProfileDataProfQuestionsFragment.OnFragmentInteractionListener,ProfileDataProfilePictureFragment.OnFragmentInteractionListener{
 
     private Uri imagefileuri;
     final int REQUEST_IMAGE_CAPTURE = 1;
@@ -51,15 +57,14 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
         setContentView(R.layout.activity_profiledatacollector);
 
         Intent incoming = getIntent();
-        //snappyuser = (User) incoming.getSerializableExtra(USER_LOGGED_IN);
-        snappyuser = new MainActivity().getUserforShare();
+        snappyuser = (User) incoming.getSerializableExtra(USER_LOGGED_IN);
         operation = incoming.getStringExtra(LoginActivity.OPERATION);
 
-        ProfileNameQuestionFragment = new ProfileDataNameQuestions();
-        ProfileSettingsQuestionFragment = new ProfileDataSettingsQuestions();
-        ProfileInterestQuestionFragment = new ProfileDataUserInterestsQuestions();
-        ProfileProfessionQuestionFragment = new ProileDataProfQuestions();
-        ProfilePictureFragment = new ProfileDataProfilePicture();
+        ProfileNameQuestionFragment = new ProfileDataNameQuestionsFragment();
+        ProfileSettingsQuestionFragment = new ProfileDataSettingsQuestionsFragment();
+        ProfileInterestQuestionFragment = new ProfileDataUserInterestsQuestionsFragment();
+        ProfileProfessionQuestionFragment = new ProfileDataProfQuestionsFragment();
+        ProfilePictureFragment = new ProfileDataProfilePictureFragment();
 
         snappyfragmanager = getSupportFragmentManager();
 
@@ -81,7 +86,9 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
                 case "Profession":
                     snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfileProfessionQuestionFragment).commit();
                     break;
-        }
+                case "settings":
+                    snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfileSettingsQuestionFragment).commit();
+            }
         }
 
 
@@ -192,7 +199,7 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
         {
             Log.e("Error",e.toString());
         }
-        Intent timelineIntent = new Intent(getBaseContext(),ProfileView.class);
+        Intent timelineIntent = new Intent(getBaseContext(),ProfileViewActivity.class);
         //Intent timelineIntent = new Intent(getBaseContext(), ProfileView.class);
         timelineIntent.putExtra(USER_LOGGED_IN,snappyuser);
         startActivity(timelineIntent);
@@ -224,6 +231,8 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
 
             Gson userGson = new Gson();
             String userString = userGson.toJson(snappyuser);
+            
+
             Log.v("My JSON Object",userString.toString());
             ServiceHandler.updateUserWithString(snappyuser.getEmail(),userString);
             return null;

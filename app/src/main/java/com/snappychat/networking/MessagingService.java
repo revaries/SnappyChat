@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.networking;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,7 +11,11 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.snappychat.MainActivity;
+import com.snappychat.friends.ChatActivity;
+import com.snappychat.friends.ChatFragment;
 import com.snappychat.model.ChatMessage;
+import com.snappychat.model.MessageEvent;
 
 import org.greenrobot.eventbus.EventBus;
 

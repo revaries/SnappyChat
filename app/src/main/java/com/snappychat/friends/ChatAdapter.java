@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.friends;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.snappychat.R;
 import com.snappychat.model.ChatMessage;
 
 import java.util.ArrayList;
