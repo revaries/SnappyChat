@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
         if(getIntent().getSerializableExtra(USER_LOGGED_IN) != null)
             userLoggedIn = (User) getIntent().getSerializableExtra(USER_LOGGED_IN);
 
-        userforShare = userLoggedIn;
+        userforShare = new LoginActivity().getLoginuser();
 
         setContentView(R.layout.activity_main);
 

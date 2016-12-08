@@ -69,11 +69,11 @@ public class ProfileView extends AppCompatActivity {
         userLoggedIn =  mainActivity.getUserforShare();
 
 
-        Name.setText(userLoggedIn.getFirstName()+" "+userLoggedIn.getLastName());
-        Interests.setText(userLoggedIn.getInterests());
-        Location.setText(userLoggedIn.getLocation());
-        Profession.setText(userLoggedIn.getProfession());
-        AboutMe.setText(userLoggedIn.getAboutMe());
+        Name.setText(profileUser.getFirstName()+" "+profileUser.getLastName());
+        Interests.setText(profileUser.getInterests());
+        Location.setText(profileUser.getLocation());
+        Profession.setText(profileUser.getProfession());
+        AboutMe.setText(profileUser.getAboutMe());
 
         Name.setOnClickListener(textClickListeners);
         Interests.setOnClickListener(textClickListeners);

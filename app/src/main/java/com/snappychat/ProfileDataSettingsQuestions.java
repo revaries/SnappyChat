@@ -101,7 +101,6 @@ public class ProfileDataSettingsQuestions extends Fragment {
         }
 
 
-
         return  view;
     }
 

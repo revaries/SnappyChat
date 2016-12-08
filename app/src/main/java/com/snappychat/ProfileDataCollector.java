@@ -51,7 +51,8 @@ public class ProfileDataCollector extends AppCompatActivity implements ProfileDa
         setContentView(R.layout.activity_profiledatacollector);
 
         Intent incoming = getIntent();
-        snappyuser = (User) incoming.getSerializableExtra(USER_LOGGED_IN);
+        //snappyuser = (User) incoming.getSerializableExtra(USER_LOGGED_IN);
+        snappyuser = new MainActivity().getUserforShare();
         operation = incoming.getStringExtra(LoginActivity.OPERATION);
 
         ProfileNameQuestionFragment = new ProfileDataNameQuestions();
