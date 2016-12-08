@@ -46,7 +46,7 @@ public class ProfileViewActivity extends AppCompatActivity {
     private TextView Profession;
     private TextView AboutMe;
     private TextView NickName;
-    private TextView Settings;
+    private TextView Visibility;
     private TextView Notifications;
     private TextView Email;
     private User profileUser;
@@ -69,7 +69,7 @@ public class ProfileViewActivity extends AppCompatActivity {
         //Birthday = (TextView) findViewById(R.id.birthday);
         profilepicture = (ImageView) findViewById(R.id.profilepicture);
         NickName = (TextView) findViewById(R.id.nick_name);
-        Settings = (TextView)findViewById(R.id.settings);
+        Visibility = (TextView)findViewById(R.id.visibility);
         Notifications = (TextView)findViewById(R.id.notifications);
         Email = (TextView)findViewById(R.id.email);
 
@@ -86,7 +86,7 @@ public class ProfileViewActivity extends AppCompatActivity {
         Location.setText(profileUser.getLocation());
         Profession.setText(profileUser.getProfession());
         AboutMe.setText(profileUser.getAboutMe());
-        Settings.setText(profileUser.getVisibility());
+        Visibility.setText(profileUser.getVisibility());
         Notifications.setText(profileUser.getNotification().toString());
         NickName.setText(profileUser.getNickName());
         Email.setText(profileUser.getEmail());
@@ -97,7 +97,7 @@ public class ProfileViewActivity extends AppCompatActivity {
         Location.setOnClickListener(textClickListeners);
         Profession.setOnClickListener(textClickListeners);
         AboutMe.setOnClickListener(textClickListeners);
-        Settings.setOnClickListener(textClickListeners);
+        Visibility.setOnClickListener(textClickListeners);
         Notifications.setOnClickListener(textClickListeners);
         NickName.setOnClickListener(textClickListeners);
 
@@ -176,7 +176,7 @@ public class ProfileViewActivity extends AppCompatActivity {
                 {
                     editIntent.putExtra("FragmentToEdit","Interests");
                 }
-                else if (view == Settings)
+                else if (view == Visibility)
                 {
                     editIntent.putExtra("FragmentToEdit","settings");
                 }

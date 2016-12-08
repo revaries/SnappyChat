@@ -231,10 +231,20 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
 
             Gson userGson = new Gson();
             String userString = userGson.toJson(snappyuser);
-            
+            JSONObject jsonObject;
+            try{
+                jsonObject  = new JSONObject(userString);
+                jsonObject.remove("email");
+                Log.v("My JSON Object",userString.toString());
+                ServiceHandler.updateUserWithString(snappyuser.getEmail(),jsonObject.toString());
+            }
+            catch (Exception e)
+            {
+                Log.e("JSON Conversion",e.toString());
+            }
 
-            Log.v("My JSON Object",userString.toString());
-            ServiceHandler.updateUserWithString(snappyuser.getEmail(),userString);
+
+
             return null;
         }
 
