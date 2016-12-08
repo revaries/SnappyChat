@@ -1,4 +1,4 @@
-package com.snappychat;
+package com.snappychat.friends;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.snappychat.R;
 import com.snappychat.model.FriendCard;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  * Created by Jelson on 12/8/16.
  */
 
-public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<com.snappychat.RecyclerConverstationsAdapter.ChatConversationViewHolder> {
+public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<RecyclerConverstationsAdapter.ChatConversationViewHolder> {
     private static String TAG = "RECYCLER_FRIENDS";
     private ArrayList<FriendCard> mDataset;
 
@@ -52,18 +53,18 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<com.snap
     }
 
     @Override
-    public com.snappychat.RecyclerConverstationsAdapter.ChatConversationViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                                      int viewType) {
+    public RecyclerConverstationsAdapter.ChatConversationViewHolder onCreateViewHolder(ViewGroup parent,
+                                                                                       int viewType) {
         Integer layoutId = R.layout.card_view;
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(layoutId, parent, false);
-        com.snappychat.RecyclerConverstationsAdapter.ChatConversationViewHolder vh =
-                new com.snappychat.RecyclerConverstationsAdapter.ChatConversationViewHolder(v);
+        RecyclerConverstationsAdapter.ChatConversationViewHolder vh =
+                new RecyclerConverstationsAdapter.ChatConversationViewHolder(v);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(com.snappychat.RecyclerConverstationsAdapter.ChatConversationViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerConverstationsAdapter.ChatConversationViewHolder holder, int position) {
         holder.mTextView.setText(mDataset.get(position).getName() + " " +mDataset.get(position).getLast());
         holder.mTextViewCardName.setText(mDataset.get(position).getDescription());
     }
