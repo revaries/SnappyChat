@@ -15,7 +15,7 @@ import com.snappychat.R;
 import com.snappychat.model.User;
 
 
-public class ProileDataProfQuestionsFragment extends Fragment {
+public class ProfileDataProfQuestionsFragment extends Fragment {
 
     private EditText userLocation;
     private EditText userProfession;
@@ -27,13 +27,13 @@ public class ProileDataProfQuestionsFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private String operationToPerform;
 
-    public ProileDataProfQuestionsFragment() {
+    public ProfileDataProfQuestionsFragment() {
 
     }
 
 
-    public static ProileDataProfQuestionsFragment newInstance(String param1, String param2) {
-        ProileDataProfQuestionsFragment fragment = new ProileDataProfQuestionsFragment();
+    public static ProfileDataProfQuestionsFragment newInstance(String param1, String param2) {
+        ProfileDataProfQuestionsFragment fragment = new ProfileDataProfQuestionsFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);

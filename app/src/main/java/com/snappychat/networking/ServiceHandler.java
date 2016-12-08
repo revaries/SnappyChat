@@ -68,7 +68,7 @@ public class ServiceHandler {
             String url = Uri.parse(ENDPOINT_USER).buildUpon()
                     .appendEncodedPath(param)
                     .build().toString();
-
+            Log.v("JSON",json);
             response = makeRequest(url,"PUT",json);
             if(response != null){
                 Log.v(TAG,response);
@@ -370,6 +370,55 @@ public class ServiceHandler {
         }
 
         return timelines;
+    }
+
+    public static ArrayList<User> getChatConversations(String user_id){
+        ArrayList<User> chats = new ArrayList<>();
+        try {
+            String url = Uri.parse(ENDPOINT_CHAT).buildUpon()
+                    .appendQueryParameter("search",user_id)
+                    .build().toString();
+            String response = makeRequest(url,"GET",null);
+            if(response != null){
+                JSONArray jsonArray = new JSONArray(response);
+                User user = null;
+                for(int i=0; i < jsonArray.length(); i++){
+                    Boolean receiver = false;
+                    Boolean chatOwner = false;
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String chat_creator = jsonObject.getJSONObject("user_creator_id").getString("email");
+                    if(chat_creator.equals(user_id)){
+                        chatOwner = true;
+                    }
+                    JSONArray chat_messages = jsonObject.getJSONArray("chat_messages");
+                    JSONObject last_message = chat_messages.getJSONObject(chat_messages.length() - 1);
+
+                    String user_sender = last_message.getJSONObject("user_sender_id").getString("email");
+                    String user_receiver = last_message.getJSONObject("user_receiver_id").getString("email");
+                    Boolean pending = jsonObject.getBoolean("pending");
+                    String message = last_message.getString("message");
+                    if(!user_sender.equals(user_id)){
+                        user = getUser(user_sender);
+                    }else if(!user_receiver.equals(user_id)){
+                        user = getUser(user_receiver);
+                    }
+                    if(user_receiver.equals(user_id) && pending){
+                        receiver = true;
+                    }
+                    user.setMessage(message);
+                    user.setPending(receiver);
+                    user.setChatOwner(chatOwner);
+                    chats.add(user);
+
+
+                }
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to fetch chat conversations", e);
+        }
+
+        return chats;
     }
 
     public static String makeRequest (String urlSpec, String method, String jsonRequest) throws IOException {

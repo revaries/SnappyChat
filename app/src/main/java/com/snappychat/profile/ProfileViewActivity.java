@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,12 +23,14 @@ import com.snappychat.LoginActivity;
 import com.snappychat.MainActivity;
 import com.snappychat.R;
 import com.snappychat.model.User;
+import com.snappychat.networking.ServiceHandler;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 public class ProfileViewActivity extends AppCompatActivity {
@@ -42,8 +45,14 @@ public class ProfileViewActivity extends AppCompatActivity {
     private TextView Location;
     private TextView Profession;
     private TextView AboutMe;
+    private TextView NickName;
+    private TextView Visibility;
+    private TextView Notifications;
+    private TextView Email;
     private User profileUser;
+
     private MainActivity mainActivity;
+
     //private TextView Birthday;
     private String option;
     @Override
@@ -59,6 +68,10 @@ public class ProfileViewActivity extends AppCompatActivity {
         AboutMe = (TextView) findViewById(R.id.about_me);
         //Birthday = (TextView) findViewById(R.id.birthday);
         profilepicture = (ImageView) findViewById(R.id.profilepicture);
+        NickName = (TextView) findViewById(R.id.nick_name);
+        Visibility = (TextView)findViewById(R.id.visibility);
+        Notifications = (TextView)findViewById(R.id.notifications);
+        Email = (TextView)findViewById(R.id.email);
 
         mainActivity = new MainActivity();
 
@@ -68,18 +81,25 @@ public class ProfileViewActivity extends AppCompatActivity {
         userLoggedIn =  mainActivity.getUserforShare();
 
 
-        Name.setText(userLoggedIn.getFirstName()+" "+userLoggedIn.getLastName());
-        Interests.setText(userLoggedIn.getInterests());
-        Location.setText(userLoggedIn.getLocation());
-        Profession.setText(userLoggedIn.getProfession());
-        AboutMe.setText(userLoggedIn.getAboutMe());
+        Name.setText(profileUser.getFirstName()+" "+profileUser.getLastName());
+        Interests.setText(profileUser.getInterests());
+        Location.setText(profileUser.getLocation());
+        Profession.setText(profileUser.getProfession());
+        AboutMe.setText(profileUser.getAboutMe());
+        Visibility.setText(profileUser.getVisibility());
+        Notifications.setText(profileUser.getNotification().toString());
+        NickName.setText(profileUser.getNickName());
+        Email.setText(profileUser.getEmail());
+
 
         Name.setOnClickListener(textClickListeners);
         Interests.setOnClickListener(textClickListeners);
         Location.setOnClickListener(textClickListeners);
         Profession.setOnClickListener(textClickListeners);
         AboutMe.setOnClickListener(textClickListeners);
-
+        Visibility.setOnClickListener(textClickListeners);
+        Notifications.setOnClickListener(textClickListeners);
+        NickName.setOnClickListener(textClickListeners);
 
 
         if (profileUser.getImage()!=null)
@@ -130,11 +150,12 @@ public class ProfileViewActivity extends AppCompatActivity {
     private View.OnClickListener textClickListeners = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent editIntent = new Intent(getBaseContext(),ProfileDataCollectorActivity.class);
-            editIntent.putExtra(LoginActivity.OPERATION,"EDIT");
-            editIntent.putExtra(MainActivity.USER_LOGGED_IN,userLoggedIn);
+
             if (profileUser.getEmail().equals(userLoggedIn.getEmail()))
             {
+                Intent editIntent = new Intent(getBaseContext(),ProfileDataCollectorActivity.class);
+                editIntent.putExtra(LoginActivity.OPERATION,"EDIT");
+                editIntent.putExtra(MainActivity.USER_LOGGED_IN,userLoggedIn);
                 if (view == Name)
                 {
                     editIntent.putExtra("FragmentToEdit","Name");
@@ -155,8 +176,21 @@ public class ProfileViewActivity extends AppCompatActivity {
                 {
                     editIntent.putExtra("FragmentToEdit","Interests");
                 }
+                else if (view == Visibility)
+                {
+                    editIntent.putExtra("FragmentToEdit","settings");
+                }
+                else if (view == NickName)
+                {
+                    editIntent.putExtra("FragmentToEdit","Name");
+                }
+                else if (view==Notifications)
+                {
+                    editIntent.putExtra("FragmentToEdit","settings");
+                }
+                startActivity(editIntent);
             }
-            startActivity(editIntent);
+
         }
     };
 
