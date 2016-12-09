@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
                 return true;
             case R.id.profile_menu_option:
                 intent = new Intent(this,ProfileViewActivity.class);
+               // userLoggedIn = ServiceHandler.getUser(userLoggedIn.getEmail());
                 intent.putExtra(USER_LOGGED_IN,userLoggedIn);
                 //intent.putExtra("from","menuoption");
                 startActivity(intent);

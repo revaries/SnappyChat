@@ -1,9 +1,12 @@
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.snappychat.profile.ProfileDataSettingsQuestionsFragment"
     android:orientation="vertical">
+
+
 
     <TextView
         android:layout_marginTop="50dp"
@@ -19,13 +22,13 @@
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:id="@+id/profile_settings_visibiity_radio"
         android:layout_margin="20dp"
         >
         <RadioButton
             android:layout_margin="10dp"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/profile_settings_private"
             android:text="Private"
@@ -33,7 +36,7 @@
             />
         <RadioButton
             android:layout_margin="10dp"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/profile_settings_friendsonly"
             android:text="Friends Only"
@@ -87,44 +90,33 @@
 
     <LinearLayout
         android:layout_margin="30dp"
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <Button
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
-            <Button
-                android:layout_centerInParent="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/profile_settings_back"
-                android:visibility="invisible"
-                android:text="BACK"></Button>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
+            android:id="@+id/profile_settings_back"
+            android:layout_weight="1"
+            android:text="BACK"></Button>
+
+        <Button
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
-            <Button
-                android:layout_centerInParent="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/profile_settings_save"
-                android:visibility="invisible"
-                android:text="SAVE"></Button>
-        </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
+            android:id="@+id/profile_settings_save"
+            android:layout_weight="1"
+            android:text="SAVE"></Button>
+
         <Button
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/profile_settings_next"
-            android:visibility="invisible"
+            android:layout_weight="1"
             android:text="NEXT"></Button>
-    </RelativeLayout>
+
 
     </LinearLayout>
 
