@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private User user;
     private static User loginuser;
     String email;
+    private String token;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -86,11 +87,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         e.printStackTrace();
                     }
                     email = user.getEmail();
-                    new GetUserTask().execute(email, FirebaseInstanceId.getInstance().getToken());
+                    token = FirebaseInstanceId.getInstance().getToken();
+                    new GetUserTask().execute(email, token);
                 } else {
                     googlesignIn.setVisibility(View.VISIBLE);
                     fbloginbutton.setVisibility(View.VISIBLE);
-                    snappyauth.signOut();
+                    //snappyauth.signOut();
                     LoginManager.getInstance().logOut();
                     signOut();
                     //Log.v("User SIgned out", "No User");
@@ -160,6 +162,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         @Override
                         public void onResult(Status status) {
                             Log.d(TAG,"Google user log out");
+                            if (snappyauthListener != null) {
+                                snappyauth.removeAuthStateListener(snappyauthListener);
+                            }
                         }
                     });
         }
@@ -176,6 +181,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             user = new User();
             loginuser = user;
             user.setEmail(email);
+            user.setToken(token);
             //Intent i = new Intent(getBaseContext(), UserProfileActitivy.class);
             Intent i = new Intent(getBaseContext(),ProfileDataCollectorActivity.class);
             i.putExtra(MainActivity.USER_LOGGED_IN,user);
