@@ -1,5 +1,7 @@
 package com.snappychat.friends;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,8 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.snappychat.MainActivity;
 import com.snappychat.R;
 import com.snappychat.model.User;
+import com.snappychat.networking.ServiceHandler;
+
 import java.util.ArrayList;
 
 /**
@@ -20,6 +26,7 @@ import java.util.ArrayList;
 public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<RecyclerConverstationsAdapter.ChatConversationViewHolder> {
     private static String TAG = "CONVERSATION_CHAT";
     private ArrayList<User> mDataset;
+    private static Context context = null;
 
     public RecyclerConverstationsAdapter(ArrayList<User> myDataset) {
         mDataset = myDataset;
@@ -33,6 +40,7 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
         public ImageView mImage;
         public ChatConversationViewHolder(View v) {
             super(v);
+            context = v.getContext();
             mCardView = (CardView) v.findViewById(R.id.card_view_conversations);
             mTextView = (TextView) v.findViewById(R.id.card_text_chat);
             mTextViewCardName = (TextView) v.findViewById(R.id.card_name_chat);
@@ -68,7 +76,7 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
     }
 
     @Override
-    public void onBindViewHolder(RecyclerConverstationsAdapter.ChatConversationViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerConverstationsAdapter.ChatConversationViewHolder holder, final int position) {
         holder.mTextView.setText(mDataset.get(position).getFirstName() + " " +mDataset.get(position).getLastName());
         holder.mTextViewCardName.setText(mDataset.get(position).getMessage());
         if(mDataset.get(position).getPending()){
@@ -79,6 +87,18 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
         if(!mDataset.get(position).getChatOwner()){
             holder.mButton.setVisibility(View.GONE);
         }
+        holder.mCardView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ChatActivity.class);
+                intent.putExtra(MainActivity.USER_LOGGED_IN,ChatConverstationsFragment.userLoggedIn);
+                //intent.putExtra(MainActivity.USER_LOGGED_IN, ServiceHandler.getUser(MainActivity.CURRENT_USER_LOGGED_IN_ID));
+                intent.putExtra(ChatActivity.USER_RECEIVER,mDataset.get(position));
+                context.startActivity(intent);
+                ///MainActivity.onOpenMessage(mDataset.get(position));
+                Log.d(TAG, "Delete chat was clicked!");
+            }
+        });
 
     }
 

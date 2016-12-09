@@ -375,8 +375,7 @@ public class ServiceHandler {
     public static ArrayList<User> getChatConversations(String user_id){
         ArrayList<User> chats = new ArrayList<>();
         try {
-            String url = Uri.parse(ENDPOINT_CHAT).buildUpon()
-                    .appendQueryParameter("search",user_id)
+            String url = Uri.parse(ENDPOINT_CHAT+"?search="+user_id).buildUpon()
                     .build().toString();
             String response = makeRequest(url,"GET",null);
             if(response != null){

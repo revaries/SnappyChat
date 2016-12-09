@@ -29,7 +29,7 @@ public class ChatConverstationsFragment extends Fragment{
     public static final String TAG = "CHAT_CONVERSATION";
     private static AsyncTask<String, Void, ArrayList<User>> chatConversationTask;
     public static RecyclerConverstationsAdapter adapter;
-    private User userLoggedIn;
+    public static User userLoggedIn;
     //PendingRequestsFragment.OnListFragmentInteractionListener mListener;
     private ProgressBar mProgressBar;
     RecyclerView recyclerView;
