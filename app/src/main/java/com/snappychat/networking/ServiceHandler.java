@@ -420,6 +420,23 @@ public class ServiceHandler {
         return chats;
     }
 
+    public static String deleteChatConversation(JSONObject json) {
+        String response = null;
+        try {
+            String url = Uri.parse(ENDPOINT_CHAT).buildUpon()
+                    .build().toString();
+
+            response = makeRequest(url,"DELETE",json.toString());
+            if(response != null){
+                Log.v(TAG,response);
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to delete chat conversation", e);
+        }
+        return response;
+    }
+
     public static String makeRequest (String urlSpec, String method, String jsonRequest) throws IOException {
         URL url = new URL(urlSpec);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
