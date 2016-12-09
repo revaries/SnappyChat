@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.snappychat.friends.ChatConverstationsActivity;
 import com.snappychat.friends.FriendsActivity;
 import com.snappychat.friends.SearchUserActivity;
 import com.snappychat.model.Timeline;
@@ -109,6 +110,11 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
                 return true;
             case R.id.search_bar:
                 intent = new Intent(this, SearchUserActivity.class);
+                intent.putExtra(USER_LOGGED_IN,userLoggedIn);
+                startActivity(intent);
+                return true;
+            case R.id.chat_messages:
+                intent = new Intent(this, ChatConverstationsActivity.class);
                 intent.putExtra(USER_LOGGED_IN,userLoggedIn);
                 startActivity(intent);
                 return true;

@@ -1,14 +1,10 @@
 package com.snappychat.friends;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +13,9 @@ import android.widget.Toast;
 
 import com.snappychat.MainActivity;
 import com.snappychat.R;
-import com.snappychat.friends.MyItemRecyclerViewAdapter;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,7 +38,7 @@ public class ChatConverstationsFragment extends Fragment{
         ChatConverstationsFragment fragment = new ChatConverstationsFragment();
         Bundle args = new Bundle();
         //args.putSerializable(MainActivity.USER_LOGGED_IN,user);
-        args.putSerializable(MainActivity.CURRENT_USER_LOGGED_IN_ID,user);
+        args.putSerializable(MainActivity.USER_LOGGED_IN,user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,7 +46,7 @@ public class ChatConverstationsFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        //userLoggedIn = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
+        userLoggedIn = (User) getActivity().getIntent().getSerializableExtra(MainActivity.USER_LOGGED_IN);
         getPendingFriendsList();
 
     }
@@ -115,7 +109,7 @@ public class ChatConverstationsFragment extends Fragment{
             chatConversationTask.execute(userLoggedIn.getEmail());
 
         ///temporary
-        chatConversationTask.execute(MainActivity.CURRENT_USER_LOGGED_IN_ID);
+        //chatConversationTask.execute();
     }
 
 
