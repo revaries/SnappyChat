@@ -14,6 +14,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -47,7 +48,7 @@ import java.io.IOException;
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = "Firebase Login";
-
+    public static final String STATUS = "status";
 
     //Creating Objects
     private FirebaseAuth snappyauth;
@@ -89,10 +90,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 } else {
                     googlesignIn.setVisibility(View.VISIBLE);
                     fbloginbutton.setVisibility(View.VISIBLE);
-                    //snappyauth.signOut();
-                    //LoginManager.getInstance().logOut();
-                    //signOut();
-                    Log.v("User SIgned out", "No User");
+                    snappyauth.signOut();
+                    LoginManager.getInstance().logOut();
+                    signOut();
+                    //Log.v("User SIgned out", "No User");
                 }
             }
         };
@@ -149,8 +150,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 Log.d("Facebook Login", error.toString());
             }
         });
-        //Facebook Login Button Closure
-
 
     }
 
@@ -168,26 +167,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void selectActivity() {
         if(user!=null) { //If user is found, redirect to timeline
-
-           /* Original to be kept Changing for Test purposes
-            */
             Intent i = new Intent(getBaseContext(), MainActivity.class);
             i.putExtra(MainActivity.USER_LOGGED_IN,user);
             i.putExtra(MainActivity.FROM_LOGIN,true);
             loginuser = user;
             startActivity(i);
-
-
-            //Remove After Implementation is checked and Works
-            /*
-<<<<<<< HEAD
-                Intent i = new Intent(getBaseContext(),ProfileDataCollector.java.class);
-=======
-                Intent i = new Intent(getBaseContext(),ProfileDataCollectorActivity.class);
->>>>>>> e8f8249aee162e8ca59c43044a5276afebf045e0
-                i.putExtra("user",user);
-                startActivity(i);
-            */
         }else { //if user doesn't exist redirects to user profile activity
             user = new User();
             loginuser = user;
