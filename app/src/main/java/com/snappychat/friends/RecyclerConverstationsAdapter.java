@@ -17,6 +17,9 @@ import com.snappychat.R;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -92,11 +95,28 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
             public void onClick(View v) {
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra(MainActivity.USER_LOGGED_IN,ChatConverstationsFragment.userLoggedIn);
-                //intent.putExtra(MainActivity.USER_LOGGED_IN, ServiceHandler.getUser(MainActivity.CURRENT_USER_LOGGED_IN_ID));
                 intent.putExtra(ChatActivity.USER_RECEIVER,mDataset.get(position));
                 context.startActivity(intent);
-                ///MainActivity.onOpenMessage(mDataset.get(position));
-                Log.d(TAG, "Delete chat was clicked!");
+            }
+        });
+
+        holder.mButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                JSONObject put_request = new JSONObject();
+                try {
+                    if(ChatConverstationsFragment.userLoggedIn.getChatOwner()) {
+                        put_request.put("user_creator_id", ChatConverstationsFragment.userLoggedIn.getEmail());
+                        put_request.put("user_receiver_id", mDataset.get(position).getEmail());
+                    }else{
+                        put_request.put("user_receiver_id", ChatConverstationsFragment.userLoggedIn.getEmail());
+                        put_request.put("user_creator_id", mDataset.get(position).getEmail());
+                    }
+                    ServiceHandler.deleteChatConversation(put_request);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d(TAG, "Chat conversation was deleted");
             }
         });
 
