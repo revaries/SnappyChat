@@ -87,17 +87,19 @@ public class ProfileDataSettingsQuestionsFragment extends Fragment {
         next.setOnClickListener(radioClickListener);
         back.setOnClickListener(radioClickListener);
 
+
+        if (operationToPerform.equals(ProfileDataCollectorActivity.EDIT))
+        {
+            next.setVisibility(View.INVISIBLE);
+            back.setVisibility(View.INVISIBLE);
+            save.setVisibility(View.VISIBLE);
+        }
+
         if (operationToPerform.equals(ProfileDataCollectorActivity.NEW))
         {
             next.setVisibility(View.VISIBLE);
             back.setVisibility(View.VISIBLE);
             save.setVisibility(View.INVISIBLE);
-        }
-        else if (operationToPerform.equals(ProfileDataCollectorActivity.EDIT))
-        {
-            next.setVisibility(View.INVISIBLE);
-            back.setVisibility(View.INVISIBLE);
-            save.setVisibility(View.VISIBLE);
         }
 
 

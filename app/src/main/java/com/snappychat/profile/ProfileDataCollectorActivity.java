@@ -237,6 +237,7 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
                 jsonObject.remove("email");
                 Log.v("My JSON Object",userString.toString());
                 ServiceHandler.updateUserWithString(snappyuser.getEmail(),jsonObject.toString());
+
             }
             catch (Exception e)
             {
