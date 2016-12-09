@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -14,6 +15,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -62,6 +64,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private static User loginuser;
     String email;
     private String token;
+    private ProgressBar progressBar;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -91,10 +94,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 } else {
                     googlesignIn.setVisibility(View.VISIBLE);
                     fbloginbutton.setVisibility(View.VISIBLE);
-                    //snappyauth.signOut();
-                    //LoginManager.getInstance().logOut();
-                    //signOut();
-                    //Log.v("User SIgned out", "No User");
                 }
             }
         };
@@ -136,6 +135,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         fbloginbutton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                progressBar.setVisibility(View.VISIBLE);
+                googlesignIn.setVisibility(View.GONE);
+                fbloginbutton.setVisibility(View.GONE);
                 Log.d("Facebook Login", "facebook:onSuccess:" + loginResult);
                 Log.d("Facebook Login", loginResult.getAccessToken().getToken().toString());
                 handleFacebookAccessToken(loginResult.getAccessToken());
@@ -152,14 +154,19 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
         if(getIntent().getSerializableExtra(STATUS) != null && getIntent().getSerializableExtra(STATUS).equals("signOut")){
             signOut();
         }
+
+
 
     }
 
     private void signOut() {
         snappyauth.signOut();
+        LoginManager.getInstance().logOut();
         if(googleApiClient.isConnected()) {
             Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
                     new ResultCallback<Status>() {
@@ -222,6 +229,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (requestcode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
+                progressBar.setVisibility(View.VISIBLE);
+                googlesignIn.setVisibility(View.GONE);
+                fbloginbutton.setVisibility(View.GONE);
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
@@ -255,7 +265,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
-
+                        progressBar.setVisibility(View.GONE);
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
@@ -263,6 +273,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            googlesignIn.setVisibility(View.VISIBLE);
+                            fbloginbutton.setVisibility(View.VISIBLE);
                         }
                             // ...
                     }
