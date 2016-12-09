@@ -14,7 +14,6 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -92,9 +91,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 } else {
                     googlesignIn.setVisibility(View.VISIBLE);
                     fbloginbutton.setVisibility(View.VISIBLE);
-                    snappyauth.signOut();
-                    LoginManager.getInstance().logOut();
-                    signOut();
+                    //snappyauth.signOut();
+                    //LoginManager.getInstance().logOut();
+                    //signOut();
                     //Log.v("User SIgned out", "No User");
                 }
             }
@@ -120,9 +119,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.google_login_button:
+                        googleApiClient.clearDefaultAccountAndReconnect();
                         signIn();
                         break;
-                    // ...
                 }
             }
         });
@@ -153,9 +152,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
+        if(getIntent().getSerializableExtra(STATUS) != null && getIntent().getSerializableExtra(STATUS).equals("signOut")){
+            signOut();
+        }
+
     }
 
     private void signOut() {
+        snappyauth.signOut();
         if(googleApiClient.isConnected()) {
             Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
                     new ResultCallback<Status>() {

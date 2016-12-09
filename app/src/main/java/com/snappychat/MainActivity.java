@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.snappychat.friends.ChatConverstationsActivity;
 import com.snappychat.friends.FriendsActivity;
 import com.snappychat.friends.SearchUserActivity;
@@ -119,8 +118,9 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
                 startActivity(intent);
                 return true;
             case R.id.sign_out:
-                FirebaseAuth.getInstance().signOut();
+                //FirebaseAuth.getInstance().signOut();
                 intent = new Intent(this, LoginActivity.class);
+                intent.putExtra(LoginActivity.STATUS,"signOut");
                 startActivity(intent);
                 //finish();
                 return true;
