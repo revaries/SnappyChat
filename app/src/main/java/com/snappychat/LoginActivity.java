@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 } else {
                     googlesignIn.setVisibility(View.VISIBLE);
                     fbloginbutton.setVisibility(View.VISIBLE);
-                    //snappyauth.signOut();
+                    snappyauth.signOut();
                     LoginManager.getInstance().logOut();
                     signOut();
                     //Log.v("User SIgned out", "No User");
@@ -162,9 +162,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         @Override
                         public void onResult(Status status) {
                             Log.d(TAG,"Google user log out");
-                            if (snappyauthListener != null) {
-                                snappyauth.removeAuthStateListener(snappyauthListener);
-                            }
+                            //if (snappyauthListener != null) {
+                            //    snappyauth.removeAuthStateListener(snappyauthListener);
+                            //}
                         }
                     });
         }
