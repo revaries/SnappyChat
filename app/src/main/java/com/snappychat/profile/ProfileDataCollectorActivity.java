@@ -215,6 +215,7 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
 
             Gson userGson = new Gson();
             String userString = userGson.toJson(snappyuser);
+            Log.v("Image Detail",snappyuser.getImage());
             Log.v("My JSON Object",userString.toString());
             ServiceHandler.createUser(userString);
             return null;
@@ -317,6 +318,9 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
                 byte[] imagebyte = byteArrayOutputStream.toByteArray();
                 String imagestring = Base64.encodeToString(imagebyte, Base64.DEFAULT);
                 snappyuser.setImage(imagestring);
+                ProfileDataProfilePictureFragment profpictFrag = (ProfileDataProfilePictureFragment) ProfilePictureFragment;
+                profpictFrag.setProfilePicture(imagestring);
+
             }
 
         }

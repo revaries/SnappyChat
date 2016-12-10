@@ -36,7 +36,7 @@ import java.util.Set;
 public class ProfileViewActivity extends AppCompatActivity {
 
     public static final String USER_TYPE = "user type";
-    private ImageView profilepicture;
+    private RoundedImageView profilepicture;
     private Uri imagefileuri;
     final int REQUEST_IMAGE_CAPTURE = 1;
     private User userLoggedIn;
@@ -49,6 +49,7 @@ public class ProfileViewActivity extends AppCompatActivity {
     private TextView Visibility;
     private TextView Notifications;
     private TextView Email;
+    private ImageView profilePictureEdit;
     private User profileUser;
 
     private MainActivity mainActivity;
@@ -67,11 +68,13 @@ public class ProfileViewActivity extends AppCompatActivity {
         Profession = (TextView) findViewById(R.id.profession);
         AboutMe = (TextView) findViewById(R.id.about_me);
         //Birthday = (TextView) findViewById(R.id.birthday);
-        profilepicture = (ImageView) findViewById(R.id.profilepicture);
+        profilepicture = (RoundedImageView) findViewById(R.id.profilepicture);
         NickName = (TextView) findViewById(R.id.nick_name);
         Visibility = (TextView)findViewById(R.id.visibility);
         Notifications = (TextView)findViewById(R.id.notifications);
         Email = (TextView)findViewById(R.id.email);
+        profilePictureEdit = (ImageView) findViewById(R.id.profile_picture_edit_icon);
+
 
         mainActivity = new MainActivity();
 
@@ -87,10 +90,21 @@ public class ProfileViewActivity extends AppCompatActivity {
         Profession.setText(profileUser.getProfession());
         AboutMe.setText(profileUser.getAboutMe());
         Visibility.setText(profileUser.getVisibility());
-        Notifications.setText(profileUser.getNotification().toString());
+
         NickName.setText(profileUser.getNickName());
         Email.setText(profileUser.getEmail());
 
+
+
+
+        if (profileUser.getNotification())
+        {
+            Notifications.setText("You will receive Email Notifications");
+        }
+        else
+        {
+            Notifications.setText("You will not receive Email Notifications");
+        }
 
         Name.setOnClickListener(textClickListeners);
         Interests.setOnClickListener(textClickListeners);
@@ -112,12 +126,16 @@ public class ProfileViewActivity extends AppCompatActivity {
 
 
 
-        profilepicture.setOnClickListener(new View.OnClickListener() {
+        profilePictureEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (userLoggedIn.getEmail().equals(profileUser.getEmail())) {
                     Log.v("Clicked On Picture", " Camera APp should Open ");
                     ProfilePictureSelector();
+                }
+                else
+                {
+                    profilePictureEdit.setVisibility(View.INVISIBLE);
                 }
             }
         });

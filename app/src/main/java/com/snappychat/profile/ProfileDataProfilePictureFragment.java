@@ -65,6 +65,7 @@ public class ProfileDataProfilePictureFragment extends Fragment {
 
 
 
+
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,6 +94,13 @@ public class ProfileDataProfilePictureFragment extends Fragment {
         return view;
     }
 
+
+    public void setProfilePicture(String imageDetails)
+    {
+        byte[] imagearray = Base64.decode(imageDetails, Base64.DEFAULT);
+        Bitmap image = BitmapFactory.decodeByteArray(imagearray, 0, imagearray.length);
+        profilePicture.setImageBitmap(image);
+    }
 
     @Override
     public void onAttach(Context context) {
