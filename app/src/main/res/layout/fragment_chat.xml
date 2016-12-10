@@ -39,6 +39,13 @@
             android:maxHeight="80dp" />
 
         <ImageButton
+            android:id="@+id/sendImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:background="@drawable/add_chat_image"
+            android:layout_weight="0.12"/>
+
+        <ImageButton
             android:id="@+id/sendMessageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
