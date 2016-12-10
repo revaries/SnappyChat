@@ -118,7 +118,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.google_login_button:
-                        googleApiClient.clearDefaultAccountAndReconnect();
+                        if(googleApiClient.isConnected())
+                            googleApiClient.clearDefaultAccountAndReconnect();
                         signIn();
                         break;
                 }
