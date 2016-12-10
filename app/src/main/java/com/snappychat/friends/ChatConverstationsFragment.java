@@ -50,7 +50,7 @@ public class ChatConverstationsFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         userLoggedIn = (User) getActivity().getIntent().getSerializableExtra(MainActivity.USER_LOGGED_IN);
-        getPendingFriendsList();
+        getChatsList();
 
     }
 
@@ -100,7 +100,7 @@ public class ChatConverstationsFragment extends Fragment{
         adapter.updateData(result);
     }
 
-    public void getPendingFriendsList(){
+    public void getChatsList(){
         chatConversationTask = new AsyncTask<String, Void, ArrayList<User>>() {
             @Override
             protected ArrayList<User> doInBackground(String... params) {

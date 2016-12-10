@@ -1,14 +1,13 @@
 package com.snappychat.friends;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.snappychat.R;
-import com.snappychat.model.User;
-
-import static com.snappychat.MainActivity.USER_LOGGED_IN;
 
 /**
  * Created by Jelson on 12/8/16.
@@ -34,10 +33,30 @@ public class ChatConverstationsActivity extends AppCompatActivity implements Cha
     }
 
     @Override
-    public void onDeleteChatConversation(String creator, String receiver) {
-        ChatConverstationsFragment f = (ChatConverstationsFragment) fragment;
-        f.deleteChatConversation(creator, receiver);
+    public void onDeleteChatConversation(final String creator, final String receiver) {
+        final ChatConverstationsFragment f = (ChatConverstationsFragment) fragment;
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage("Are you sure that you want to remove this chat conversation?");
+        builder1.setCancelable(true);
 
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        f.deleteChatConversation(creator, receiver);
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 }
 

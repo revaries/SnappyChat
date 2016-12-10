@@ -46,20 +46,6 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
             mButton = (ImageButton) v.findViewById(R.id.remove_chat);
             mImage = (ImageView) v.findViewById(R.id.card_image_chat);
 
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d(TAG, "Card view was clicked!");
-                }
-            });
-
-            mButton.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        Log.d(TAG, "Delete chat was clicked!");
-                    }
-            });
-
         }
     }
 
@@ -106,7 +92,7 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
         });
 
     }
-    
+
     @Override
     public int getItemCount() {
         return mDataset.size();
