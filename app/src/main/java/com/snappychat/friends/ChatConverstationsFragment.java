@@ -1,5 +1,6 @@
 package com.snappychat.friends;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.snappychat.networking.ServiceHandler.getChatConversations;
+
 /**
  * Created by Jelson on 12/7/16.
  */
@@ -30,9 +33,9 @@ public class ChatConverstationsFragment extends Fragment{
     private static AsyncTask<String, Void, ArrayList<User>> chatConversationTask;
     public static RecyclerConverstationsAdapter adapter;
     public static User userLoggedIn;
-    //PendingRequestsFragment.OnListFragmentInteractionListener mListener;
     private ProgressBar mProgressBar;
     RecyclerView recyclerView;
+    private OnListFragmentInteractionListener mListener;
 
     public static ChatConverstationsFragment newInstance(User user) {
         ChatConverstationsFragment fragment = new ChatConverstationsFragment();
@@ -56,7 +59,7 @@ public class ChatConverstationsFragment extends Fragment{
         View v = inflater.inflate(R.layout.fragment_chat_conversations, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.chat_conversations_recycler_view);
         recyclerView.setHasFixedSize(true);
-        adapter = new RecyclerConverstationsAdapter(new ArrayList<User>());
+        adapter = new RecyclerConverstationsAdapter(new ArrayList<User>(), mListener);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(llm);
@@ -64,29 +67,34 @@ public class ChatConverstationsFragment extends Fragment{
         return v;
     }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof PendingRequestsFragment.OnListFragmentInteractionListener) {
-//            mListener = (PendingRequestsFragment.OnListFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnListFragmentInteractionListener");
-//        }
-//    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnListFragmentInteractionListener) {
+            mListener = (OnListFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                + " must implement OnListFragmentInteractionListener");
+        }
+}
 
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
-//    public interface OnListFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onPendingChanged(User item, boolean answer);
-//    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
 
-    void setupAdapter(ArrayList<User> result) {
+
+    public interface OnListFragmentInteractionListener {
+        void onDeleteChatConversation(String creator, String receiver);
+    }
+
+    public void setupAdapter(ArrayList<User> result) {
         if (getActivity() == null || recyclerView == null) return;
         mProgressBar.setVisibility(View.GONE);
         adapter.updateData(result);
@@ -103,44 +111,38 @@ public class ChatConverstationsFragment extends Fragment{
             protected void onPostExecute(ArrayList<User> result) {
                 setupAdapter(result);
             }
-
         };
         if(userLoggedIn != null)
             chatConversationTask.execute(userLoggedIn.getEmail());
 
-        ///temporary
-        //chatConversationTask.execute();
     }
 
-
-    public void modifyPendingRequest(User friendCard, boolean answer){
-        AsyncTask<Object, Void, ArrayList<User>> invitationFriendsTask = new AsyncTask<Object, Void, ArrayList<User>>() {
+    public void deleteChatConversation(String user_creator, String user_receiver){
+        AsyncTask<String, Void, ArrayList<User>> deleteConversationTask = new AsyncTask<String, Void, ArrayList<User>>() {
             @Override
-            protected ArrayList<User> doInBackground(Object... params) {
-                JSONObject jsonObject = new JSONObject();
+            protected ArrayList<User> doInBackground(String... params) {
+                JSONObject put_request = new JSONObject();
                 try {
-                    jsonObject.put("email",(String)params[0]);
-                    jsonObject.put("accept",(Boolean) params[2]);
-                    String result = ServiceHandler.updateFriendPending((String)params[1], jsonObject);
-                    if(result != null)
-                        return ServiceHandler.getFriendsPending((String)params[1]);
-
+                    put_request.put("user_creator_id", params[0]);
+                    put_request.put("user_receiver_id", params[1]);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                String response = ServiceHandler.deleteChatConversation(put_request);
+                if(response != null)
+                    return getChatConversations(userLoggedIn.getEmail());
                 return null;
             }
 
             @Override
             protected void onPostExecute(ArrayList<User> result) {
                 if(result != null){
-                    Toast.makeText(getActivity(), "Friend pending modified!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Chat conversation deleted!", Toast.LENGTH_SHORT).show();
                     setupAdapter(result);
                 }
             }
-
         };
-        invitationFriendsTask.execute(friendCard.getEmail(),userLoggedIn.getEmail(),answer);
+        deleteConversationTask.execute(user_creator,user_receiver);
     }
 }
 
