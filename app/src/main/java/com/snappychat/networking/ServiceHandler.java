@@ -410,8 +410,6 @@ public class ServiceHandler {
                     user.setChatOwner(chatOwner);
                     user.setChatConversationId(chat_id);
                     chats.add(user);
-
-
                 }
             }
 
@@ -422,19 +420,20 @@ public class ServiceHandler {
         return chats;
     }
 
-    public static String deleteChatConversation(String chat_id) {
+    public static String deleteChatConversation(JSONObject jsonObject) {
         String response = null;
         try {
-            String url = Uri.parse(ENDPOINT_CHAT + "/"+chat_id).buildUpon()
+            String url = Uri.parse(ENDPOINT_CHAT).buildUpon()
                     .build().toString();
-
-            response = makeRequest(url,"DELETE",chat_id);
+            response = makeRequest(url,"DELETE",jsonObject.toString());
             if(response != null){
                 Log.v(TAG,response);
             }
 
         } catch (Exception e) {
-            Log.e(TAG, "Failed to delete chat conversation", e);
+            if(response != null) {
+                Log.e(TAG, "Failed to delete chat conversation", e);
+            }
         }
         return response;
     }
