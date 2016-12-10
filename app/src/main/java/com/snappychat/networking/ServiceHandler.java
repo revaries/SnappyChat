@@ -146,7 +146,15 @@ public class ServiceHandler {
                 if(jsonObject.optJSONArray("friends") != null) {
                     Type listType = new TypeToken<List<User>>(){}.getType();
                     friends = new Gson().fromJson(jsonObject.optJSONArray("friends").toString(), listType);
-                    for(User friend : friends){friend.setFriend(true);};
+                    for(int i=0; i < friends.size(); i++){
+                        User friend = friends.get(i);
+                        JSONObject jsonObject1 = jsonObject.optJSONArray("friends").getJSONObject(i);
+                        if(jsonObject1.optJSONObject("image") != null){
+                            friend.setImage(jsonObject1.optJSONObject("image").optString("data").trim());
+                            friend.setImage1(friend.getImageIntoBitmap());
+                        }
+                        friend.setFriend(true);
+                    };
                 }
 
             }

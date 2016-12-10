@@ -53,6 +53,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             holder.statusTextView.setText("On");
         if(holder.mItem.getImage() != null && !holder.mItem.getImage().isEmpty()) {
             holder.imageProfileImageView.setImageBitmap(holder.mItem.getImageIntoBitmap());
+            holder.imageProfileImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }else {
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 holder.imageProfileImageView.setImageTintList(ColorStateList.valueOf(holder.imageProfileImageView.getContext().getResources().getColor(R.color.com_facebook_blue)));
@@ -64,6 +65,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             holder.friendImageView.setVisibility(View.GONE);
             holder.friendTextView.setVisibility(View.GONE);
             holder.chatButton.setVisibility(View.GONE);
+            holder.addFriendButton.setVisibility(View.VISIBLE);
         }else {
             holder.addFriendButton.setVisibility(View.GONE);
             holder.friendImageView.setVisibility(View.VISIBLE);

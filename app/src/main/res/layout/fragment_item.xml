@@ -29,7 +29,8 @@
             android:layout_height="60dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_account_circle_black_24dp"></ImageView>
+            android:src="@drawable/ic_account_circle_black_24dp"
+            android:scaleType="fitXY"/>
 
 
     </android.support.v7.widget.CardView>
