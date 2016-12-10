@@ -75,7 +75,6 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
         if(!mDataset.get(position).getChatOwner()){
             holder.mButton.setVisibility(View.GONE);
         }
-        holder.mCardView.setMinimumHeight(100);
         holder.mCardView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
