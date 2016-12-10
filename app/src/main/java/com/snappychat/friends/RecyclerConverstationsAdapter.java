@@ -2,6 +2,8 @@ package com.snappychat.friends;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -63,6 +65,7 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
     @Override
     public void onBindViewHolder(RecyclerConverstationsAdapter.ChatConversationViewHolder holder, final int position) {
         holder.mTextView.setText(mDataset.get(position).getFirstName() + " " +mDataset.get(position).getLastName());
+        holder.mTextView.setTextColor(Color.RED);
         holder.mTextViewCardName.setText(mDataset.get(position).getMessage());
         if(mDataset.get(position).getPending()){
             holder.mImage.setImageResource(R.drawable.circle_unread);
@@ -72,6 +75,7 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
         if(!mDataset.get(position).getChatOwner()){
             holder.mButton.setVisibility(View.GONE);
         }
+        holder.mCardView.setMinimumHeight(100);
         holder.mCardView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

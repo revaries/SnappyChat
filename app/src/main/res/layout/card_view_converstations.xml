@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="68dp" >
@@ -9,14 +10,16 @@
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_margin="2dp"
-        android:layout_height="100dp"
+        android:layout_height="match_parent"
         card_view:cardCornerRadius="4dp"
-        card_view:elevation="25dp">
+        card_view:elevation="5dp"
+        card_view:cardElevation="8dp"
+        card_view:cardBackgroundColor="@color/com_facebook_button_login_silver_background_color_pressed">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:background="@color/com_facebook_button_background_color_disabled">
+            tools:background="@color/com_facebook_button_login_silver_background_color_pressed">
 
             <ImageView
                 android:id="@+id/card_image_chat"
@@ -36,7 +39,9 @@
                 android:layout_below="@+id/card_text_chat"
                 android:layout_alignStart="@+id/card_text_chat"
                 android:layout_marginTop="6dp"
-                android:textSize="18sp">
+                android:textSize="18sp"
+                android:textColor="@color/com_facebook_button_send_background_color_pressed"
+                android:textStyle="normal|bold">
             </TextView>
 
             <TextView
@@ -46,12 +51,12 @@
                 android:gravity="center"
                 android:text="Name"
                 android:layout_marginStart="16dp"
-                tools:textColor="@color/common_google_signin_btn_text_dark_focused"
+                tools:textColor="@android:color/holo_red_dark"
                 android:textSize="18sp"
                 android:textStyle="normal|bold"
+                android:layout_marginTop="6dp"
                 android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/card_image_chat"
-                android:layout_marginTop="10dp">
+                android:layout_toEndOf="@+id/card_image_chat">
             </TextView>
 
             <ImageButton
@@ -60,7 +65,9 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_delete_black_24dp"
                 android:tint="@color/com_facebook_blue"
-                android:layout_above="@+id/card_name_chat"
+                android:background="@null"
+                android:layout_marginEnd="8dp"
+                android:layout_alignTop="@+id/card_text_chat"
                 android:layout_alignParentEnd="true"/>
 
         </RelativeLayout>
