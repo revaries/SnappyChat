@@ -420,13 +420,13 @@ public class ServiceHandler {
         return chats;
     }
 
-    public static String deleteChatConversation(JSONObject json) {
+    public static String deleteChatConversation(String chat_id) {
         String response = null;
         try {
-            String url = Uri.parse(ENDPOINT_CHAT).buildUpon()
+            String url = Uri.parse(ENDPOINT_CHAT + "/"+chat_id).buildUpon()
                     .build().toString();
 
-            response = makeRequest(url,"DELETE",json.toString());
+            response = makeRequest(url,"DELETE",chat_id);
             if(response != null){
                 Log.v(TAG,response);
             }
