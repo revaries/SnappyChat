@@ -3,6 +3,7 @@ package com.snappychat.friends;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.snappychat.MainActivity;
 import com.snappychat.R;
 import com.snappychat.model.User;
@@ -32,9 +35,11 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
     private static String TAG = "CONVERSATION_CHAT";
     private ArrayList<User> mDataset;
     private static Context context = null;
+    private final ChatConverstationsFragment.OnListFragmentInteractionListener mListener;
 
-    public RecyclerConverstationsAdapter(ArrayList<User> myDataset) {
+    public RecyclerConverstationsAdapter(ArrayList<User> myDataset, ChatConverstationsFragment.OnListFragmentInteractionListener listener) {
         mDataset = myDataset;
+        mListener = listener;
     }
 
     public static class ChatConversationViewHolder extends RecyclerView.ViewHolder {
@@ -105,40 +110,45 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
         holder.mButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                deleteChatConversation(ChatConverstationsFragment.userLoggedIn.getEmail(),
-                        ChatConverstationsFragment.userLoggedIn.getEmail(), mDataset.get(position).getEmail());
+//                deleteChatConversation(ChatConverstationsFragment.userLoggedIn.getEmail(),
+//                        ChatConverstationsFragment.userLoggedIn.getEmail(), mDataset.get(position).getEmail());
+                mListener.onDeleteChatConversation(ChatConverstationsFragment.userLoggedIn.getEmail(), mDataset.get(position).getEmail());
+
                 Log.d(TAG, "Chat conversation was deleted");
             }
         });
 
     }
 
-    public void deleteChatConversation(String current_user, String user_creator, String user_receiver){
-        AsyncTask<String, Void, ArrayList<User>> deleteConversationTask = new AsyncTask<String, Void, ArrayList<User>>() {
-            @Override
-            protected ArrayList<User> doInBackground(String... params) {
-                JSONObject put_request = new JSONObject();
-                try {
-                    put_request.put("user_creator_id", params[1]);
-                    put_request.put("user_receiver_id", params[2]);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                String response = ServiceHandler.deleteChatConversation(put_request);
-                if(response != null)
-                    return getChatConversations(params[0]);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(ArrayList<User> result) {
-                if(result != null){
-                    updateData(result);
-                }
-            }
-        };
-        deleteConversationTask.execute(current_user,user_creator,user_receiver);
-    }
+//    public void deleteChatConversation(String current_user, String user_creator, String user_receiver){
+//        AsyncTask<String, Void, ArrayList<User>> deleteConversationTask = new AsyncTask<String, Void, ArrayList<User>>() {
+//            @Override
+//            protected ArrayList<User> doInBackground(String... params) {
+//                JSONObject put_request = new JSONObject();
+//                try {
+//                    put_request.put("user_creator_id", params[1]);
+//                    put_request.put("user_receiver_id", params[2]);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                String response = ServiceHandler.deleteChatConversation(put_request);
+//                if(response != null)
+//                    return getChatConversations(params[0]);
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(ArrayList<User> result) {
+//                if(result != null){
+//                    FragmentManager fm = getSupportFragmentManager();
+//                    ChatConverstationsFragment fragment = new ChatConverstationsFragment();
+//                    fragment.conversationDeleted();
+//                    updateData(result);
+//                }
+//            }
+//        };
+//        deleteConversationTask.execute(current_user,user_creator,user_receiver);
+//    }
 
     @Override
     public int getItemCount() {
