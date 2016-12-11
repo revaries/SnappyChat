@@ -33,7 +33,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.snappychat.MainActivity.USER_LOGGED_IN;
 
@@ -43,7 +42,7 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
     final int REQUEST_IMAGE_CAPTURE = 1;
     public final static String EDIT = "EDIT";
     public final static String NEW = "NEW";
-    private static User snappyuser;
+    private User snappyuser;
     private Fragment ProfileNameQuestionFragment;
     private Fragment ProfileSettingsQuestionFragment;
     private Fragment ProfileInterestQuestionFragment;
@@ -206,21 +205,28 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
 
     }
 
-    private class NewUserCreator extends AsyncTask<Void, Void, Void>
+    private class NewUserCreator extends AsyncTask<Void, Void, String>
     {
 
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected String doInBackground(Void... voids) {
 
             Gson userGson = new Gson();
+            JSONObject jsonObject = null;
             String userString = userGson.toJson(snappyuser);
-            Log.v("Image Detail",snappyuser.getImage());
-            Log.v("My JSON Object",userString.toString());
-            ServiceHandler.createUser(userString);
-            return null;
+            //jsonObject = new JSONObject(userGson.toJson(snappyuser));
+            //jsonObject.put("image", new JSONObject().put("data",snappyuser.getImage()));
+            return ServiceHandler.createUser(userString);
+
         }
 
+        @Override
+        protected void onPostExecute(String response) {
+            if(response != null){
+
+            }
+        }
     }
 
     private class UpdateUser extends AsyncTask<Void, Void, Void>
