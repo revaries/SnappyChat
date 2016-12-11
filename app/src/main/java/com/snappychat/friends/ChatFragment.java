@@ -1,5 +1,6 @@
 package com.snappychat.friends;
 
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -47,6 +49,8 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
     public static ArrayList<ChatMessage> chatlist;
     public static ChatAdapter chatAdapter;
     ListView msgListView;
+    private ImageButton mSendImageButton;
+    private ImageView mAddImage;
 
     //temporary destination key
     private static String token;
@@ -89,6 +93,19 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                 switch (v.getId()) {
                     case R.id.sendMessageButton:
                         sendTextMessage();
+                }
+            }
+        });
+
+        mSendImageButton = (ImageButton) view.findViewById(R.id.sendImageButton);
+        mAddImage = (ImageView) view.findViewById(R.id.image_upload);
+        mSendImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mAddImage.getVisibility() == View.GONE){
+                    mAddImage.setVisibility(View.VISIBLE);
+                }else{
+                    mAddImage.setVisibility(View.GONE);
                 }
             }
         });
