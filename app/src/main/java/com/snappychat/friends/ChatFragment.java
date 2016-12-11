@@ -16,6 +16,7 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ import com.snappychat.model.ChatMessage;
 import com.snappychat.model.User;
 import com.snappychat.networking.FriendsHandler;
 import com.snappychat.networking.ServiceHandler;
+import com.snappychat.profile.ProfileDataProfilePictureFragment;
 import com.snappychat.profile.ProfileViewActivity;
 import com.snappychat.profile.RoundedImageView;
 
@@ -124,7 +126,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         });
 
         mSendImageButton = (ImageButton) view.findViewById(R.id.sendImageButton);
-        mAddImage = (ImageView) view.findViewById(R.id.image_upload);
+        //mAddImage = (ImageView) view.findViewById(R.id.image_upload);
         profilepicture = (RoundedImageView) view.findViewById(R.id.profilepicture);
         mSendImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -261,6 +263,28 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
             chatMessage.Time = getCurrentTime();
             msg_edittext.setText("");
             //updateView(chatMessage);
+            postMessage(chatMessage);
+            updateViewAndChatStatus(chatMessage,true);
+        }
+    }
+
+    public void sendImageMessage(Bitmap imgBitMap) {
+        String message = "";//msg_edittext.getEditableText().toString();
+        if (imgBitMap!=null)
+        {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            imgBitMap.compress(Bitmap.CompressFormat.PNG, 50, byteArrayOutputStream);
+            byte[] imagebyte = byteArrayOutputStream.toByteArray();
+            message = Base64.encodeToString(imagebyte, Base64.DEFAULT);
+        }
+        if (!message.equalsIgnoreCase("")) {
+            final ChatMessage chatMessage = new ChatMessage(((ChatActivity)getActivity()).userSender.getEmail(), ((ChatActivity)getActivity()).userReceiver.getEmail(),
+                    message, "" + random.nextInt(1000), true, "image");
+            chatMessage.setMsgID();
+            chatMessage.setChatId(chatId);
+            chatMessage.body = message;
+            chatMessage.Date = getCurrentDate();
+            chatMessage.Time = getCurrentTime();
             postMessage(chatMessage);
             updateViewAndChatStatus(chatMessage,true);
         }
@@ -414,7 +438,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         }
     }
 
-    public void showDialog(Bitmap imageBitMap) {
+    public void showDialog(final Bitmap imageBitMap) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
         builder1.setMessage("Are you sure that you want to remove this friend?");
         builder1.setCancelable(true);
@@ -429,6 +453,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Log.d(TAG, "Dialog send was clicked!");
+                sendImageMessage(imageBitMap);
             }
         });
 
@@ -443,6 +468,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Log.d(TAG, "Dialog choose was clicked!");
+                ProfilePictureSelector();
             }
         });
 
