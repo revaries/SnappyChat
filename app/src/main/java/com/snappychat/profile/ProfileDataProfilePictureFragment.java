@@ -89,8 +89,6 @@ public class ProfileDataProfilePictureFragment extends Fragment {
             }
         });
 
-
-
         return view;
     }
 
