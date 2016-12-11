@@ -273,7 +273,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         if (imgBitMap!=null)
         {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            imgBitMap.compress(Bitmap.CompressFormat.PNG, 50, byteArrayOutputStream);
+            imgBitMap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] imagebyte = byteArrayOutputStream.toByteArray();
             message = Base64.encodeToString(imagebyte, Base64.DEFAULT);
         }
