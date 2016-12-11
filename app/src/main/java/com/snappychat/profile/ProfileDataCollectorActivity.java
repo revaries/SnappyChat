@@ -303,7 +303,7 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
                 Uri imguri = data.getData();
                 try{
                     imagebitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),imguri);
-                    imagebitmap = scaleDownBitmap(imagebitmap,100,this);
+                    imagebitmap = scaleDownBitmap(imagebitmap,50,this);
                 }
                 catch (IOException e)
                 {
@@ -314,7 +314,7 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
             if (imagebitmap!=null)
             {
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                imagebitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                imagebitmap.compress(Bitmap.CompressFormat.PNG, 50, byteArrayOutputStream);
                 byte[] imagebyte = byteArrayOutputStream.toByteArray();
                 String imagestring = Base64.encodeToString(imagebyte, Base64.DEFAULT);
                 snappyuser.setImage(imagestring);
