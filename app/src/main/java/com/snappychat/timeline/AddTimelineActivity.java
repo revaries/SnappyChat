@@ -6,11 +6,12 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.snappychat.MainActivity;
 import com.snappychat.R;
+import com.snappychat.model.ImageUtils;
 import com.snappychat.model.Timeline;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
@@ -95,6 +97,7 @@ public class AddTimelineActivity extends AppCompatActivity {
         startActivityForResult(chooserintent,REQUEST_IMAGE_CAPTURE);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -117,7 +120,8 @@ public class AddTimelineActivity extends AppCompatActivity {
 
 
             }
-            adapter.addPicture(imagebitmap);
+            compressImage(imagebitmap);
+            //adapter.addPicture(imagebitmap);
         }
     }
 
@@ -126,7 +130,33 @@ public class AddTimelineActivity extends AppCompatActivity {
     }
 
     private void storeTimeline(){
-        Timeline timeline = new Timeline();
+        new Thread(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void run() {
+                Timeline timeline = new Timeline();
+                timeline.setUserId(userLoggedIn.getId());
+                timeline.setComment(timelineComment.getText().toString());
+                timeline.setImages(new ArrayList<String>());
+                for(Bitmap image : adapter.getImagesList()){
+                    timeline.getImages().add(ImageUtils.encodeImageBase64(image));
+                }
+                String timelineToString = new Gson().toJson(timeline,Timeline.class);
+                final String result = ServiceHandler.createTimeline(userLoggedIn.getEmail(),timelineToString);
+                gridView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(result != null)
+                            callBackActivity();
+                        else
+                            Toast.makeText(AddTimelineActivity.this, "Saving timeline failed.",
+                                    Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
+
+        /*Timeline timeline = new Timeline();
         timeline.setUserId(userLoggedIn.getId());
         timeline.setComment(timelineComment.getText().toString());
         timeline.setImages(adapter.getImagesEncodedList());
@@ -134,7 +164,7 @@ public class AddTimelineActivity extends AppCompatActivity {
         AsyncTask<String,Void,String> task = new AsyncTask<String, Void, String>() {
             @Override
             protected String doInBackground(String... params) {
-                return ServiceHandler.createTimeline(params[0],params[1]);
+                return createTimeline(params[0],params[1]);
             }
 
             @Override
@@ -147,8 +177,24 @@ public class AddTimelineActivity extends AppCompatActivity {
             }
         };
 
-        task.execute(userLoggedIn.getEmail(),timelineToString);
+        task.execute(userLoggedIn.getEmail(),timelineToString);*/
     }
 
 
+    private void compressImage(final Bitmap image){
+        new Thread(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void run() {
+                final Bitmap scaledBitmap = ImageUtils.scaleImageAspectRatio(image);
+                //To run on UI Thread
+                gridView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.addPicture(scaledBitmap);
+                    }
+                });
+            }
+        }).start();
+    }
 }

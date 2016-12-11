@@ -1,10 +1,5 @@
 package com.snappychat.model;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
-import android.util.Log;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -140,17 +135,6 @@ public class User implements Serializable{
 
     public void setStatus(Boolean status) {
         this.status = status;
-    }
-
-    public Bitmap getImageIntoBitmap(){
-        Bitmap decodedByte = null;
-        try {
-            byte[] decodedString = Base64.decode(image,Base64.DEFAULT);
-            decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        }catch (Exception ex){
-            Log.e("User", "Error converting image to bitmap",ex);
-        }
-        return decodedByte;
     }
 
     public String getAboutMe() {
