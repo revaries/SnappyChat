@@ -2,7 +2,7 @@ package com.snappychat.timeline;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -11,7 +11,6 @@ import android.widget.ImageView;
 
 import com.snappychat.R;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -21,20 +20,18 @@ import java.util.ArrayList;
 public class ImageAdapter extends BaseAdapter {
 
     private ArrayList<Bitmap> imagesList;
-    private ArrayList<String> imagesEncodedList;
     private ImageView imageView;
     private Context mContext;
 
     public ImageAdapter(Context context, ArrayList<Bitmap> imagesList) {
         super();
         this.imagesList = imagesList;
-        imagesEncodedList = new ArrayList<String>();
         mContext = context;
     }
 
     @Override
     public int getCount() {
-        return imagesList.size();
+        return getImagesList().size();
     }
 
     @Override
@@ -62,22 +59,23 @@ public class ImageAdapter extends BaseAdapter {
 
             imageView = (ImageView) convertView;
         }
-        imageView.setImageBitmap(imagesList.get(position));
+        imageView.setImageBitmap(getImagesList().get(position));
         return imageView;
     }
 
     public void addPicture(Bitmap image) {
-        //Convert bitmap to byte[]
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
-        byte[] imagebyte = byteArrayOutputStream.toByteArray();
-        String encodedImage = Base64.encodeToString(imagebyte,Base64.DEFAULT);
-        getImagesEncodedList().add(encodedImage.trim());
-        imagesList.add(image);
+        Log.d("ImageAdapter","Image size: "+image.getByteCount());
+        //getImagesEncodedList().add(encodedImage.trim());
+        getImagesList().add(image);
         notifyDataSetChanged();
     }
 
-    public ArrayList<String> getImagesEncodedList() {
-        return imagesEncodedList;
+
+    public ArrayList<Bitmap> getImagesList() {
+        return imagesList;
+    }
+
+    public void setImagesList(ArrayList<Bitmap> imagesList) {
+        this.imagesList = imagesList;
     }
 }

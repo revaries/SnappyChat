@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.snappychat.R;
 import com.snappychat.friends.SearchUserFragment.OnListFragmentInteractionListener;
+import com.snappychat.model.ImageUtils;
 import com.snappychat.model.User;
 
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         }else
             holder.statusTextView.setText("On");
         if(holder.mItem.getImage() != null && !holder.mItem.getImage().isEmpty()) {
-            holder.imageProfileImageView.setImageBitmap(holder.mItem.getImageIntoBitmap());
+            holder.imageProfileImageView.setImageBitmap(ImageUtils.decodeImageBase64(holder.mItem.getImage()));
             holder.imageProfileImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }else {
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
