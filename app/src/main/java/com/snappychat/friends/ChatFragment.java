@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,16 +23,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-
-import com.facebook.Profile;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.snappychat.R;
 import com.snappychat.model.ChatMessage;
-import com.snappychat.model.User;
 import com.snappychat.networking.FriendsHandler;
 import com.snappychat.networking.ServiceHandler;
-import com.snappychat.profile.ProfileDataProfilePictureFragment;
-import com.snappychat.profile.ProfileViewActivity;
 import com.snappychat.profile.RoundedImageView;
 
 import org.json.JSONArray;
@@ -90,7 +83,6 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
 
     //for images
     final int REQUEST_IMAGE_CAPTURE = 1;
-    private RoundedImageView imageToSend;
     private Uri imagefileuri;
     private RoundedImageView profilepicture;
 
@@ -126,18 +118,11 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         });
 
         mSendImageButton = (ImageButton) view.findViewById(R.id.sendImageButton);
-        //mAddImage = (ImageView) view.findViewById(R.id.image_upload);
         profilepicture = (RoundedImageView) view.findViewById(R.id.profilepicture);
         mSendImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ProfilePictureSelector();
-//                ProfilePictureSelector();
-//                if(mAddImage.getVisibility() == View.GONE){
-//                    mAddImage.setVisibility(View.VISIBLE);
-//                }else{
-//                    mAddImage.setVisibility(View.GONE);
-//                }
             }
         });
 
@@ -262,14 +247,13 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
             chatMessage.Date = getCurrentDate();
             chatMessage.Time = getCurrentTime();
             msg_edittext.setText("");
-            //updateView(chatMessage);
             postMessage(chatMessage);
             updateViewAndChatStatus(chatMessage,true);
         }
     }
 
     public void sendImageMessage(Bitmap imgBitMap) {
-        String message = "";//msg_edittext.getEditableText().toString();
+        String message = "";
         if (imgBitMap!=null)
         {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -431,8 +415,6 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                 {
                     Log.e("IOEXception", e.toString());
                 }
-
-
             }
             showDialog(imagebitmap);
         }
@@ -440,7 +422,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
 
     public void showDialog(final Bitmap imageBitMap) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
-        builder1.setMessage("Are you sure that you want to remove this friend?");
+        builder1.setMessage("Do you want to send this image?");
         builder1.setCancelable(true);
         LayoutInflater factory = LayoutInflater.from(getActivity());
         View view = factory.inflate(R.layout.send_image_dialog, null);
@@ -452,7 +434,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         builder1.setPositiveButton("Send", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Log.d(TAG, "Dialog send was clicked!");
+                //Log.d(TAG, "Dialog send was clicked!");
                 sendImageMessage(imageBitMap);
             }
         });
@@ -467,7 +449,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         builder1.setNeutralButton("Choose Another", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Log.d(TAG, "Dialog choose was clicked!");
+                //Log.d(TAG, "Dialog choose was clicked!");
                 ProfilePictureSelector();
             }
         });
