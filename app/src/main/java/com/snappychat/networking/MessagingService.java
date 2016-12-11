@@ -53,9 +53,10 @@ public class MessagingService extends FirebaseMessagingService {
             String message = remoteMessage.getData().get("message");
             String sender_id = remoteMessage.getData().get("user_sender_id");
             String receiver_id = remoteMessage.getData().get("user_receiver_id");
+            String type = remoteMessage.getData().get("type");
             Random random = new Random();
             final ChatMessage chatMessage = new ChatMessage(sender_id, receiver_id,
-                    message, "" + random.nextInt(1000), false);
+                    message, "" + random.nextInt(1000), false, type);
             chatMessage.setMsgID();
             chatMessage.body = message;
             chatMessage.Date = ChatFragment.getCurrentDate();

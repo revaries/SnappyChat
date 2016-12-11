@@ -345,6 +345,26 @@ public class ServiceHandler {
         return response;
     }
 
+
+    public static String createTimeline(String userId, String json) {
+        String response = null;
+        try {
+            String url = Uri.parse(ENDPOINT_USER).buildUpon()
+                    .appendEncodedPath(userId)
+                    .appendPath("timeline")
+                    .build().toString();
+
+            response = makeRequest(url,"POST",json);
+            if(response != null){
+                Log.v(TAG,response);
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to update user", e);
+        }
+        return response;
+    }
+
     public static ArrayList<Timeline> getTimeline(String param) {
         ArrayList<Timeline> timelines = null;
         try {

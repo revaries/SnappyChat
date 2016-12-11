@@ -87,7 +87,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".friends.ChatActivity"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".friends.ChatConverstationsActivity"
             android:theme="@style/AppTheme" />
 
         <service android:name=".networking.MessagingService">

@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,6 +14,7 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,15 +23,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-
-import com.facebook.Profile;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.snappychat.R;
 import com.snappychat.model.ChatMessage;
-import com.snappychat.model.User;
 import com.snappychat.networking.FriendsHandler;
 import com.snappychat.networking.ServiceHandler;
-import com.snappychat.profile.ProfileViewActivity;
 import com.snappychat.profile.RoundedImageView;
 
 import org.json.JSONArray;
@@ -88,7 +83,6 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
 
     //for images
     final int REQUEST_IMAGE_CAPTURE = 1;
-    private RoundedImageView imageToSend;
     private Uri imagefileuri;
     private RoundedImageView profilepicture;
 
@@ -124,18 +118,11 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         });
 
         mSendImageButton = (ImageButton) view.findViewById(R.id.sendImageButton);
-        mAddImage = (ImageView) view.findViewById(R.id.image_upload);
         profilepicture = (RoundedImageView) view.findViewById(R.id.profilepicture);
         mSendImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ProfilePictureSelector();
-//                ProfilePictureSelector();
-//                if(mAddImage.getVisibility() == View.GONE){
-//                    mAddImage.setVisibility(View.VISIBLE);
-//                }else{
-//                    mAddImage.setVisibility(View.GONE);
-//                }
             }
         });
 
@@ -204,6 +191,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                         String sender_email = message.getJSONObject("user_sender_id").getString("email");
                         String receiver_email = message.getJSONObject("user_receiver_id").getString("email");
                         String msg = message.getString("message");
+                        String type = message.getString("type");
 //                        Log.d(TAG, "Sender id "+ sender_email);
 //                        Log.d(TAG, "Receiver id "+ receiver_email);
 //                        Log.d(TAG, "Message "+ msg);
@@ -212,7 +200,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                             isMine= true;
                         }
                         ChatMessage chatMessage = new ChatMessage(sender_email, receiver_email,
-                                msg, "" + random.nextInt(1000), isMine);
+                                msg, "" + random.nextInt(1000), isMine, type);
                         chatMessage.setChatId(message.optString("chat_id"));
                         messages.add(chatMessage);
                         //chatAdapter.add(chatMessage);
@@ -252,14 +240,35 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         String message = msg_edittext.getEditableText().toString();
         if (!message.equalsIgnoreCase("")) {
             final ChatMessage chatMessage = new ChatMessage(((ChatActivity)getActivity()).userSender.getEmail(), ((ChatActivity)getActivity()).userReceiver.getEmail(),
-                    message, "" + random.nextInt(1000), true);
+                    message, "" + random.nextInt(1000), true, "text");
             chatMessage.setMsgID();
             chatMessage.setChatId(chatId);
             chatMessage.body = message;
             chatMessage.Date = getCurrentDate();
             chatMessage.Time = getCurrentTime();
             msg_edittext.setText("");
-            //updateView(chatMessage);
+            postMessage(chatMessage);
+            updateViewAndChatStatus(chatMessage,true);
+        }
+    }
+
+    public void sendImageMessage(Bitmap imgBitMap) {
+        String message = "";
+        if (imgBitMap!=null)
+        {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            imgBitMap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] imagebyte = byteArrayOutputStream.toByteArray();
+            message = Base64.encodeToString(imagebyte, Base64.DEFAULT);
+        }
+        if (!message.equalsIgnoreCase("")) {
+            final ChatMessage chatMessage = new ChatMessage(((ChatActivity)getActivity()).userSender.getEmail(), ((ChatActivity)getActivity()).userReceiver.getEmail(),
+                    message, "" + random.nextInt(1000), true, "image");
+            chatMessage.setMsgID();
+            chatMessage.setChatId(chatId);
+            chatMessage.body = message;
+            chatMessage.Date = getCurrentDate();
+            chatMessage.Time = getCurrentTime();
             postMessage(chatMessage);
             updateViewAndChatStatus(chatMessage,true);
         }
@@ -272,6 +281,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
             updateDB.put("user_sender_id", chatMessage.getSender());
             updateDB.put("user_receiver_id", chatMessage.getReceiver());
             updateDB.put("message", chatMessage.body);
+            updateDB.put("type", chatMessage.getType());
             String chatUrl = Uri.parse(CHAT_URL).buildUpon()
                     .build().toString();
             responseChat = ServiceHandler.makeRequest(chatUrl,"POST",updateDB.toString());
@@ -296,6 +306,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                     data.put("message", chatMessage.body);
                     data.put("user_sender_id", chatMessage.getSender());
                     data.put("user_receiver_id", chatMessage.getReceiver());
+                    data.put("type", chatMessage.getType());
                     json.put("data", data);
                     json.put("to", token);
 
@@ -404,34 +415,27 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                 {
                     Log.e("IOEXception", e.toString());
                 }
-
-
             }
             showDialog(imagebitmap);
-//            profilepicture.setImageBitmap(imagebitmap);
-//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//            imagebitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            //byte[] imagebyte = byteArrayOutputStream.toByteArray();
         }
     }
 
-    public void showDialog(Bitmap imageBitMap) {
-//        profilepicture.setImageBitmap(imagebitmap);
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//        imagebitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+    public void showDialog(final Bitmap imageBitMap) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
-        builder1.setMessage("Are you sure that you want to remove this friend?");
+        builder1.setMessage("Do you want to send this image?");
         builder1.setCancelable(true);
         LayoutInflater factory = LayoutInflater.from(getActivity());
         View view = factory.inflate(R.layout.send_image_dialog, null);
         ImageView imgView = (ImageView) view.findViewById(R.id.dialog_imageview);
         imgView.setImageBitmap(imageBitMap);
-        //sendImage.setImageResource(R.);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBitMap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         builder1.setView(view);
         builder1.setPositiveButton("Send", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Log.d(TAG, "Dialog send was clicked!");
+                //Log.d(TAG, "Dialog send was clicked!");
+                sendImageMessage(imageBitMap);
             }
         });
 
@@ -445,24 +449,10 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         builder1.setNeutralButton("Choose Another", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Log.d(TAG, "Dialog choose was clicked!");
+                //Log.d(TAG, "Dialog choose was clicked!");
+                ProfilePictureSelector();
             }
         });
-
-
-//        builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//
-//                    }
-//                });
-//
-//        builder1.setNegativeButton(
-//                "No",
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        dialog.cancel();
-//                    }
-//                });
 
         AlertDialog alert11 = builder1.create();
         alert11.show();
