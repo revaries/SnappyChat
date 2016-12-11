@@ -151,7 +151,6 @@ public class ServiceHandler {
                         JSONObject jsonObject1 = jsonObject.optJSONArray("friends").getJSONObject(i);
                         if(jsonObject1.optJSONObject("image") != null){
                             friend.setImage(jsonObject1.optJSONObject("image").optString("data").trim());
-                            friend.setImage1(friend.getImageIntoBitmap());
                         }
                         friend.setFriend(true);
                     };

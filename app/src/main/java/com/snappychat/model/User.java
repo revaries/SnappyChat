@@ -46,7 +46,6 @@ public class User implements Serializable{
     private transient Boolean pending;
     private transient Boolean chatOwner;
     private transient String chatConversationId;
-    private transient Bitmap image1;
 
     public User(){};
 
@@ -250,11 +249,4 @@ public class User implements Serializable{
         this.chatConversationId = chatId;
     }
 
-    public Bitmap getImage1() {
-        return image1;
-    }
-
-    public void setImage1(Bitmap image1) {
-        this.image1 = image1;
-    }
 }
