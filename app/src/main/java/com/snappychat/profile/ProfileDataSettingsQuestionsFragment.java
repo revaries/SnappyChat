@@ -179,7 +179,7 @@ public class ProfileDataSettingsQuestionsFragment extends Fragment {
 
                 switch (visibilityid){
                     case R.id.profile_settings_friendsonly:
-                        visibility = "friends";
+                        visibility = "friends-only";
                         break;
                     case R.id.profile_settings_private:
                         visibility = "private";
@@ -212,7 +212,7 @@ public class ProfileDataSettingsQuestionsFragment extends Fragment {
 
                 switch (visibilityid){
                     case R.id.profile_settings_friendsonly:
-                        visibility = "friends";
+                        visibility = "friends-only";
                         break;
                     case R.id.profile_settings_private:
                         visibility = "private";
