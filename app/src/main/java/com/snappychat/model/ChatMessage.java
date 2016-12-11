@@ -20,15 +20,18 @@ public class ChatMessage {
     public String Date, Time;
     public String msgid;
     public boolean isMine;// Did I send the message.
+    public String type;
 
     public ChatMessage(String Sender, String Receiver, String messageString,
-                       String ID, boolean isMINE) {
+                       String ID, boolean isMINE, String Type) {
         body = messageString;
         isMine = isMINE;
         setSender(Sender);
         msgid = ID;
         setReceiver(Receiver);
         senderName = getSender();
+        setType(Type);
+        type = getType();
     }
 
     public void setMsgID() {
@@ -59,6 +62,14 @@ public class ChatMessage {
 
     public void setReceiver(String receiver) {
         this.receiver = receiver;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
 
