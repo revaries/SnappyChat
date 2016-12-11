@@ -1,10 +1,21 @@
 package com.snappychat.friends;
 
+import android.content.ComponentName;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,24 +25,33 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.facebook.Profile;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.snappychat.R;
 import com.snappychat.model.ChatMessage;
+import com.snappychat.model.User;
 import com.snappychat.networking.FriendsHandler;
 import com.snappychat.networking.ServiceHandler;
+import com.snappychat.profile.ProfileViewActivity;
+import com.snappychat.profile.RoundedImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Jelson on 11/27/16.
@@ -66,6 +86,12 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
     public static AsyncTask<Void, Void, Void> updateViewTask;
     public String chatId;
 
+    //for images
+    final int REQUEST_IMAGE_CAPTURE = 1;
+    private RoundedImageView imageToSend;
+    private Uri imagefileuri;
+    private RoundedImageView profilepicture;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -99,14 +125,17 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
 
         mSendImageButton = (ImageButton) view.findViewById(R.id.sendImageButton);
         mAddImage = (ImageView) view.findViewById(R.id.image_upload);
+        profilepicture = (RoundedImageView) view.findViewById(R.id.profilepicture);
         mSendImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mAddImage.getVisibility() == View.GONE){
-                    mAddImage.setVisibility(View.VISIBLE);
-                }else{
-                    mAddImage.setVisibility(View.GONE);
-                }
+                ProfilePictureSelector();
+//                ProfilePictureSelector();
+//                if(mAddImage.getVisibility() == View.GONE){
+//                    mAddImage.setVisibility(View.VISIBLE);
+//                }else{
+//                    mAddImage.setVisibility(View.GONE);
+//                }
             }
         });
 
@@ -324,6 +353,119 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         Date today = Calendar.getInstance().getTime();
         DateFormat format_date = new SimpleDateFormat("d MMM yyyy", Locale.US);
         return format_date.format(today);
+    }
+
+    private void ProfilePictureSelector() {
+        File camimageholders = new File(Environment.getExternalStorageDirectory() + File.separator + "ProfilePictures" + File.separator);
+        camimageholders.mkdirs();
+        String capturedimagename = "snappychat profile picture";
+        File imageinstorage = new File(camimageholders,capturedimagename);
+
+        imagefileuri = Uri.fromFile(imageinstorage);
+
+        List<Intent> camIntents = new ArrayList<Intent>();
+        Intent camerapictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        PackageManager packageManager = getActivity().getPackageManager();
+        List<ResolveInfo>  syscamlists = packageManager.queryIntentActivities(camerapictureIntent, 0);
+        for(ResolveInfo each: syscamlists){
+            String packagename = each.activityInfo.packageName;
+            Intent eachintent = new Intent(camerapictureIntent);
+            eachintent.setComponent(new ComponentName(each.activityInfo.packageName,each.activityInfo.name));
+            eachintent.setPackage(packagename);
+            camIntents.add(eachintent);
+        }
+
+        Intent galleryintent = new Intent();
+        galleryintent.setType("image/*");
+        galleryintent.setAction(Intent.ACTION_GET_CONTENT);
+
+
+        Intent chooserintent = Intent.createChooser(galleryintent,"");
+        chooserintent.putExtra(Intent.EXTRA_INITIAL_INTENTS,camIntents.toArray(new Parcelable[camIntents.size()]));
+        startActivityForResult(chooserintent,REQUEST_IMAGE_CAPTURE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bitmap imagebitmap  = null;
+            Bundle extras = data.getExtras();
+            if (extras!=null)
+            {
+                imagebitmap = (Bitmap) extras.get("data");
+            }
+            else
+            {
+                Uri imguri = data.getData();
+                try{
+                    imagebitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),imguri);
+                }
+                catch (IOException e)
+                {
+                    Log.e("IOEXception", e.toString());
+                }
+
+
+            }
+            showDialog(imagebitmap);
+//            profilepicture.setImageBitmap(imagebitmap);
+//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//            imagebitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            //byte[] imagebyte = byteArrayOutputStream.toByteArray();
+        }
+    }
+
+    public void showDialog(Bitmap imageBitMap) {
+//        profilepicture.setImageBitmap(imagebitmap);
+//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//        imagebitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+        builder1.setMessage("Are you sure that you want to remove this friend?");
+        builder1.setCancelable(true);
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        View view = factory.inflate(R.layout.send_image_dialog, null);
+        ImageView imgView = (ImageView) view.findViewById(R.id.dialog_imageview);
+        imgView.setImageBitmap(imageBitMap);
+        //sendImage.setImageResource(R.);
+        builder1.setView(view);
+        builder1.setPositiveButton("Send", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.d(TAG, "Dialog send was clicked!");
+            }
+        });
+
+        builder1.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+
+        builder1.setNeutralButton("Choose Another", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.d(TAG, "Dialog choose was clicked!");
+            }
+        });
+
+
+//        builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//
+//                    }
+//                });
+//
+//        builder1.setNegativeButton(
+//                "No",
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        dialog.cancel();
+//                    }
+//                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 
 }
