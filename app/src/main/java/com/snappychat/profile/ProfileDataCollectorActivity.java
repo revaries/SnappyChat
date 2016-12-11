@@ -181,11 +181,6 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
         }
 
 
-        Intent timelineIntent = new Intent(getBaseContext(),MainActivity.class);
-        //Intent timelineIntent = new Intent(getBaseContext(), ProfileView.class);
-        timelineIntent.putExtra(USER_LOGGED_IN,snappyuser);
-        startActivity(timelineIntent);
-
     }
 
     private void saveUpdatedValues()
@@ -198,11 +193,6 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
         {
             Log.e("Error",e.toString());
         }
-        Intent timelineIntent = new Intent(getBaseContext(),ProfileViewActivity.class);
-        //Intent timelineIntent = new Intent(getBaseContext(), ProfileView.class);
-        timelineIntent.putExtra(USER_LOGGED_IN,snappyuser);
-        startActivity(timelineIntent);
-
     }
 
     private class NewUserCreator extends AsyncTask<Void, Void, String>
@@ -224,36 +214,61 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
         @Override
         protected void onPostExecute(String response) {
             if(response != null){
+                if (response.toLowerCase().contains("user created"))
+                {
+                    try {
+                        Intent timelineIntent = new Intent(getBaseContext(),MainActivity.class);
+                        timelineIntent.putExtra(USER_LOGGED_IN,snappyuser);
+                        startActivity(timelineIntent);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.v("Main Activity",e.toString());
+                    }
 
+                }
+            }
+            else
+            {
+                Log.e("","");
             }
         }
     }
 
-    private class UpdateUser extends AsyncTask<Void, Void, Void>
+    private class UpdateUser extends AsyncTask<Void, Void, String>
     {
 
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected String doInBackground(Void... voids) {
 
             Gson userGson = new Gson();
             String userString = userGson.toJson(snappyuser);
-            JSONObject jsonObject;
+            JSONObject jsonObject = null;
             try{
                 jsonObject  = new JSONObject(userString);
                 jsonObject.remove("email");
                 Log.v("My JSON Object",userString.toString());
-                ServiceHandler.updateUserWithString(snappyuser.getEmail(),jsonObject.toString());
-
             }
             catch (Exception e)
             {
                 Log.e("JSON Conversion",e.toString());
             }
+            return ServiceHandler.updateUserWithString(snappyuser.getEmail(),jsonObject.toString());
+        }
 
+        @Override
+        protected void onPostExecute(String response) {
+            Log.v("Response",response);
+            if (response!=null)
+            {
 
+                Intent profileViewIntent = new Intent(getBaseContext(),ProfileViewActivity.class);
+                //Intent timelineIntent = new Intent(getBaseContext(), ProfileView.class);
+                profileViewIntent.putExtra(USER_LOGGED_IN,snappyuser);
+                startActivity(profileViewIntent);
+            }
 
-            return null;
         }
 
     }
@@ -309,7 +324,7 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
                 Uri imguri = data.getData();
                 try{
                     imagebitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),imguri);
-                    imagebitmap = scaleDownBitmap(imagebitmap,100,this);
+                    imagebitmap = scaleDownBitmap(imagebitmap,50,this);
                 }
                 catch (IOException e)
                 {
@@ -320,7 +335,7 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
             if (imagebitmap!=null)
             {
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                imagebitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                imagebitmap.compress(Bitmap.CompressFormat.PNG, 50, byteArrayOutputStream);
                 byte[] imagebyte = byteArrayOutputStream.toByteArray();
                 String imagestring = Base64.encodeToString(imagebyte, Base64.DEFAULT);
                 snappyuser.setImage(imagestring);

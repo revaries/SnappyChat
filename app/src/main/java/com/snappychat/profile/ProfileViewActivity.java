@@ -89,7 +89,22 @@ public class ProfileViewActivity extends AppCompatActivity {
         Location.setText(profileUser.getLocation());
         Profession.setText(profileUser.getProfession());
         AboutMe.setText(profileUser.getAboutMe());
-        Visibility.setText(profileUser.getVisibility());
+        if (profileUser.getVisibility().equals("friends-only"))
+        {
+            Visibility.setText("Your Profile is visible to your Friends Only");
+        }
+        else if (profileUser.getVisibility().equals("public"))
+        {
+            Visibility.setText("Your Profile is visible to Everyone");
+        }
+        else if (profileUser.getVisibility().equals("private"))
+        {
+            Visibility.setText("Your Profile is visible to only You");
+        }
+
+
+
+
 
         NickName.setText(profileUser.getNickName());
         Email.setText(profileUser.getEmail());
