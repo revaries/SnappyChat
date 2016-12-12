@@ -12,7 +12,6 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.snappychat.MainActivity;
-import com.snappychat.friends.ChatActivity;
 import com.snappychat.friends.ChatFragment;
 import com.snappychat.model.ChatMessage;
 import com.snappychat.model.MessageEvent;
@@ -62,18 +61,9 @@ public class MessagingService extends FirebaseMessagingService {
             chatMessage.Date = ChatFragment.getCurrentDate();
             chatMessage.Time = ChatFragment.getCurrentTime();
 
-//            ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
-//            ActivityManager manager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-//            List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
-//            String currentActivity = taskInfo.get(0).topActivity.getShortClassName();
-//            Log.d("topActivity", "CURRENT Activity ::" + taskInfo.get(0).topActivity.getClassName());
-            //EventBus.getDefault().post(new MessageEvent(chatMessage));
+            //Publish the chat message to be consumed by listeners
+            EventBus.getDefault().post(new MessageEvent(chatMessage));
 
-            if(ChatActivity.isActive) {
-                //ChatActivity.updateView(chatMessage);
-                //ChatFragment.updateView(chatMessage);
-                EventBus.getDefault().post(new MessageEvent(chatMessage));
-            }
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
