@@ -6,8 +6,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.snappychat.R;
+import com.snappychat.model.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by Jelson on 12/8/16.
@@ -30,6 +36,20 @@ public class ChatConverstationsActivity extends AppCompatActivity implements Cha
                     .commit();
         }
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("CHAT", "State was called OnStart()");
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+        Log.d("CHAT", "State was called OnStop()");
     }
 
     @Override
@@ -57,6 +77,16 @@ public class ChatConverstationsActivity extends AppCompatActivity implements Cha
 
         AlertDialog alert11 = builder1.create();
         alert11.show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        FragmentManager fm = getSupportFragmentManager();
+        ChatConverstationsFragment fragment = (ChatConverstationsFragment) fm.findFragmentById(R.id.fragment_chat_conversations_container);
+        if(fragment != null){
+            fragment.getChatsList();
+        }
+
     }
 }
 
