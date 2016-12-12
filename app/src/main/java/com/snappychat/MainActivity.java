@@ -1,11 +1,13 @@
 package com.snappychat;
 
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -148,6 +150,13 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
     protected void onResume() {
         super.onResume();
         new UpdateUserTask().execute(userLoggedIn.getEmail(),true);
+        Fragment fragment = createFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(R.id.fragmentContainer, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
     }
 
     @Override
