@@ -59,6 +59,12 @@ public class ImageAdapter extends BaseAdapter {
 
             imageView = (ImageView) convertView;
         }
+        Bitmap bitmap = getImagesList().get(position);
+        if(bitmap.getHeight() > bitmap.getWidth()){
+            imageView.setLayoutParams(new GridView.LayoutParams(240,320));
+        }else{
+            imageView.setLayoutParams(new GridView.LayoutParams(320,240));
+        }
         imageView.setImageBitmap(getImagesList().get(position));
         return imageView;
     }

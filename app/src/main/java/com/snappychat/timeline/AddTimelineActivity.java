@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.snappychat.MainActivity;
 import com.snappychat.R;
+import com.snappychat.model.Image;
 import com.snappychat.model.ImageUtils;
 import com.snappychat.model.Timeline;
 import com.snappychat.model.User;
@@ -139,6 +140,8 @@ public class AddTimelineActivity extends AppCompatActivity {
                 timeline.setComment(timelineComment.getText().toString());
                 timeline.setImages(new ArrayList<String>());
                 for(Bitmap image : adapter.getImagesList()){
+                    //Image imageToAdd = new Image();
+                    //imageToAdd.setData(ImageUtils.encodeImageBase64(image));
                     timeline.getImages().add(ImageUtils.encodeImageBase64(image));
                 }
                 String timelineToString = new Gson().toJson(timeline,Timeline.class);

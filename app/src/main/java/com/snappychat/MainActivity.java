@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
         return TimelineFragment.newInstance(userLoggedIn,1);
     }
 
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

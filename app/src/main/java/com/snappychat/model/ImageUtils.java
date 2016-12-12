@@ -152,6 +152,8 @@ public class ImageUtils {
     public static Bitmap scaleImageAspectRatio(Bitmap image){
         int nh = (int) ( image.getHeight() * (512.0 / image.getWidth()) );
         Bitmap scaled = Bitmap.createScaledBitmap(image, 512, nh, true);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        scaled.compress(Bitmap.CompressFormat.JPEG, 80, bos);
         return scaled;
     }
 

@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.snappychat.model.Timeline;
 import com.snappychat.model.User;
@@ -376,18 +377,11 @@ public class ServiceHandler {
             if(response != null){
                 JSONArray jsonArray = new JSONArray(response);
                 timelines = new ArrayList<Timeline>();
-                for(int i=0; i < jsonArray.length(); i++){
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                    Timeline timeline = new Gson().fromJson(jsonObject.toString(), Timeline.class);
-
-                    if(jsonObject.optJSONArray("images") != null){
-                        timeline.setImages(new ArrayList<String>());
-                        for(int j=0; i < jsonObject.optJSONArray("images").length(); j++){
-                            JSONObject jsonObject1 =  jsonObject.optJSONArray("images").getJSONObject(i);
-                            timeline.getImages().add(jsonObject.optString("data"));
-                        }
-                    }
+                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                for(int i=0; i < jsonObject.getJSONArray("timeline").length(); i++){
+                    JSONObject jsonObject1 = jsonObject.getJSONArray("timeline").getJSONObject(i);
+                    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+                    Timeline timeline = gson.fromJson(jsonObject1.toString(), Timeline.class);
                     timelines.add(timeline);
                 }
             }
