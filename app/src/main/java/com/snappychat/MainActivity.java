@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
                 return true;
             case R.id.sign_out:
                 //FirebaseAuth.getInstance().signOut();
+                new UpdateUserTask().execute(userLoggedIn.getEmail(),false);
                 intent = new Intent(this, LoginActivity.class);
                 intent.putExtra(LoginActivity.STATUS,"signOut");
                 startActivity(intent);
