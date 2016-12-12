@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.snappychat.model.Timeline;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
 
+import java.sql.Time;
 import java.util.ArrayList;
 
 /**
@@ -31,6 +33,9 @@ public class TimelineFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     ArrayList<Timeline> timelines;
+
+    ArrayList<Timeline> testtimeLines;
+
     private User user;
     RecyclerView recyclerView;
     /**
@@ -66,7 +71,24 @@ public class TimelineFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_timeline_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_timeline, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.timeline_recycler_view);
+
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager recyleLayoutManager = new LinearLayoutManager(getContext());
+        recyleLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(recyleLayoutManager);
+
+        /*
+        testtimeLines = new ArrayList<Timeline>();
+        Timeline one = new Timeline();
+        one.setComment("Hello there");
+        Timeline two = new Timeline();
+        two.setComment("Hello Again");
+
+        testtimeLines.add(0,one);
+        testtimeLines.add(1,two);
+        */
 
         setupAdapter();
         return view;
@@ -92,10 +114,16 @@ public class TimelineFragment extends Fragment {
 
     void setupAdapter() {
         if (getActivity() == null || recyclerView == null) return;
-        if (timelines != null) {
+        if (testtimeLines != null) {
 //            mGridView.setAdapter(new ArrayAdapter<GalleryItem>(getActivity(),
 //                    android.R.layout.simple_gallery_item, mItems));
-            recyclerView.setAdapter(new MyTimelineRecyclerViewAdapter(timelines,mListener));
+
+
+
+
+
+            recyclerView.setAdapter(new MyTimelineRecyclerViewAdapter(timelines,mListener,getContext()));
+            //recyclerView.setAdapter(new MyTimelineRecyclerViewAdapter(testtimeLines,mListener,getContext()));
         } else {
             recyclerView.setAdapter(null);
         }
