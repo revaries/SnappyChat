@@ -1,5 +1,6 @@
 package com.snappychat.timeline;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,14 +19,20 @@ import com.snappychat.model.Timeline;
 
 import java.util.List;
 
+
 public class MyTimelineRecyclerViewAdapter extends RecyclerView.Adapter<MyTimelineRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Timeline> mValues;
-    private final TimelineFragment.OnListFragmentInteractionListener mListener;
+    private List<Timeline> mValues;
 
-    public MyTimelineRecyclerViewAdapter(List<Timeline> items, TimelineFragment.OnListFragmentInteractionListener listener) {
+
+    private final TimelineFragment.OnListFragmentInteractionListener mListener;
+    private Context activityConext;
+
+    public MyTimelineRecyclerViewAdapter(List<Timeline> items, TimelineFragment.OnListFragmentInteractionListener listener, Context myContext) {
         mValues = items;
         mListener = listener;
+        activityConext = myContext;
+
     }
 
     @Override
@@ -37,19 +45,20 @@ public class MyTimelineRecyclerViewAdapter extends RecyclerView.Adapter<MyTimeli
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getId());
-        holder.mContentView.setText(mValues.get(position).getComment());
+        //holder.mIdView.setText(mValues.get(position).getId());
+        //holder.mContentView.setText(mValues.get(position).getComment());
         holder.postText.setText(mValues.get(position).getComment());
 
         List<String> cardImages = mValues.get(position).getImages();
 
-        for (String eachimage: cardImages)
-        {
-            ImageView tempImage = new ImageView();
-            tempImage.setScaleType(ImageView.ScaleType.FIT_XY);
+        if (cardImages!=null) {
+            for (String eachimage : cardImages) {
+                ImageView tempImage = new ImageView(activityConext);
+                tempImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                tempImage.setImageBitmap(ImageFromBase64(eachimage));
+                holder.postGrid.addView(tempImage);
 
-
-
+            }
         }
 
 
@@ -72,8 +81,8 @@ public class MyTimelineRecyclerViewAdapter extends RecyclerView.Adapter<MyTimeli
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
+        //public final TextView mIdView;
+        //public final TextView mContentView;
         public Timeline mItem;
 
         public TextView postText;
@@ -83,15 +92,17 @@ public class MyTimelineRecyclerViewAdapter extends RecyclerView.Adapter<MyTimeli
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            /*mIdView = (TextView) view.findViewById(R.id.id);
+            mContentView = (TextView) view.findViewById(R.id.content);*/
+
             postText = (TextView) view.findViewById(R.id.timeline_post_card_text);
             postGrid = (GridLayout) view.findViewById(R.id.timeline_post_card_grid);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            //return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString();
         }
     }
 
