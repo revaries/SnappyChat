@@ -96,7 +96,7 @@ public class ChatActivity extends AppCompatActivity {
         ChatFragment fragment = (ChatFragment) fm.findFragmentById(R.id.fragment_container);
         if (fragment != null) {
             ChatMessage chatMessage = event.getChatMessage();
-            //Validate that the message it is not sent to himselft
+            //Validate that the message it is not sent to the sender
             if(!chatMessage.getSender().equals(userSender.getEmail()))
                 fragment.updateViewAndChatStatus(event.getChatMessage(),false);
         }
