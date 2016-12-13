@@ -83,12 +83,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 if (user != null) {
                     Log.v("User Logged In", user.getUid());
                     Log.v("User Logged In EMAIL", user.getEmail());
-                    try {
-                        FirebaseInstanceId.getInstance().deleteInstanceId();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                     email = user.getEmail();
+                    //deleteToken();
                     token = FirebaseInstanceId.getInstance().getToken();
                     new GetUserTask().execute(email, token);
                 } else {
@@ -167,6 +163,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void signOut() {
         snappyauth.signOut();
+        //deleteToken();
         LoginManager.getInstance().logOut();
         if(googleApiClient.isConnected()) {
             Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
@@ -331,6 +328,20 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             setUser(user);
             selectActivity();
         }
+    }
+
+    private void deleteToken(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    FirebaseInstanceId.getInstance().deleteInstanceId();
+                    FirebaseInstanceId.getInstance().getToken();
+                } catch (IOException e) {
+                    Log.e(TAG,"Error deleting token",e);
+                }
+            }
+        }).start();
     }
 
     public User getLoginuser()

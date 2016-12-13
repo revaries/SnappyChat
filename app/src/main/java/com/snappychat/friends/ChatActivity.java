@@ -6,8 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.snappychat.model.MessageEvent;
 import com.snappychat.R;
+import com.snappychat.model.ChatMessage;
+import com.snappychat.model.MessageEvent;
 import com.snappychat.model.User;
 
 import org.greenrobot.eventbus.EventBus;
@@ -94,7 +95,10 @@ public class ChatActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         ChatFragment fragment = (ChatFragment) fm.findFragmentById(R.id.fragment_container);
         if (fragment != null) {
-            fragment.updateViewAndChatStatus(event.getChatMessage(),false);
+            ChatMessage chatMessage = event.getChatMessage();
+            //Validate that the message it is not sent to himselft
+            if(!chatMessage.getSender().equals(userSender.getEmail()))
+                fragment.updateViewAndChatStatus(event.getChatMessage(),false);
         }
     };
 
