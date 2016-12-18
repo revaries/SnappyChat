@@ -1,5 +1,6 @@
 package com.snappychat.networking;
 
+import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -12,9 +13,11 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.snappychat.MainActivity;
+import com.snappychat.R;
 import com.snappychat.friends.ChatFragment;
 import com.snappychat.model.ChatMessage;
 import com.snappychat.model.MessageEvent;
+import com.snappychat.model.User;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -64,6 +67,13 @@ public class MessagingService extends FirebaseMessagingService {
             //Publish the chat message to be consumed by listeners
             EventBus.getDefault().post(new MessageEvent(chatMessage));
 
+            ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+            ActivityManager.RunningTaskInfo foregroundTaskInfo = am.getRunningTasks(1).get(0);
+            Log.d(TAG, "Foreground app is " +foregroundTaskInfo.baseActivity.getClassName());
+            if(!foregroundTaskInfo.baseActivity.getClassName().equals("com.snappychat.LoginActivity")){
+                sendNotification(message);
+            }
+
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -84,8 +94,8 @@ public class MessagingService extends FirebaseMessagingService {
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                /*.setSmallIcon(R.drawable.ic_stat_ic_notification)*/
-                .setContentTitle("FCM Message")
+                .setSmallIcon(R.drawable.sjsu_icon)
+                .setContentTitle("SnappyChat New Message")
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
