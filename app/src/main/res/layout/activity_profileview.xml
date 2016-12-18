@@ -28,7 +28,6 @@
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:id="@+id/profilepicture"
-        android:background="#FFFF"
         android:padding="25dp"
 
         android:scaleType="fitXY"
@@ -72,9 +71,6 @@
         android:layout_height="60dp"
         android:drawableLeft="@drawable/ic_nick_name"
         android:gravity="center_vertical"
-
-        android:onClick="onClick"
-        android:clickable="true"
         android:drawablePadding="10dp"
         android:layout_marginLeft="15dp"
         />

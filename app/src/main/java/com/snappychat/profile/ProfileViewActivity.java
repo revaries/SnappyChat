@@ -137,7 +137,7 @@ public class ProfileViewActivity extends AppCompatActivity {
         AboutMe.setOnClickListener(textClickListeners);
         Visibility.setOnClickListener(textClickListeners);
         Notifications.setOnClickListener(textClickListeners);
-        NickName.setOnClickListener(textClickListeners);
+        //NickName.setOnClickListener(textClickListeners);
 
 
         //Saving Edit Options if Profile is not of Logged in user
@@ -156,8 +156,10 @@ public class ProfileViewActivity extends AppCompatActivity {
             Interests.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_interests,0,0,0);
             Location.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_location,0,0,0);
             Profession.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_profession,0,0,0);
-            Visibility.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_visibility,0,0,0);
-            Notifications.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_notification,0,0,0);
+            Visibility.setVisibility(View.INVISIBLE);
+            Notifications.setVisibility(View.INVISIBLE);
+            //Visibility.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_visibility,0,0,0);
+            //Notifications.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_notification,0,0,0);
         }
 
 

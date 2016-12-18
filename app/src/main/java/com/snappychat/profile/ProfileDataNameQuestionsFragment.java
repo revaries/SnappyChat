@@ -77,6 +77,7 @@ public class ProfileDataNameQuestionsFragment extends Fragment {
         {
             save.setVisibility(View.VISIBLE);
             next.setVisibility(View.INVISIBLE);
+            nickName.setVisibility(View.INVISIBLE);
         }
         else if (operationToPerform.equals(ProfileDataCollectorActivity.NEW)) {
             save.setVisibility(View.INVISIBLE);
