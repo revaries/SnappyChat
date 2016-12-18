@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -163,6 +164,8 @@ public class ProfileViewActivity extends AppCompatActivity {
         }
 
 
+        //Setting Up Navigation
+        /*
         profilePictureEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,6 +179,22 @@ public class ProfileViewActivity extends AppCompatActivity {
                 }
             }
         });
+        */
+        profilePictureEdit.setOnClickListener(textClickListeners);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                Intent upintent = new Intent(this,MainActivity.class);
+                if (profileUser.getEmail().equals(userLoggedIn.getEmail())) {
+                    upintent.putExtra(MainActivity.USER_LOGGED_IN, profileUser);
+                }
+                startActivity(upintent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -211,7 +230,11 @@ public class ProfileViewActivity extends AppCompatActivity {
                 Intent editIntent = new Intent(getBaseContext(),ProfileDataCollectorActivity.class);
                 editIntent.putExtra(LoginActivity.OPERATION,"EDIT");
                 editIntent.putExtra(MainActivity.USER_LOGGED_IN,profileUser);
-                if (view == Name)
+                if (view==profilePictureEdit)
+                {
+                    editIntent.putExtra("FragmentToEdit","ProfilePicture");
+                }
+                else if (view == Name)
                 {
                     editIntent.putExtra("FragmentToEdit","Name");
                 }
@@ -315,6 +338,7 @@ public class ProfileViewActivity extends AppCompatActivity {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             imagebitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] imagebyte = byteArrayOutputStream.toByteArray();
+
         }
     }
 

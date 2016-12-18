@@ -82,6 +82,9 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
             String page = incoming.getStringExtra("FragmentToEdit");
 
             switch (page) {
+                case "ProfilePicture":
+                    snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder,ProfilePictureFragment).commit();
+                    break;
                 case "Name":
                     snappyfragmanager.beginTransaction().replace(R.id.profiledata_fragmentholder, ProfileNameQuestionFragment).commit();
                     break;
