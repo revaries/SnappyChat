@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.snappychat.R;
 import com.snappychat.model.ChatMessage;
+import com.snappychat.model.ImageUtils;
 
 import java.util.ArrayList;
 
@@ -70,8 +71,9 @@ public class ChatAdapter extends BaseAdapter {
 
     public View setImageMessagesView(View vi, ChatMessage message){
         ImageView imgView = (ImageView) vi.findViewById(R.id.imageview_message);
-        byte[] imagearray = Base64.decode(message.body, Base64.DEFAULT);
-        Bitmap image = BitmapFactory.decodeByteArray(imagearray, 0, imagearray.length);
+        //byte[] imagearray = Base64.decode(message.body, Base64.DEFAULT);
+        //Bitmap image = BitmapFactory.decodeByteArray(imagearray, 0, imagearray.length);
+        Bitmap image = ImageUtils.decodeImageBase64(message.body);
         imgView.setImageBitmap(image);
         LinearLayout parent_layout = (LinearLayout) vi
                 .findViewById(R.id.imageview_layout_parent);

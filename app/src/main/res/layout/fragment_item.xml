@@ -54,7 +54,6 @@
                 android:layout_marginTop="10dp"
                 android:textAppearance="?attr/textAppearanceListItem"
                 tools:text="@nick"
-
                 />
 
 
@@ -87,6 +86,13 @@
 
                 />
 
+
+            <ImageButton
+                android:id="@+id/add_friend_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_circle_black_24dp"
+                android:tint="@color/com_facebook_blue" />
             <ImageButton
                 android:id="@+id/chat_button"
                 android:layout_width="wrap_content"
@@ -95,13 +101,6 @@
                 android:tint="@color/com_facebook_blue"
 
                 />
-            <ImageButton
-                android:id="@+id/add_friend_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_circle_black_24dp"
-                android:tint="@color/com_facebook_blue" />
-
             <ImageButton
                 android:id="@+id/remove_friend_button"
                 android:layout_width="wrap_content"
@@ -151,6 +150,19 @@
                 tools:text="Friend"
 
                 />
+
+            <ImageButton
+                android:id="@+id/timeline_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_description_black_24dp"
+                android:tint="@color/com_facebook_blue"
+
+                />
+
+
+
+
 
         </LinearLayout>
     </LinearLayout>

@@ -197,6 +197,7 @@ public class SearchUserFragment extends Fragment {
         void onFriendAdded(User item);
         void onFriendRemoved(User item);
         void onProfileRequested(User user);
+        void onTimelineRequested(User user);
     }
 
 

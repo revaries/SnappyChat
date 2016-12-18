@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if(savedInstanceState != null)
             userLoggedIn = (User)savedInstanceState.getSerializable(USER_LOGGED_IN);
         if(getIntent().getSerializableExtra(USER_LOGGED_IN) != null)
@@ -100,6 +99,8 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
+        getSupportActionBar().setTitle("SnappyChat");
+        getSupportActionBar().setSubtitle("Timeline");
         return true;
     }
 

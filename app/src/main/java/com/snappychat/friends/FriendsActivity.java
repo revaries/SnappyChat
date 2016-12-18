@@ -28,12 +28,16 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
     private User userLoggedIn;
     ViewPager viewPager;
     PagerAdapter adapter;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("SnappyChat");
+        getSupportActionBar().setSubtitle("Friends");
         userLoggedIn = (User) getIntent().getSerializableExtra(USER_LOGGED_IN);
         //String currentUserEmail = getIntent().getStringExtra("CURRENT_USER_ID");
         //Log.d(TAG, "Email: "+currentUserEmail);
@@ -206,6 +210,13 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
         if (fragment != null) {
             fragment.modifyPendingRequest(item, answer);
         }
+    }
+
+    @Override
+    public void onTimelineRequested(User user) {
+        Intent intent = new Intent(this, TimelineFriendActivity.class);
+        intent.putExtra(USER_LOGGED_IN,user);
+        startActivity(intent);
     }
 
 }

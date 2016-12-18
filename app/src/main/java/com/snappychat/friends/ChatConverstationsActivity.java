@@ -19,6 +19,8 @@ public class ChatConverstationsActivity extends AppCompatActivity implements Cha
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_conversations);
+        getSupportActionBar().setTitle("SnappyChat");
+        getSupportActionBar().setSubtitle("Chat conversations");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         FragmentManager fm = getSupportFragmentManager();
         fragment = fm.findFragmentById(R.id.fragment_chat_conversations_container);

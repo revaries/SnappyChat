@@ -14,7 +14,6 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +22,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.snappychat.R;
 import com.snappychat.model.ChatMessage;
+import com.snappychat.model.ImageUtils;
 import com.snappychat.networking.FriendsHandler;
 import com.snappychat.networking.ServiceHandler;
 import com.snappychat.profile.RoundedImageView;
@@ -256,10 +257,12 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         String message = "";
         if (imgBitMap!=null)
         {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            imgBitMap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byte[] imagebyte = byteArrayOutputStream.toByteArray();
-            message = Base64.encodeToString(imagebyte, Base64.DEFAULT);
+            //ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            //imgBitMap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            //byte[] imagebyte = byteArrayOutputStream.toByteArray();
+            //message = Base64.encodeToString(imagebyte, Base64.DEFAULT);
+            message = ImageUtils.encodeImageBase64(imgBitMap);
+
         }
         if (!message.equalsIgnoreCase("")) {
             final ChatMessage chatMessage = new ChatMessage(((ChatActivity)getActivity()).userSender.getEmail(), ((ChatActivity)getActivity()).userReceiver.getEmail(),
@@ -430,6 +433,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         imgView.setImageBitmap(imageBitMap);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         imageBitMap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        ImageUtils.scaleImageAspectRatio(imageBitMap);
         builder1.setView(view);
         builder1.setPositiveButton("Send", new DialogInterface.OnClickListener() {
             @Override
