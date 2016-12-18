@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,14 +22,12 @@ import com.snappychat.LoginActivity;
 import com.snappychat.MainActivity;
 import com.snappychat.R;
 import com.snappychat.model.User;
-import com.snappychat.networking.ServiceHandler;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 public class ProfileViewActivity extends AppCompatActivity {
@@ -61,6 +58,8 @@ public class ProfileViewActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profileview);
+        getSupportActionBar().setTitle("SnappyChat");
+        getSupportActionBar().setSubtitle("Profile");
 
                 Name = (TextView) findViewById(R.id.name);
         Interests = (TextView) findViewById(R.id.interests);

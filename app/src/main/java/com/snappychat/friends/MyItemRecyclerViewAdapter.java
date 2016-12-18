@@ -66,6 +66,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             holder.friendImageView.setVisibility(View.GONE);
             holder.friendTextView.setVisibility(View.GONE);
             holder.chatButton.setVisibility(View.GONE);
+            holder.timelineButton.setVisibility(View.GONE);
             holder.addFriendButton.setVisibility(View.VISIBLE);
         }else {
             holder.addFriendButton.setVisibility(View.GONE);
@@ -115,6 +116,16 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                 }
             }
         });
+        holder.timelineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    // Notify the active callbacks interface (the activity, if the
+                    // fragment is attached to one) that an item has been selected.
+                    mListener.onTimelineRequested(holder.mItem);
+                }
+            }
+        });
     }
 
     public void updateData(ArrayList<User> data){
@@ -137,6 +148,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final ImageView friendImageView;
         public final TextView friendTextView;
         public final ImageButton profileButton;
+        public final ImageButton timelineButton;
         public final ImageButton chatButton;
         public final ImageButton addFriendButton;
         public final ImageButton removeFriendButton;
@@ -156,6 +168,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             chatButton = (ImageButton) view.findViewById(R.id.chat_button);
             addFriendButton = (ImageButton) view.findViewById(R.id.add_friend_button);
             removeFriendButton = (ImageButton) view.findViewById(R.id.remove_friend_button);
+            timelineButton = (ImageButton) view.findViewById(R.id.timeline_button);
         }
 
         @Override

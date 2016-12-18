@@ -118,4 +118,11 @@ public class SearchUserActivity extends AppCompatActivity implements SearchUserF
         intent.putExtra(USER_LOGGED_IN,user);
         startActivity(intent);
     }
+
+    @Override
+    public void onTimelineRequested(User user) {
+        Intent intent = new Intent(this, TimelineFriendActivity.class);
+        intent.putExtra(USER_LOGGED_IN,user);
+        startActivity(intent);
+    }
 }

@@ -14,7 +14,6 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.snappychat.R;
 import com.snappychat.model.ChatMessage;
@@ -262,6 +262,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
             //byte[] imagebyte = byteArrayOutputStream.toByteArray();
             //message = Base64.encodeToString(imagebyte, Base64.DEFAULT);
             message = ImageUtils.encodeImageBase64(imgBitMap);
+
         }
         if (!message.equalsIgnoreCase("")) {
             final ChatMessage chatMessage = new ChatMessage(((ChatActivity)getActivity()).userSender.getEmail(), ((ChatActivity)getActivity()).userReceiver.getEmail(),
