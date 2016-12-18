@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
         userforShare = new LoginActivity().getLoginuser();
 
         setContentView(R.layout.activity_main);
-
+        /*
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
         if (fragment == null) {
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements TimelineFragment.
             fm.beginTransaction()
                     .add(R.id.fragmentContainer, fragment)
                     .commit();
-        }
+        }*/
 
         addTimelineButton =(FloatingActionButton) findViewById(R.id.addTimeline);
         addTimelineButton.setOnClickListener(new View.OnClickListener() {
