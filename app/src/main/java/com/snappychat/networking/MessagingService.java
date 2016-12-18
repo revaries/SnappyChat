@@ -14,6 +14,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.snappychat.MainActivity;
 import com.snappychat.R;
+import com.snappychat.friends.ChatActivity;
 import com.snappychat.friends.ChatFragment;
 import com.snappychat.model.ChatMessage;
 import com.snappychat.model.MessageEvent;
@@ -22,6 +23,8 @@ import com.snappychat.model.User;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Random;
+
+import static com.snappychat.MainActivity.USER_LOGGED_IN;
 
 public class MessagingService extends FirebaseMessagingService {
 
@@ -71,7 +74,7 @@ public class MessagingService extends FirebaseMessagingService {
             ActivityManager.RunningTaskInfo foregroundTaskInfo = am.getRunningTasks(1).get(0);
             Log.d(TAG, "Foreground app is " +foregroundTaskInfo.baseActivity.getClassName());
             if(!foregroundTaskInfo.baseActivity.getClassName().equals("com.snappychat.LoginActivity")){
-                sendNotification(message);
+                sendNotification(chatMessage);
             }
 
         }
@@ -86,8 +89,10 @@ public class MessagingService extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-    private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, MainActivity.class);
+    private void sendNotification(ChatMessage chatMessage) {
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra(USER_LOGGED_IN,ServiceHandler.getUser(chatMessage.getReceiver()));
+        intent.putExtra(ChatActivity.USER_RECEIVER,ServiceHandler.getUser(chatMessage.getSender()));
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -96,7 +101,7 @@ public class MessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.sjsu_icon)
                 .setContentTitle("SnappyChat New Message")
-                .setContentText(messageBody)
+                .setContentText(chatMessage.body)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
