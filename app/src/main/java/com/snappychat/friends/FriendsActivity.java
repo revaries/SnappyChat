@@ -136,7 +136,7 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
         builder1.setCancelable(true);
         builder1.setView(edittext);
         builder1.setPositiveButton(
-                "Yes",
+                "Send",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         SearchUserFragment fragment = (SearchUserFragment) adapter.getItem(viewPager.getCurrentItem());
@@ -147,7 +147,7 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
                 });
 
         builder1.setNegativeButton(
-                "No",
+                "Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
