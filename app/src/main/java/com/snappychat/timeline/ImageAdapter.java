@@ -2,7 +2,9 @@ package com.snappychat.timeline;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -57,7 +59,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         LinearLayout linearLayout = (LinearLayout) convertView;
         if (convertView == null) { // if it's not recycled, initialize some
 
@@ -98,6 +100,12 @@ public class ImageAdapter extends BaseAdapter {
                 imageView.setLayoutParams(new GridView.LayoutParams(320,240));
             }
             imageView.setImageBitmap(getImagesList().get(position));
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showDialog(getImagesList().get(position));
+                }
+            });
             linearLayout.addView(imageView);
             linearLayout.addView(imageButton);
         }
@@ -122,6 +130,21 @@ public class ImageAdapter extends BaseAdapter {
 
     public void setImagesList(ArrayList<Bitmap> imagesList) {
         this.imagesList = imagesList;
+    }
+
+    public void showDialog(final Bitmap imageBitMap) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
+        builder1.setCancelable(true);
+        LayoutInflater factory = LayoutInflater.from(mContext);
+        View view = factory.inflate(R.layout.send_image_dialog, null);
+        ImageView imgView = (ImageView) view.findViewById(R.id.dialog_imageview);
+        imgView.setPadding(5,30,5,30);
+        imgView.setImageBitmap(imageBitMap);
+        //imageBitMap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        //ImageUtils.scaleImageAspectRatio(imageBitMap);
+        builder1.setView(view);
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 
 }

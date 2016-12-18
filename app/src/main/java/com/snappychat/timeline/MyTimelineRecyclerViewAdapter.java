@@ -3,6 +3,7 @@ package com.snappychat.timeline;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.view.Gravity;
@@ -69,7 +70,7 @@ public class MyTimelineRecyclerViewAdapter extends RecyclerView.Adapter<MyTimeli
                 imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                 imageView.setPadding(5,5,5,5);
                 imageView.setVisibility(View.VISIBLE);
-                Bitmap bitmap = ImageUtils.decodeImageBase64(stringImage);
+                final Bitmap bitmap = ImageUtils.decodeImageBase64(stringImage);
                 imageView.setImageBitmap(ImageUtils.decodeImageBase64(stringImage));
                 imageView.setBackground(activityConext.getResources().getDrawable(R.drawable.image_border));
                 GridLayout.LayoutParams param =new GridLayout.LayoutParams();
@@ -86,6 +87,12 @@ public class MyTimelineRecyclerViewAdapter extends RecyclerView.Adapter<MyTimeli
                 param.columnSpec = GridLayout.spec(c);
                 param.rowSpec = GridLayout.spec(r);
                 imageView.setLayoutParams (param);
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showDialog(bitmap);
+                    }
+                });
                 holder.postGrid.addView(imageView);
 
             }
@@ -141,5 +148,20 @@ public class MyTimelineRecyclerViewAdapter extends RecyclerView.Adapter<MyTimeli
         byte[] imagearray = Base64.decode(imagestring, Base64.DEFAULT);
         Bitmap image = BitmapFactory.decodeByteArray(imagearray, 0, imagearray.length);
         return image;
+    }
+
+    public void showDialog(final Bitmap imageBitMap) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(activityConext);
+        builder1.setCancelable(true);
+        LayoutInflater factory = LayoutInflater.from(activityConext);
+        View view = factory.inflate(R.layout.send_image_dialog, null);
+        ImageView imgView = (ImageView) view.findViewById(R.id.dialog_imageview);
+        imgView.setPadding(5,30,5,30);
+        imgView.setImageBitmap(imageBitMap);
+        //imageBitMap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        //ImageUtils.scaleImageAspectRatio(imageBitMap);
+        builder1.setView(view);
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 }
