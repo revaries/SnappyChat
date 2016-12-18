@@ -66,7 +66,11 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
     public void onBindViewHolder(RecyclerConverstationsAdapter.ChatConversationViewHolder holder, final int position) {
         holder.mTextView.setText(mDataset.get(position).getFirstName() + " " +mDataset.get(position).getLastName());
         holder.mTextView.setTextColor(Color.RED);
-        holder.mTextViewCardName.setText(mDataset.get(position).getMessage());
+        if(mDataset.get(position).getMessageType().equals("image")){
+            holder.mTextViewCardName.setText("Image");
+        }else{
+            holder.mTextViewCardName.setText(mDataset.get(position).getMessage());
+        }
         if(mDataset.get(position).getPending()){
             holder.mImage.setImageResource(R.drawable.circle_unread);
         }else {

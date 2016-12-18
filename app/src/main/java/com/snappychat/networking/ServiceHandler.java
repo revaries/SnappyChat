@@ -419,6 +419,7 @@ public class ServiceHandler {
                     String user_receiver = last_message.getJSONObject("user_receiver_id").getString("email");
                     Boolean pending = jsonObject.getBoolean("pending");
                     String message = last_message.getString("message");
+                    String messageType = last_message.getString("type");
                     if(!user_sender.equals(user_id)){
                         user = getUser(user_sender);
                     }else if(!user_receiver.equals(user_id)){
@@ -427,6 +428,7 @@ public class ServiceHandler {
                     if(user_receiver.equals(user_id) && pending){
                         receiver = true;
                     }
+                    user.setMessageType(messageType);
                     user.setMessage(message);
                     user.setPending(receiver);
                     user.setChatOwner(chatOwner);
