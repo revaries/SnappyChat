@@ -41,6 +41,7 @@ public class User implements Serializable{
     private transient Boolean pending;
     private transient Boolean chatOwner;
     private transient String chatConversationId;
+    private transient String messageType;
 
     public User(){};
 
@@ -231,6 +232,14 @@ public class User implements Serializable{
 
     public void setChatConversationId(String chatId) {
         this.chatConversationId = chatId;
+    }
+
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String msgType) {
+        this.messageType = msgType;
     }
 
 }

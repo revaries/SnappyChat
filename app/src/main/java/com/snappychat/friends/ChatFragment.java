@@ -419,7 +419,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                     Log.e("IOEXception", e.toString());
                 }
             }
-            showDialog(imagebitmap);
+            showDialog(ImageUtils.scaleImageAspectRatio(imagebitmap));
         }
     }
 
@@ -431,9 +431,9 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
         View view = factory.inflate(R.layout.send_image_dialog, null);
         ImageView imgView = (ImageView) view.findViewById(R.id.dialog_imageview);
         imgView.setImageBitmap(imageBitMap);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        imageBitMap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        ImageUtils.scaleImageAspectRatio(imageBitMap);
+        //ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        //imageBitMap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        //ImageUtils.scaleImageAspectRatio(imageBitMap);
         builder1.setView(view);
         builder1.setPositiveButton("Send", new DialogInterface.OnClickListener() {
             @Override
