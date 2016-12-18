@@ -129,7 +129,7 @@ public class ProfileDataSettingsQuestionsFragment extends Fragment {
         if (settingsUser.getVisibility()==null)
         {
             visibilitySettings.check(visibilityFriends.getId());
-            visibility = "friends";
+            visibility = "friends-only";
         }
         else
         {
@@ -138,7 +138,7 @@ public class ProfileDataSettingsQuestionsFragment extends Fragment {
             {
                 visibilitySettings.check(visibilityPrivate.getId());
             }
-            else if (visibility.equals("friends"))
+            else if (visibility.equals("friends-only"))
             {
                 visibilitySettings.check(visibilityFriends.getId());
             }

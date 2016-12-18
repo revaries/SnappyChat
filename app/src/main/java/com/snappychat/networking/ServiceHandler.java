@@ -107,6 +107,7 @@ public class ServiceHandler {
         ArrayList<User> users = null;
         try {
             String url = Uri.parse(ENDPOINT_USER).buildUpon()
+                    .appendQueryParameter("email",userLoggedIn.getEmail())
                     .appendQueryParameter("search",param)
                     .build().toString();
             String response = makeRequest(url,"GET",null);
