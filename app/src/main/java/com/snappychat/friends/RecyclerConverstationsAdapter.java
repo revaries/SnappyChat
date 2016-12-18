@@ -67,7 +67,7 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
         holder.mTextView.setText(mDataset.get(position).getFirstName() + " " +mDataset.get(position).getLastName());
         holder.mTextView.setTextColor(Color.RED);
         if(mDataset.get(position).getMessageType().equals("image")){
-            holder.mTextViewCardName.setText("Image received");
+            holder.mTextViewCardName.setText("Image");
         }else{
             holder.mTextViewCardName.setText(mDataset.get(position).getMessage());
         }
