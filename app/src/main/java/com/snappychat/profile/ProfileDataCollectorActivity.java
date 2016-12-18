@@ -273,11 +273,13 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
         protected void onPostExecute(String response) {
             Log.v("Response", response);
             if (response != null) {
-
+                Toast.makeText(ProfileDataCollectorActivity.this,"Profile Updated",Toast.LENGTH_SHORT).show();
                 Intent profileViewIntent = new Intent(getBaseContext(), ProfileViewActivity.class);
                 //Intent timelineIntent = new Intent(getBaseContext(), ProfileView.class);
+
                 profileViewIntent.putExtra(USER_LOGGED_IN, snappyuser);
                 startActivity(profileViewIntent);
+
             }else{
                 Toast.makeText(ProfileDataCollectorActivity.this, "User creation failed.",
                         Toast.LENGTH_SHORT).show();
