@@ -25,8 +25,11 @@ public class ProfileDataProfilePictureFragment extends Fragment {
     public ImageView profilePicture;
     private Button backProfilePic;
     private Button nextProfilePic;
+    private Button saveProfilePic;
     private User picUser;
     private User userLoggedIn;
+    private String operationToPerform;
+
     public ProfileDataProfilePictureFragment() {
 
     }
@@ -52,8 +55,25 @@ public class ProfileDataProfilePictureFragment extends Fragment {
         profilePicture = (ImageView) view.findViewById(R.id.profile_data_profile_picture);
         backProfilePic = (Button) view.findViewById(R.id.profile_pic_back);
         nextProfilePic = (Button) view.findViewById(R.id.profile_pic_next);
+        saveProfilePic = (Button) view.findViewById(R.id.profile_pic_save);
 
         picUser = ((ProfileDataCollectorActivity)getActivity()).getUserObject();
+
+        operationToPerform = ((ProfileDataCollectorActivity)getActivity()).getOperation();
+        if (operationToPerform.equals(ProfileDataCollectorActivity.EDIT))
+        {
+            saveProfilePic.setVisibility(View.VISIBLE);
+            nextProfilePic.setVisibility(View.INVISIBLE);
+            backProfilePic.setVisibility(View.INVISIBLE);
+        }
+        else if (operationToPerform.equals(ProfileDataCollectorActivity.NEW)) {
+            saveProfilePic.setVisibility(View.INVISIBLE);
+            nextProfilePic.setVisibility(View.VISIBLE);
+            backProfilePic.setVisibility(View.VISIBLE);
+        }
+
+
+
 
         if (picUser.getImage()!=null)
         {
@@ -89,6 +109,12 @@ public class ProfileDataProfilePictureFragment extends Fragment {
             }
         });
 
+        saveProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ProfileDataCollectorActivity)getActivity()).savePageHandeler();
+            }
+        });
         return view;
     }
 
