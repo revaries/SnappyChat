@@ -188,7 +188,7 @@ public class ProfileViewActivity extends AppCompatActivity {
             {
                 Intent editIntent = new Intent(getBaseContext(),ProfileDataCollectorActivity.class);
                 editIntent.putExtra(LoginActivity.OPERATION,"EDIT");
-                editIntent.putExtra(MainActivity.USER_LOGGED_IN,userLoggedIn);
+                editIntent.putExtra(MainActivity.USER_LOGGED_IN,profileUser);
                 if (view == Name)
                 {
                     editIntent.putExtra("FragmentToEdit","Name");
