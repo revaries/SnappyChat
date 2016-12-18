@@ -1,5 +1,10 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:isScrollContainer="true">
+
+<LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -13,14 +18,27 @@
             android:id="@+id/textView2"
             tools:text="Write a message"/>
 
-    <Button
-        android:text="Submit"
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/timelineComment"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/textView2"
+        android:layout_alignStart="@+id/textView2" />
+
+    <ImageButton
+        android:id="@+id/addImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/mygrid"
-        android:layout_alignEnd="@+id/mygrid"
-        android:layout_marginTop="68dp"
-        android:id="@+id/submitButton" />
+        android:background="@drawable/add_chat_image"
+        android:layout_below="@+id/timelineComment"
+        android:layout_alignStart="@+id/textView2"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="30dp"/>
+
 
     <GridView
         android:id="@+id/mygrid"
@@ -29,6 +47,7 @@
         android:numColumns="auto_fit"
         android:columnWidth="120dp"
         android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
         android:horizontalSpacing="10dp"
         android:verticalSpacing="10dp"
         android:gravity="center"
@@ -38,23 +57,25 @@
         android:layout_marginTop="15dp">
     </GridView>
 
-    <ImageButton
-        android:id="@+id/addImageButton"
+
+    <Button
+        android:text="Submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/add_chat_image"
-        android:layout_weight="0.12"
-        android:layout_below="@+id/timelineComment"
-        android:layout_alignStart="@+id/textView2"
-        android:layout_marginTop="12dp" />
+        android:layout_below="@+id/mygrid"
+        android:layout_alignEnd="@+id/mygrid"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="150dp"
+        android:id="@+id/submitButton" />
 
-    <EditText
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/timelineComment"
-        android:layout_below="@+id/textView2"
-        android:layout_alignStart="@+id/textView2" />
-</RelativeLayout>
+        android:paddingTop="10dp"
+        android:layout_marginRight="20dp"
+        android:indeterminateTint="@color/com_facebook_blue"
+        android:visibility="gone"/>
+</LinearLayout>
+    </ScrollView>
 

@@ -337,7 +337,7 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
                 Uri imguri = data.getData();
                 try {
                     imagebitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imguri);
-                    imagebitmap = scaleDownBitmap(imagebitmap,50,this);
+                    imagebitmap = scaleDownBitmap(imagebitmap,70,this);
                     //imagebitmap = ImageUtils.scaleImageAspectRatio(imagebitmap);
                 } catch (IOException e) {
                     Log.e("IOEXception", e.toString());

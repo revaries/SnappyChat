@@ -17,7 +17,7 @@ public class TimelineFriendActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline_friend);
         getSupportActionBar().setTitle("SnappyChat");
-        getSupportActionBar().setSubtitle("Friend Timeline");
+
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
         if (fragment == null) {
@@ -30,6 +30,7 @@ public class TimelineFriendActivity extends AppCompatActivity {
 
     protected Fragment createFragment() {
         User userLoggedIn = (User) getIntent().getSerializableExtra(MainActivity.USER_LOGGED_IN);
+        getSupportActionBar().setSubtitle("@"+userLoggedIn.getNickName()+" Timeline");
         return TimelineFragment.newInstance(userLoggedIn,1);
     }
 }

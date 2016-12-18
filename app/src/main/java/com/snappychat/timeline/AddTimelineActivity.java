@@ -19,12 +19,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.snappychat.MainActivity;
 import com.snappychat.R;
-import com.snappychat.model.Image;
 import com.snappychat.model.ImageUtils;
 import com.snappychat.model.Timeline;
 import com.snappychat.model.User;
@@ -36,13 +36,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AddTimelineActivity extends AppCompatActivity {
+public class AddTimelineActivity extends AppCompatActivity implements ImageAdapter.OnImageGridViewSelectedListener{
 
     private GridView gridView;
     private ImageAdapter adapter;
     private EditText timelineComment;
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     private User userLoggedIn;
+    private ProgressBar progressBar;
+    private Button submitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,17 +53,26 @@ public class AddTimelineActivity extends AppCompatActivity {
         userLoggedIn = (User) getIntent().getSerializableExtra(MainActivity.USER_LOGGED_IN);
         gridView = (GridView) findViewById(R.id.mygrid);
         ImageButton addImage = (ImageButton) findViewById(R.id.addImageButton);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        final EditText editText = (EditText) findViewById(R.id.timelineComment);
         addImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 profilePictureSelector();
             }
         });
-        Button submitButton = (Button)findViewById(R.id.submitButton);
+        submitButton = (Button)findViewById(R.id.submitButton);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                storeTimeline();
+                if(!editText.getText().toString().equals("")) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    submitButton.setVisibility(View.GONE);
+                    storeTimeline();
+                }else{
+                    Toast.makeText(AddTimelineActivity.this, "Add a message",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
         timelineComment = (EditText)findViewById(R.id.timelineComment);
@@ -69,6 +80,7 @@ public class AddTimelineActivity extends AppCompatActivity {
         gridView.setAdapter(adapter);
 
     }
+
 
     private void profilePictureSelector() {
         File camimageholders = new File(Environment.getExternalStorageDirectory() + File.separator + "ProfilePictures" + File.separator);
@@ -151,9 +163,12 @@ public class AddTimelineActivity extends AppCompatActivity {
                     public void run() {
                         if(result != null)
                             callBackActivity();
-                        else
+                        else {
                             Toast.makeText(AddTimelineActivity.this, "Saving timeline failed.",
                                     Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
+                            submitButton.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
             }
@@ -199,5 +214,11 @@ public class AddTimelineActivity extends AppCompatActivity {
                 });
             }
         }).start();
+    }
+
+    @Override
+    public void onImageRemoved(Bitmap item) {
+        adapter.getImagesList().remove(item);
+        adapter.notifyDataSetChanged();
     }
 }
