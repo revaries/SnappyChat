@@ -50,6 +50,8 @@ public class AddTimelineActivity extends AppCompatActivity implements ImageAdapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_timeline);
+        getSupportActionBar().setTitle("SnappyChat");
+        getSupportActionBar().setSubtitle("Add Timeline");
         userLoggedIn = (User) getIntent().getSerializableExtra(MainActivity.USER_LOGGED_IN);
         gridView = (GridView) findViewById(R.id.mygrid);
         ImageButton addImage = (ImageButton) findViewById(R.id.addImageButton);
