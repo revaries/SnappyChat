@@ -19,6 +19,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
@@ -277,6 +278,9 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
                 //Intent timelineIntent = new Intent(getBaseContext(), ProfileView.class);
                 profileViewIntent.putExtra(USER_LOGGED_IN, snappyuser);
                 startActivity(profileViewIntent);
+            }else{
+                Toast.makeText(ProfileDataCollectorActivity.this, "User creation failed.",
+                        Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -331,8 +335,8 @@ public class ProfileDataCollectorActivity extends AppCompatActivity implements P
                 Uri imguri = data.getData();
                 try {
                     imagebitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imguri);
-                    //imagebitmap = scaleDownBitmap(imagebitmap,50,this);
-                    imagebitmap = ImageUtils.scaleImageAspectRatio(imagebitmap);
+                    imagebitmap = scaleDownBitmap(imagebitmap,50,this);
+                    //imagebitmap = ImageUtils.scaleImageAspectRatio(imagebitmap);
                 } catch (IOException e) {
                     Log.e("IOEXception", e.toString());
                 }
