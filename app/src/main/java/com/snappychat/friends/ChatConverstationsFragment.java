@@ -14,9 +14,13 @@ import android.widget.Toast;
 
 import com.snappychat.MainActivity;
 import com.snappychat.R;
+import com.snappychat.model.MessageEvent;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,7 +54,7 @@ public class ChatConverstationsFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         userLoggedIn = (User) getActivity().getIntent().getSerializableExtra(MainActivity.USER_LOGGED_IN);
-        getChatsList();
+        //getChatsList();
 
     }
 
@@ -81,12 +85,33 @@ public class ChatConverstationsFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
+        getChatsList();
+        //Log.d(TAG, "State Conversations Fragment was called OnResume()");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //Log.d("CHAT_FRAGMENT", "State Conversations Fragment was called OnStart()");
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+        //Log.d("CHAT_FRAGMENT", "State Conversations Fragment was called OnStop()");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        adapter.updateAdapterEntry(event.getChatMessage());
     }
 
 

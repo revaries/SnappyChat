@@ -2,7 +2,6 @@ package com.snappychat.friends;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.snappychat.MainActivity;
 import com.snappychat.R;
+import com.snappychat.model.ChatMessage;
 import com.snappychat.model.User;
 import java.util.ArrayList;
 
@@ -103,6 +103,16 @@ public class RecyclerConverstationsAdapter extends RecyclerView.Adapter<Recycler
 
     public void updateData(ArrayList<User> data){
         mDataset = data;
+        notifyDataSetChanged();
+    }
+
+    public void updateAdapterEntry(ChatMessage chatMessage){
+        for(int i=0; i < mDataset.size(); i++){
+            if(mDataset.get(i).getEmail().equals(chatMessage.getSender())){
+                mDataset.get(i).setMessage(chatMessage.body);
+                mDataset.get(i).setPending(true);
+            }
+        }
         notifyDataSetChanged();
     }
 }
