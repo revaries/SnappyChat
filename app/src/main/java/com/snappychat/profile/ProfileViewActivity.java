@@ -61,7 +61,7 @@ public class ProfileViewActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("SnappyChat");
         getSupportActionBar().setSubtitle("Profile");
 
-                Name = (TextView) findViewById(R.id.name);
+        Name = (TextView) findViewById(R.id.name);
         Interests = (TextView) findViewById(R.id.interests);
         Location = (TextView) findViewById(R.id.location);
         Profession = (TextView) findViewById(R.id.profession);
@@ -88,6 +88,8 @@ public class ProfileViewActivity extends AppCompatActivity {
         Location.setText(profileUser.getLocation());
         Profession.setText(profileUser.getProfession());
         AboutMe.setText(profileUser.getAboutMe());
+
+
         if (profileUser.getVisibility().equals("friends-only"))
         {
             Visibility.setText("Your Profile is visible to your Friends Only");
@@ -120,6 +122,14 @@ public class ProfileViewActivity extends AppCompatActivity {
             Notifications.setText("You will not receive Email Notifications");
         }
 
+        if (profileUser.getImage()!=null)
+        {
+
+            byte[] imagearray = Base64.decode(profileUser.getImage(), Base64.DEFAULT);
+            Bitmap image = BitmapFactory.decodeByteArray(imagearray, 0, imagearray.length);
+            profilepicture.setImageBitmap(image);
+        }
+
         Name.setOnClickListener(textClickListeners);
         Interests.setOnClickListener(textClickListeners);
         Location.setOnClickListener(textClickListeners);
@@ -130,14 +140,25 @@ public class ProfileViewActivity extends AppCompatActivity {
         NickName.setOnClickListener(textClickListeners);
 
 
-        if (profileUser.getImage()!=null)
+        //Saving Edit Options if Profile is not of Logged in user
+        if (profileUser.getEmail().equals(userLoggedIn.getEmail()))
         {
+            Interests.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_interests,0,R.drawable.ic_edit_icon,0);
+            Location.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_location,0,R.drawable.ic_edit_icon,0);
+            Profession.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_profession,0,R.drawable.ic_edit_icon,0);
+            Visibility.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_visibility,0,R.drawable.ic_edit_icon,0);
+            Notifications.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_notification,0,R.drawable.ic_edit_icon,0);
 
-            byte[] imagearray = Base64.decode(profileUser.getImage(), Base64.DEFAULT);
-            Bitmap image = BitmapFactory.decodeByteArray(imagearray, 0, imagearray.length);
-            profilepicture.setImageBitmap(image);
         }
-
+        else
+        {
+            profilePictureEdit.setVisibility(View.INVISIBLE);
+            Interests.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_interests,0,0,0);
+            Location.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_location,0,0,0);
+            Profession.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_profession,0,0,0);
+            Visibility.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_visibility,0,0,0);
+            Notifications.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_notification,0,0,0);
+        }
 
 
         profilePictureEdit.setOnClickListener(new View.OnClickListener() {
