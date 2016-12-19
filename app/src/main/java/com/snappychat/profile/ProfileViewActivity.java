@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import com.snappychat.LoginActivity;
 import com.snappychat.MainActivity;
 import com.snappychat.R;
+import com.snappychat.friends.FriendsActivity;
 import com.snappychat.model.User;
 
 import java.io.ByteArrayOutputStream;
@@ -188,6 +190,7 @@ public class ProfileViewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
+                /*
                 Intent upintent = new Intent(this,MainActivity.class);
                 if (profileUser.getEmail().equals(userLoggedIn.getEmail())) {
                     upintent.putExtra(MainActivity.USER_LOGGED_IN, profileUser);
@@ -196,7 +199,21 @@ public class ProfileViewActivity extends AppCompatActivity {
                 {
                     upintent.putExtra(MainActivity.USER_LOGGED_IN, userLoggedIn);
                 }
+
+
                 startActivity(upintent);
+                */
+                if (profileUser.getEmail().equals(userLoggedIn.getEmail())){
+                    Intent upintent = new Intent(this,MainActivity.class);
+                    upintent.putExtra(MainActivity.USER_LOGGED_IN, profileUser);
+                    startActivity(upintent);
+                }
+                else
+                {
+                    Intent upintent = new Intent(this,FriendsActivity.class);
+                    upintent.putExtra(MainActivity.USER_LOGGED_IN, userLoggedIn);
+                    startActivity(upintent);
+                }
         }
         return super.onOptionsItemSelected(item);
     }
