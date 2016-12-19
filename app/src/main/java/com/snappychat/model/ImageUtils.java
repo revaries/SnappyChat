@@ -153,7 +153,7 @@ public class ImageUtils {
         int nh = (int) ( image.getHeight() * (512.0 / image.getWidth()) );
         Bitmap scaled = Bitmap.createScaledBitmap(image, 512, nh, true);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        scaled.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+        scaled.compress(Bitmap.CompressFormat.JPEG, 70, bos);
         return scaled;
     }
 
