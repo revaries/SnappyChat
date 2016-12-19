@@ -130,7 +130,7 @@ public class InvitationSentFragment extends Fragment {
             protected ArrayList<User> doInBackground(String... params) {
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    jsonObject.put("email",(String)params[0]);
+                    jsonObject.put("user_id",(String)params[0]);
                     ServiceHandler.deleteFriendRequest(params[1], jsonObject);
                 } catch (JSONException e) {
                     e.printStackTrace();
