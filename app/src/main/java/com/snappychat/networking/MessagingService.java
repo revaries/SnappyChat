@@ -90,6 +90,12 @@ public class MessagingService extends FirebaseMessagingService {
      * @param messageBody FCM message body received.
      */
     private void sendNotification(ChatMessage chatMessage) {
+        String msgBody;
+        if(chatMessage.getType().equals("image")){
+            msgBody = "Image";
+        }else{
+            msgBody = chatMessage.body;
+        }
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra(USER_LOGGED_IN,ServiceHandler.getUser(chatMessage.getReceiver()));
         intent.putExtra(ChatActivity.USER_RECEIVER,ServiceHandler.getUser(chatMessage.getSender()));
@@ -101,7 +107,7 @@ public class MessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.sjsu_icon)
                 .setContentTitle("SnappyChat New Message")
-                .setContentText(chatMessage.body)
+                .setContentText(msgBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
