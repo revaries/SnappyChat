@@ -3,9 +3,12 @@ package com.snappychat.friends;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,11 +16,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.snappychat.MainActivity;
 import com.snappychat.R;
 import com.snappychat.model.User;
 import com.snappychat.networking.ServiceHandler;
@@ -27,6 +32,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.snappychat.MainActivity.USER_LOGGED_IN;
 import static com.snappychat.networking.ServiceHandler.getFriends;
 
 /**
@@ -60,7 +66,7 @@ public class SearchUserFragment extends Fragment {
         SearchUserFragment fragment = new SearchUserFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
-        args.putSerializable(MainActivity.USER_LOGGED_IN,user);
+        args.putSerializable(USER_LOGGED_IN,user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,7 +77,7 @@ public class SearchUserFragment extends Fragment {
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-            userLoggedIn = (User) getArguments().get(MainActivity.USER_LOGGED_IN);
+            userLoggedIn = (User) getArguments().get(USER_LOGGED_IN);
         }
     }
 
@@ -104,6 +110,14 @@ public class SearchUserFragment extends Fragment {
         searchView.setQuery("", true);
         searchView.clearFocus();
 
+        FloatingActionButton addFriendRequest =(FloatingActionButton) view.findViewById(R.id.addFriendRequest);
+        addFriendRequest.setVisibility(View.VISIBLE);
+        addFriendRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFriendRequestDialog();
+            }
+        });
 
         return view;
     }
@@ -200,6 +214,62 @@ public class SearchUserFragment extends Fragment {
         void onTimelineRequested(User user);
     }
 
+    private void showFriendRequestDialog(){
+
+        LinearLayout linearLayoutVertical = new LinearLayout(getActivity());
+        linearLayoutVertical.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        linearLayoutVertical.setOrientation(LinearLayout.VERTICAL);
+
+
+        TextView email = new TextView(getActivity());
+        email.setText("Email");
+
+        final EditText emailEditText = new EditText(getActivity());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.setMargins(80,10,0,0);
+        emailEditText.setLayoutParams(params);
+        email.setLayoutParams(params);
+        linearLayoutVertical.addView(email);
+        linearLayoutVertical.addView(emailEditText);
+
+
+        TextView message = new TextView(getActivity());
+        message.setText("Message");
+
+        final EditText messageEditText = new EditText(getActivity());
+
+        messageEditText.setLayoutParams(params);
+        message.setLayoutParams(params);
+        linearLayoutVertical.addView(message);
+        linearLayoutVertical.addView(messageEditText);
+
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+        //final EditText edittext = new EditText(this);
+        //builder1.setMessage("");
+
+        builder1.setCancelable(true);
+        builder1.setTitle("Send a Friend request");
+        builder1.setView(linearLayoutVertical);
+        builder1.setPositiveButton(
+                "Send",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        addFriend(emailEditText.getText().toString(),messageEditText.getText().toString());
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+
+    }
 
     public void getUsers(String query){
         AsyncTask<Object, Void, ArrayList<User>> userTask = new AsyncTask<Object,Void,ArrayList<User>>(){
@@ -219,7 +289,7 @@ public class SearchUserFragment extends Fragment {
         userTask.execute(userLoggedIn,query);
     }
 
-    public void addFriend(User userToAdd, String message){
+    public void addFriend(String userEmailToAdd, String message){
         AsyncTask<String, Void, String> friendsTask = new AsyncTask<String, Void, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -241,7 +311,7 @@ public class SearchUserFragment extends Fragment {
             }
 
         };
-        friendsTask.execute(userToAdd.getEmail(),userLoggedIn.getEmail(),message);
+        friendsTask.execute(userEmailToAdd,userLoggedIn.getEmail(),message);
     }
 
     public void deleteFriend(User userToDelete){

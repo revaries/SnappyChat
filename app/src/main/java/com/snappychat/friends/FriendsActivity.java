@@ -9,7 +9,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.snappychat.R;
 import com.snappychat.model.User;
@@ -132,16 +135,34 @@ public class FriendsActivity extends AppCompatActivity implements SearchUserFrag
     public void onFriendAdded(final User item) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
         final EditText edittext = new EditText(this);
-        builder1.setMessage("Send a message");
+        builder1.setTitle("Send a Friend Request");
+
+        LinearLayout linearLayoutVertical = new LinearLayout(this);
+        linearLayoutVertical.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        linearLayoutVertical.setOrientation(LinearLayout.VERTICAL);
+
+
+        TextView message = new TextView(this);
+        message.setText("Message");
+
+        final EditText messageEditText = new EditText(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.setMargins(80,10,0,0);
+        messageEditText.setLayoutParams(params);
+        message.setLayoutParams(params);
+        linearLayoutVertical.addView(message);
+        linearLayoutVertical.addView(messageEditText);
+
+
         builder1.setCancelable(true);
-        builder1.setView(edittext);
+        builder1.setView(linearLayoutVertical);
         builder1.setPositiveButton(
                 "Send",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         SearchUserFragment fragment = (SearchUserFragment) adapter.getItem(viewPager.getCurrentItem());
                         if (fragment != null) {
-                            fragment.addFriend(item,edittext.getText().toString());
+                            fragment.addFriend(item.getEmail(),edittext.getText().toString());
                         }
                     }
                 });

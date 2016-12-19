@@ -68,7 +68,8 @@ public class RecyclerAdapterInvitation extends RecyclerView.Adapter<RecyclerAdap
     @Override
     public void onBindViewHolder(final FriendViewHolder holder, int position) {
         holder.mItem = mDataset.get(position);
-        holder.mTextView.setText(mDataset.get(position).getFirstName() + " " +mDataset.get(position).getLastName());
+        //holder.mTextView.setText(mDataset.get(position).getFirstName() + " " +mDataset.get(position).getLastName());
+        holder.mTextView.setText(mDataset.get(position).getEmail());
         holder.mTextViewCardName.setText(mDataset.get(position).getMessage());
         holder.mButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -64,7 +64,7 @@ public class SearchUserActivity extends AppCompatActivity implements SearchUserF
                         FragmentManager fm = getSupportFragmentManager();
                         SearchUserFragment fragment = (SearchUserFragment) fm.findFragmentById(R.id.fragmentContainer);
                         if (fragment != null) {
-                            fragment.addFriend(item, edittext.getText().toString());
+                            fragment.addFriend(item.getEmail(), edittext.getText().toString());
                         }
                     }
                 });

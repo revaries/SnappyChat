@@ -182,7 +182,9 @@ public class ServiceHandler {
                     friends = new ArrayList<User>();
                     for(int i = 0; i < jsonObject.optJSONArray("friends_requested").length(); i++){
                         JSONObject js = jsonObject.optJSONArray("friends_requested").getJSONObject(i);
-                        User user = new Gson().fromJson(js.getJSONObject("user_id").toString(),User.class);
+                        User user = new User();
+                        user.setEmail(js.optString("user_id"));
+                        //User user = new Gson().fromJson(js.getJSONObject("user_id").toString(),User.class);
                         if(js.optString("message") != null)
                             user.setMessage(js.optString("message"));
                         friends.add(user);
