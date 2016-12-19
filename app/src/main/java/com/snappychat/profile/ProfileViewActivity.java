@@ -192,6 +192,10 @@ public class ProfileViewActivity extends AppCompatActivity {
                 if (profileUser.getEmail().equals(userLoggedIn.getEmail())) {
                     upintent.putExtra(MainActivity.USER_LOGGED_IN, profileUser);
                 }
+                else
+                {
+                    upintent.putExtra(MainActivity.USER_LOGGED_IN, userLoggedIn);
+                }
                 startActivity(upintent);
         }
         return super.onOptionsItemSelected(item);
