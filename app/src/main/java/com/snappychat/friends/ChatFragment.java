@@ -35,7 +35,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -254,7 +253,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
     }
 
     public void sendImageMessage(Bitmap imgBitMap) {
-        String message = "";
+        String message = "",type="";
         if (imgBitMap!=null)
         {
             //ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -262,6 +261,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
             //byte[] imagebyte = byteArrayOutputStream.toByteArray();
             //message = Base64.encodeToString(imagebyte, Base64.DEFAULT);
             message = ImageUtils.encodeImageBase64(imgBitMap);
+            type = "image";
 
         }
         if (!message.equalsIgnoreCase("")) {
@@ -272,6 +272,7 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
             chatMessage.body = message;
             chatMessage.Date = getCurrentDate();
             chatMessage.Time = getCurrentTime();
+            chatMessage.setType(type);
             postMessage(chatMessage);
             updateViewAndChatStatus(chatMessage,true);
         }
@@ -306,7 +307,8 @@ public class ChatFragment extends Fragment{//implements OnClickListener {
                 JSONObject json = new JSONObject();
                 JSONObject data = new JSONObject();
                 try {
-                    data.put("message", chatMessage.body);
+                    if(!chatMessage.getType().equals("image"))
+                        data.put("message", chatMessage.body);
                     data.put("user_sender_id", chatMessage.getSender());
                     data.put("user_receiver_id", chatMessage.getReceiver());
                     data.put("type", chatMessage.getType());

@@ -99,8 +99,12 @@ public class ChatActivity extends AppCompatActivity {
         if (fragment != null) {
             ChatMessage chatMessage = event.getChatMessage();
             //Validate that the message it is not sent to the sender
-            if(!chatMessage.getSender().equals(userSender.getEmail()))
-                fragment.updateViewAndChatStatus(event.getChatMessage(),false);
+            if(!chatMessage.getSender().equals(userSender.getEmail())) {
+                if (chatMessage.getType().equals("image"))
+                    fragment.getHistoryChatMessages();
+                else
+                    fragment.updateViewAndChatStatus(event.getChatMessage(), false);
+            }
         }
     };
 
