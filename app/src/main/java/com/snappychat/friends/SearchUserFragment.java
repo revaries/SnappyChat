@@ -254,7 +254,13 @@ public class SearchUserFragment extends Fragment {
                 "Send",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        addFriend(emailEditText.getText().toString(),messageEditText.getText().toString());
+                        if(!emailEditText.getText().toString().equals("")) {
+                            addFriend(emailEditText.getText().toString(),messageEditText.getText().toString());
+                        }else{
+                            Toast.makeText(getActivity(), "Set an email",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 });
 
